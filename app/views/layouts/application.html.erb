@@ -13,17 +13,14 @@
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
   <body>
     <header>
-      <h1>🐄 薩摩畜産日誌</h1>
-      <nav>
-        <%= link_to "日次記録", daily_records_path %>
-        <%= link_to "出荷記録", shipments_path %>
-      </nav>
+      <h1><i class="fa-solid fa-cow"></i> 薩摩畜産日誌</h1>
     </header>
 
     <main>
@@ -36,5 +33,16 @@
 
       <%= yield %>
     </main>
+
+    <nav class="bottom-nav">
+      <%= link_to daily_records_path, class: "nav-item #{controller_name == 'daily_records' ? 'active' : ''}" do %>
+        <i class="fa-solid fa-clipboard-list"></i>
+        日次記録
+      <% end %>
+      <%= link_to shipments_path, class: "nav-item #{controller_name == 'shipments' ? 'active' : ''}" do %>
+        <i class="fa-solid fa-truck"></i>
+        出荷記録
+      <% end %>
+    </nav>
   </body>
 </html>
