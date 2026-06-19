@@ -28,7 +28,7 @@ body {
   background: var(--washi);
   color: var(--text);
   min-height: 100vh;
-  padding-bottom: 40px;
+  padding-bottom: 72px;
 }
 
 header {
@@ -49,16 +49,32 @@ header h1 {
   letter-spacing: 0.1em;
   font-family: 'Hiragino Mincho ProN', 'Yu Mincho', serif;
 }
-header nav { display: flex; gap: 16px; }
-header nav a {
-  color: #FAFAF5;
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
-  opacity: 0.85;
-  letter-spacing: 0.04em;
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: white;
+  border-top: 1px solid var(--border);
+  display: flex;
+  z-index: 100;
+  padding-bottom: env(safe-area-inset-bottom);
 }
-header nav a:hover { opacity: 1; }
+.nav-item {
+  flex: 1;
+  padding: 8px 4px 7px;
+  text-align: center;
+  color: var(--sub);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  transition: color 0.2s;
+}
+.nav-item i { font-size: 19px; }
+.nav-item.active { color: var(--matcha); }
 
 main { padding: 16px; max-width: 640px; margin: 0 auto; }
 
