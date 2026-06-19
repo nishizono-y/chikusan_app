@@ -1,0 +1,26 @@
+ja:
+  activerecord:
+    models:
+      daily_record: 日次記録
+      shipment: 出荷記録
+    attributes:
+      daily_record:
+        date: 日付
+        death_count: 死亡頭数
+        feed_usage: 飼料使用量
+        feed_stock: 飼料残量
+        vaccine: ワクチン接種
+        memo: メモ
+      shipment:
+        shipped_at: 出荷日
+        count: 出荷頭数
+        avg_weight: 平均体重（kg）
+        destination: 出荷先
+  helpers:
+    submit:
+      daily_record:
+        create: 登録する
+        update: 更新する
+      shipment:
+        create: 登録する
+        update: 更新する

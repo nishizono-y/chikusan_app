@@ -1,0 +1,12 @@
+<% content_for :title, "出荷記録 編集" %>
+
+<h2 class="page-title">出荷記録 編集</h2>
+
+<div class="card">
+  <%= render "form", shipment: @shipment %>
+</div>
+
+<div class="actions">
+  <%= link_to "詳細に戻る", @shipment, class: "btn btn-secondary" %>
+  <%= link_to "一覧に戻る", shipments_path, class: "btn btn-secondary" %>
+</div>

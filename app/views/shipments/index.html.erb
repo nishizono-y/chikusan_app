@@ -1,0 +1,30 @@
+<% content_for :title, "出荷記録一覧" %>
+
+<h2 class="page-title">出荷記録一覧</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>出荷日</th>
+      <th>出荷頭数</th>
+      <th>平均体重（kg）</th>
+      <th>出荷先</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="shipments">
+    <% @shipments.each do |shipment| %>
+      <tr>
+        <td><%= shipment.shipped_at&.strftime("%Y年%m月%d日") %></td>
+        <td><%= shipment.count %></td>
+        <td><%= shipment.avg_weight %></td>
+        <td><%= shipment.destination %></td>
+        <td><%= link_to "詳細", shipment %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="actions">
+  <%= link_to "新規作成", new_shipment_path, class: "btn btn-primary" %>
+</div>

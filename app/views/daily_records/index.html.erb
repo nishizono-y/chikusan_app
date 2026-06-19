@@ -1,0 +1,32 @@
+<% content_for :title, "日次記録一覧" %>
+
+<h2 class="page-title">日次記録一覧</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>日付</th>
+      <th>死亡頭数</th>
+      <th>飼料使用量</th>
+      <th>飼料残量</th>
+      <th>ワクチン</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="daily_records">
+    <% @daily_records.each do |daily_record| %>
+      <tr>
+        <td><%= daily_record.date&.strftime("%Y年%m月%d日") %></td>
+        <td><%= daily_record.death_count %></td>
+        <td><%= daily_record.feed_usage %></td>
+        <td><%= daily_record.feed_stock %></td>
+        <td><%= daily_record.vaccine %></td>
+        <td><%= link_to "詳細", daily_record %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="actions">
+  <%= link_to "新規作成", new_daily_record_path, class: "btn btn-primary" %>
+</div>

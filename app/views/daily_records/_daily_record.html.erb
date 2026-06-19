@@ -1,0 +1,12 @@
+<div id="<%= dom_id daily_record %>">
+  <table>
+    <tbody>
+      <tr><th>日付</th><td><%= daily_record.date&.strftime("%Y年%m月%d日") %></td></tr>
+      <tr><th>死亡頭数</th><td><%= daily_record.death_count %></td></tr>
+      <tr><th>飼料使用量</th><td><%= daily_record.feed_usage %></td></tr>
+      <tr><th>飼料残量</th><td><%= daily_record.feed_stock %></td></tr>
+      <tr><th>ワクチン接種</th><td><%= daily_record.vaccine %></td></tr>
+      <tr><th>メモ</th><td><%= daily_record.memo %></td></tr>
+    </tbody>
+  </table>
+</div>

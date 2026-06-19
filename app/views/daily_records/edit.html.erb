@@ -1,0 +1,12 @@
+<% content_for :title, "日次記録 編集" %>
+
+<h2 class="page-title">日次記録 編集</h2>
+
+<div class="card">
+  <%= render "form", daily_record: @daily_record %>
+</div>
+
+<div class="actions">
+  <%= link_to "詳細に戻る", @daily_record, class: "btn btn-secondary" %>
+  <%= link_to "一覧に戻る", daily_records_path, class: "btn btn-secondary" %>
+</div>

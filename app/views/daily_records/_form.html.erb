@@ -1,0 +1,46 @@
+<%= form_with(model: daily_record) do |form| %>
+  <% if daily_record.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= daily_record.errors.count %>件のエラーがあります</h2>
+      <ul>
+        <% daily_record.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= form.label :date %>
+    <%= form.date_field :date %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :death_count %>
+    <%= form.number_field :death_count, min: 0 %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :feed_usage %>
+    <%= form.number_field :feed_usage, min: 0 %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :feed_stock %>
+    <%= form.number_field :feed_stock, min: 0 %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :vaccine %>
+    <%= form.select :vaccine, [["なし", "なし"], ["あり", "あり"]], { include_blank: "選択してください" } %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :memo %>
+    <%= form.text_area :memo, placeholder: "体調・気になることを記入してください" %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit class: "btn btn-primary" %>
+  </div>
+<% end %>
