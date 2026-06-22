@@ -4,7 +4,7 @@ FactoryBot.define do
     death_count { 1 }
     feed_usage { 1 }
     feed_stock { 1 }
-    vaccine { "MyString" }
+    vaccine { "なし" }
     memo { "MyText" }
   end
 end
