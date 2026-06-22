@@ -5,6 +5,7 @@ export default defineConfig({
   use: {
     baseURL: 'http://localhost:3001',
     screenshot: 'on',
+    video: 'retain-on-failure',
   },
   webServer: {
     command: 'RAILS_ENV=test bin/rails server -p 3001',
