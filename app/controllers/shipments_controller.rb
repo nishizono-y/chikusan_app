@@ -52,6 +52,7 @@ class ShipmentsController < ApplicationController
     @shipment.destroy!
 
     respond_to do |format|
+      format.turbo_stream
       format.html { redirect_to shipments_path, notice: "出荷記録を削除しました。", status: :see_other }
       format.json { head :no_content }
     end
