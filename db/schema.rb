@@ -10,24 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_06_18_024339) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_23_021847) do
   create_table "daily_records", force: :cascade do |t|
+    t.datetime "created_at", null: false
     t.date "date"
     t.integer "death_count"
-    t.integer "feed_usage"
     t.integer "feed_stock"
-    t.string "vaccine"
+    t.integer "feed_usage"
     t.text "memo"
-    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "vaccine"
   end
 
   create_table "shipments", force: :cascade do |t|
-    t.date "shipped_at"
-    t.integer "count"
     t.decimal "avg_weight"
-    t.string "destination"
+    t.integer "count"
     t.datetime "created_at", null: false
+    t.string "destination"
+    t.date "shipped_at"
     t.datetime "updated_at", null: false
   end
 end
