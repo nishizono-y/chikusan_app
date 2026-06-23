@@ -52,6 +52,7 @@ class DailyRecordsController < ApplicationController
     @daily_record.destroy!
 
     respond_to do |format|
+      format.turbo_stream
       format.html { redirect_to daily_records_path, notice: "日次記録を削除しました。", status: :see_other }
       format.json { head :no_content }
     end

@@ -14,7 +14,7 @@
   </thead>
   <tbody id="shipments">
     <% @shipments.each do |shipment| %>
-      <tr>
+      <tr id="<%= dom_id(shipment) %>">
         <td><%= shipment.shipped_at&.strftime("%Y年%m月%d日") %></td>
         <td><%= shipment.count %></td>
         <td><%= shipment.avg_weight %></td>
