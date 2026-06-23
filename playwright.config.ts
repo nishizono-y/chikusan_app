@@ -8,8 +8,8 @@ export default defineConfig({
     video: 'retain-on-failure',
   },
   webServer: {
-    command: 'RAILS_ENV=test bin/rails server -p 3001',
-    url: 'http://localhost:3001',
+    command: 'bin/test-server',
+    url: 'http://localhost:3001/up',
     reuseExistingServer: false,
   },
   projects: [

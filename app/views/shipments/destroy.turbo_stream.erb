@@ -1,0 +1,5 @@
+<%= turbo_stream.remove @shipment %>
+<%= turbo_stream.update "flash" do %>
+  <div class="flash-notice">出荷記録を削除しました。</div>
+<% end %>
+<%= turbo_stream.action :visit, shipments_path %>
