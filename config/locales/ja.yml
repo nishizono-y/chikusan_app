@@ -1,4 +1,7 @@
 ja:
+  date:
+    formats:
+      home: "%-m月%-d日（%a）"
   activerecord:
     models:
       daily_record: 日次記録

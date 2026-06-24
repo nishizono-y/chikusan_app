@@ -28,6 +28,7 @@ RSpec.describe "/", type: :request do
     end
 
     it "直近3件の日次記録を新しい順で表示する" do
+      DailyRecord.delete_all
       base = Date.current.beginning_of_month
       4.times { |i| create_daily_record(date: base + i.days) }
 
