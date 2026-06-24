@@ -75,7 +75,7 @@ test.describe('ボトムナビ', () => {
 
     await test.step('ホームページに遷移することを確認する', async () => {
       await expect(page).toHaveURL('/');
-      await expect(page.getByText('の状況')).toBeVisible();
+      await expect(page.locator('.section-label', { hasText: /\d+月の状況/ })).toBeVisible();
     });
   });
 
