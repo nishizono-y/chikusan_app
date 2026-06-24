@@ -36,7 +36,7 @@
       <div class="record-item">
         <div>
           <div class="record-date">
-            <%= record.date&.strftime("%-m月%-d日（#{%w[日 月 火 水 木 金 土][record.date.wday]}）") %>
+            <%= ja_date(record.date) %>
           </div>
           <div class="record-main">
             死亡 <%= record.death_count %>頭・飼料 <%= record.feed_usage %>kg
