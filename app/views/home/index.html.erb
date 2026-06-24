@@ -7,7 +7,7 @@
     <i class="fa-solid fa-chart-simple"></i> <%= @month_label %>の飼養記録
   </div>
   <div class="summary-grid">
-    <div class="summary-item <%= @month_deaths > 0 ? 'warn' : '' %>">
+    <div class="<%= class_names('summary-item', warn: @month_deaths > 0) %>">
       <div class="summary-icon"><i class="fa-solid fa-skull-crossbones"></i></div>
       <div class="summary-num"><%= @month_deaths %></div>
       <div class="summary-label">今月の死亡頭数</div>
@@ -33,16 +33,17 @@
   </div>
   <% if @recent_records.any? %>
     <% @recent_records.each do |record| %>
+      <% death_count = record.death_count.to_i %>
       <div class="record-item">
         <div>
           <div class="record-date">
             <%= ja_date(record.date) %>
           </div>
           <div class="record-main">
-            死亡 <%= record.death_count.to_i %>頭・飼料 <%= record.feed_usage.to_i %>kg
+            死亡 <%= death_count %>頭・飼料 <%= record.feed_usage.to_i %>kg
           </div>
         </div>
-        <% if record.death_count.to_i > 0 %>
+        <% if death_count > 0 %>
           <div class="record-badge badge-ng">
             <i class="fa-solid fa-circle-exclamation"></i> 要確認
           </div>
