@@ -1,0 +1,65 @@
+<% content_for :title, "ホーム" %>
+
+<div class="section-label"><%= @month_label %>の状況</div>
+
+<div class="card">
+  <div class="card-title">
+    <i class="fa-solid fa-chart-simple"></i> <%= @month_label %>の飼養記録
+  </div>
+  <div class="summary-grid">
+    <div class="summary-item">
+      <div class="summary-icon"><i class="fa-solid fa-skull-crossbones"></i></div>
+      <div class="summary-num"><%= @month_deaths %></div>
+      <div class="summary-label">今月の死亡頭数</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-icon"><i class="fa-solid fa-truck-ramp-box"></i></div>
+      <div class="summary-num"><%= @month_ship_count %></div>
+      <div class="summary-label">今月の出荷頭数</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-icon"><i class="fa-solid fa-wheat-awn"></i></div>
+      <div class="summary-num"><%= number_with_delimiter(@month_feed_usage) %><span class="summary-unit">kg</span></div>
+      <div class="summary-label">飼料使用量</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label">直近の記録</div>
+
+<div class="card">
+  <div class="card-title">
+    <i class="fa-solid fa-clock-rotate-left"></i> 記録履歴
+  </div>
+  <% if @recent_records.any? %>
+    <% @recent_records.each do |record| %>
+      <div class="record-item">
+        <div>
+          <div class="record-date">
+            <%= record.date&.strftime("%-m月%-d日（#{%w[日 月 火 水 木 金 土][record.date.wday]}）") %>
+          </div>
+          <div class="record-main">
+            死亡 <%= record.death_count %>頭・飼料 <%= record.feed_usage %>kg
+          </div>
+        </div>
+        <% if record.death_count.to_i > 0 %>
+          <div class="record-badge badge-ng">
+            <i class="fa-solid fa-circle-exclamation"></i> 要確認
+          </div>
+        <% else %>
+          <div class="record-badge badge-ok">
+            <i class="fa-solid fa-circle-check"></i> 異常なし
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  <% else %>
+    <p class="empty-message">まだ記録がありません</p>
+  <% end %>
+</div>
+
+<div class="actions">
+  <%= link_to daily_records_path, class: "btn btn-report" do %>
+    <i class="fa-solid fa-file-lines"></i> 日次記録の一覧を見る
+  <% end %>
+</div>

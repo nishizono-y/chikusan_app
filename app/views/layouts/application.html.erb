@@ -32,6 +32,10 @@
     </main>
 
     <nav class="bottom-nav">
+      <%= link_to root_path, class: "nav-item #{controller_name == 'home' ? 'active' : ''}" do %>
+        <i class="fa-solid fa-house"></i>
+        ホーム
+      <% end %>
       <%= link_to daily_records_path, class: "nav-item #{controller_name == 'daily_records' ? 'active' : ''}" do %>
         <i class="fa-solid fa-clipboard-list"></i>
         日次記録

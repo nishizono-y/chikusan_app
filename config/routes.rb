@@ -12,5 +12,6 @@ Rails.application.routes.draw do
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
-  root "daily_records#index"
+  get "home", to: "home#index", as: :home
+  root "home#index"
 end
