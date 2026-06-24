@@ -8,22 +8,22 @@ RSpec.describe "/", type: :request do
     end
 
     it "当月の日次記録だけを集計する" do
-      create_daily_record(date: Date.current, death_count: 2, feed_usage: 100)
+      create_daily_record(date: Date.current, death_count: 73, feed_usage: 100)
       create_daily_record(date: Date.current.prev_month, death_count: 99, feed_usage: 9999)
 
       get root_path
 
-      expect(response.body).to include("2")
+      expect(response.body).to include("73")
       expect(response.body).not_to include("99")
     end
 
     it "当月の出荷記録だけを集計する" do
-      create_shipment(shipped_at: Date.current, count: 5)
+      create_shipment(shipped_at: Date.current, count: 47)
       create_shipment(shipped_at: Date.current.prev_month, count: 999)
 
       get root_path
 
-      expect(response.body).to include("5")
+      expect(response.body).to include("47")
       expect(response.body).not_to include("999")
     end
 
@@ -42,7 +42,7 @@ RSpec.describe "/", type: :request do
       get root_path
 
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include("まだ記録がありません")
+      expect(response.body).to include("今月はまだ記録がありません")
     end
   end
 

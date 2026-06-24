@@ -25,11 +25,11 @@
   </div>
 </div>
 
-<div class="section-label">直近の記録</div>
+<div class="section-label">今月の直近記録</div>
 
 <div class="card">
   <div class="card-title">
-    <i class="fa-solid fa-clock-rotate-left"></i> 記録履歴
+    <i class="fa-solid fa-clock-rotate-left"></i> 今月の直近3件
   </div>
   <% if @recent_records.any? %>
     <% @recent_records.each do |record| %>
@@ -55,7 +55,7 @@
       </div>
     <% end %>
   <% else %>
-    <p class="empty-message">まだ記録がありません</p>
+    <p class="empty-message">今月はまだ記録がありません</p>
   <% end %>
 </div>
 

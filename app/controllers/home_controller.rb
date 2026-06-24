@@ -5,12 +5,12 @@ class HomeController < ApplicationController
 
     @month_label = today.strftime("%-m月")
 
-    deaths, feed_usage = DailyRecord.where(date: month_range)
-                                    .pick(Arel.sql("SUM(death_count), SUM(feed_usage)"))
+    scope = DailyRecord.where(date: month_range)
+    deaths, feed_usage = scope.pick(Arel.sql("SUM(death_count), SUM(feed_usage)"))
     @month_deaths      = deaths.to_i
     @month_feed_usage  = feed_usage.to_i
     @month_ship_count  = Shipment.where(shipped_at: month_range).sum(:count)
 
-    @recent_records    = DailyRecord.where(date: month_range).order(date: :desc).limit(3).load
+    @recent_records    = scope.order(date: :desc).limit(3).load
   end
 end
