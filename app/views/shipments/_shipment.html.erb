@@ -1,7 +1,7 @@
 <div id="<%= dom_id shipment %>">
   <table>
     <tbody>
-      <tr><th>出荷日</th><td><%= shipment.shipped_at&.strftime("%Y年%m月%d日") %></td></tr>
+      <tr><th>出荷日</th><td><%= ja_date_full(shipment.shipped_at) %></td></tr>
       <tr><th>出荷頭数</th><td><%= shipment.count %></td></tr>
       <tr><th>平均体重（kg）</th><td><%= shipment.avg_weight %></td></tr>
       <tr><th>出荷先</th><td><%= shipment.destination %></td></tr>

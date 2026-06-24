@@ -32,11 +32,15 @@
     </main>
 
     <nav class="bottom-nav">
-      <%= link_to daily_records_path, class: "nav-item #{controller_name == 'daily_records' ? 'active' : ''}" do %>
+      <%= link_to root_path, class: class_names("nav-item", active: controller_name == "home") do %>
+        <i class="fa-solid fa-house"></i>
+        ホーム
+      <% end %>
+      <%= link_to daily_records_path, class: class_names("nav-item", active: controller_name == "daily_records") do %>
         <i class="fa-solid fa-clipboard-list"></i>
         日次記録
       <% end %>
-      <%= link_to shipments_path, class: "nav-item #{controller_name == 'shipments' ? 'active' : ''}" do %>
+      <%= link_to shipments_path, class: class_names("nav-item", active: controller_name == "shipments") do %>
         <i class="fa-solid fa-truck"></i>
         出荷記録
       <% end %>
