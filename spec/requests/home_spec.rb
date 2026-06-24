@@ -27,12 +27,15 @@ RSpec.describe "/", type: :request do
       expect(response.body).not_to include("999")
     end
 
-    it "直近3件の日次記録を表示する" do
-      4.times { |i| create_daily_record(date: Date.current.beginning_of_month + i.days) }
+    it "直近3件の日次記録を新しい順で表示する" do
+      base = Date.current.beginning_of_month
+      4.times { |i| create_daily_record(date: base + i.days) }
 
       get root_path
 
       expect(response.body.scan("record-item").length).to eq(3)
+      expect(response.body).to include((base + 3.days).strftime("%-m月%-d日"))
+      expect(response.body).not_to include(base.strftime("%-m月%-d日"))
     end
 
     it "レコードがない場合も正常に表示される" do
