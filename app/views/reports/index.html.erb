@@ -1,0 +1,99 @@
+<% content_for :title, "月次報告書" %>
+
+<div class="report-header">
+  <h2><i class="fa-solid fa-file-invoice"></i> <%= @month_label %>月次報告書</h2>
+  <p>JAや取引先への提出用レポート</p>
+</div>
+
+<div class="note-box">
+  <i class="fa-solid fa-circle-info"></i>
+  入力データをもとに自動で生成されます。
+</div>
+
+<div class="card">
+  <div class="card-title"><i class="fa-solid fa-pig"></i> 頭数サマリー</div>
+  <table class="report-table">
+    <tbody>
+      <tr><th>項目</th><th style="text-align:right">数量</th></tr>
+      <tr>
+        <td>月初飼養頭数</td>
+        <td class="report-num"><%= @month_start_count.present? ? "#{@month_start_count} 頭" : "―" %></td>
+      </tr>
+      <tr><td>今月の死亡頭数</td><td class="report-num-warn"><%= @deaths %> 頭</td></tr>
+      <tr><td>今月の出荷頭数</td><td class="report-num"><%= @ship_count %> 頭</td></tr>
+      <tr>
+        <td>月末飼養頭数</td>
+        <td class="report-num"><%= @month_end_count.present? ? "#{@month_end_count} 頭" : "―" %></td>
+      </tr>
+      <tr>
+        <td>死亡率</td>
+        <td class="<%= @mortality_rate.to_f > 0 ? 'report-num-warn' : 'report-num' %>">
+          <%= @mortality_rate.present? ? "#{@mortality_rate} %" : "―" %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <div class="card-title"><i class="fa-solid fa-wheat-awn"></i> 飼料使用実績</div>
+  <table class="report-table">
+    <tbody>
+      <tr><th>項目</th><th style="text-align:right">数量</th></tr>
+      <tr><td>総使用量</td><td class="report-num"><%= number_with_delimiter(@feed_total) %> kg</td></tr>
+      <tr>
+        <td>1頭あたり平均</td>
+        <td class="report-num"><%= @feed_per_head_day.present? ? "#{@feed_per_head_day} kg／日" : "―" %></td>
+      </tr>
+      <% if @feed_vs_prev %>
+        <% sign = @feed_vs_prev >= 0 ? "+" : "" %>
+        <tr>
+          <td>前月比</td>
+          <td class="<%= @feed_vs_prev >= 0 ? 'report-num' : 'report-num-warn' %>">
+            <%= "#{sign}#{number_with_delimiter(@feed_vs_prev)}" %> kg
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <div class="card-title"><i class="fa-solid fa-truck"></i> 出荷実績</div>
+  <% if @shipments.any? %>
+    <table class="report-table">
+      <tbody>
+        <tr><th>日付</th><th>頭数</th><th style="text-align:right">合計重量</th></tr>
+        <% @shipments.each do |s| %>
+          <% total_weight = (s.count.to_i * s.avg_weight.to_f).round(1) %>
+          <tr>
+            <td><%= l(s.shipped_at, format: :short) %></td>
+            <td><%= s.count %>頭</td>
+            <td class="report-num"><%= number_with_delimiter(total_weight) %> kg</td>
+          </tr>
+        <% end %>
+        <tr>
+          <td>合計</td>
+          <td><%= @ship_count %>頭</td>
+          <td class="report-num"><%= number_with_delimiter(@ship_total_weight) %> kg</td>
+        </tr>
+      </tbody>
+    </table>
+  <% else %>
+    <p class="empty-message">今月の出荷記録はありません</p>
+  <% end %>
+</div>
+
+<div class="card">
+  <div class="card-title"><i class="fa-solid fa-note-sticky"></i> 特記事項</div>
+  <% if @memos.any? %>
+    <% @memos.each do |date, memo| %>
+      <div class="memo-item">
+        <span class="memo-date"><%= l(date, format: :short) %></span>
+        <span class="memo-text"><%= memo %></span>
+      </div>
+    <% end %>
+  <% else %>
+    <p class="empty-message">今月の特記事項はありません</p>
+  <% end %>
+</div>

@@ -66,6 +66,6 @@ class DailyRecordsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def daily_record_params
-      params.require(:daily_record).permit(:date, :death_count, :feed_usage, :feed_stock, :vaccine, :memo)
+      params.require(:daily_record).permit(:date, :head_count, :death_count, :feed_usage, :feed_stock, :vaccine, :memo)
     end
 end
