@@ -11,6 +11,6 @@ class HomeController < ApplicationController
     @month_feed_usage  = feed_usage.to_i
     @month_ship_count  = Shipment.where(shipped_at: month_range).sum(:count)
 
-    @recent_records    = DailyRecord.order(date: :desc).limit(3).load
+    @recent_records    = DailyRecord.where(date: month_range).order(date: :desc).limit(3).load
   end
 end

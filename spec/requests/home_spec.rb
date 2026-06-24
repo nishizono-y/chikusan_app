@@ -8,8 +8,8 @@ RSpec.describe "/", type: :request do
     end
 
     it "当月の日次記録だけを集計する" do
-      this_month = create_daily_record(date: Date.current, death_count: 2, feed_usage: 100)
-      last_month = create_daily_record(date: Date.current.prev_month, death_count: 99, feed_usage: 9999)
+      create_daily_record(date: Date.current, death_count: 2, feed_usage: 100)
+      create_daily_record(date: Date.current.prev_month, death_count: 99, feed_usage: 9999)
 
       get root_path
 
@@ -28,7 +28,7 @@ RSpec.describe "/", type: :request do
     end
 
     it "直近3件の日次記録を表示する" do
-      4.times { |i| create_daily_record(date: Date.current - i.days) }
+      4.times { |i| create_daily_record(date: Date.current.beginning_of_month + i.days) }
 
       get root_path
 
