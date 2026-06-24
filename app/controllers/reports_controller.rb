@@ -26,6 +26,6 @@ class ReportsController < ApplicationController
     prev_feed = DailyRecord.where(date: prev_range).sum(:feed_usage).to_i
     @feed_vs_prev = prev_feed > 0 ? @feed_total - prev_feed : nil
 
-    @memos = daily_scope.where.not(memo: [nil, ""]).order(:date).pluck(:date, :memo)
+    @memos = daily_scope.where.not(memo: [ nil, "" ]).order(:date).pluck(:date, :memo)
   end
 end
