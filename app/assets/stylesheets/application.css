@@ -218,3 +218,72 @@ td a:hover { text-decoration: underline; }
   color: #c0392b;
   margin-top: 4px;
 }
+
+/* セクションラベル */
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--sub);
+  letter-spacing: 0.12em;
+  margin: 16px 0 8px 2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* カードタイトル */
+.card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--matcha);
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--matcha-lt);
+}
+
+/* サマリーグリッド（ホーム画面） */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.summary-item { text-align: center; padding: 8px 4px; }
+.summary-item.warn .summary-num { color: var(--accent); }
+.summary-icon { font-size: 20px; color: var(--matcha-mid); margin-bottom: 4px; }
+.summary-num { font-size: 28px; font-weight: 700; color: var(--matcha); line-height: 1.1; }
+.summary-unit { font-size: 12px; }
+.summary-label { font-size: 11px; color: var(--sub); margin-top: 4px; }
+
+/* 直近の記録リスト（ホーム画面） */
+.record-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--matcha-lt);
+}
+.record-item:last-child { border-bottom: none; }
+.record-date { font-size: 12px; color: var(--sub); margin-bottom: 2px; }
+.record-main { font-size: 14px; font-weight: 600; color: var(--text); }
+.record-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.badge-ok { background: var(--matcha-lt); color: var(--matcha); }
+.badge-ng { background: var(--alert-bg); color: var(--alert-txt); border: 1px solid var(--alert-bdr); }
+
+/* レポートへのボタン */
+.btn-report { background: var(--kinari); color: var(--matcha); border: 1.5px solid var(--matcha-mid); width: 100%; }
+
+/* 空状態メッセージ */
+.empty-message { font-size: 13px; color: var(--sub); text-align: center; padding: 16px 0; }

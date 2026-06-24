@@ -16,7 +16,7 @@
   <tbody id="daily_records">
     <% @daily_records.each do |daily_record| %>
       <tr id="<%= dom_id(daily_record) %>">
-        <td><%= daily_record.date&.strftime("%Y年%m月%d日") %></td>
+        <td><%= ja_date_full(daily_record.date) %></td>
         <td><%= daily_record.death_count %></td>
         <td><%= daily_record.feed_usage %></td>
         <td><%= daily_record.feed_stock %></td>
