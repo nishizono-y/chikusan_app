@@ -21,7 +21,7 @@ class ReportsController < ApplicationController
 
     ship_scope         = Shipment.where(shipped_at: month_range).order(:shipped_at)
     @shipments         = ship_scope.load
-    @ship_count        = @shipments.sum(&:count)
+    @ship_count        = @shipments.sum { |s| s.count.to_i }
     @ship_total_weight = @shipments.sum { |s| s.count.to_i * s.avg_weight.to_f }.round(1)
 
     @feed_days = daily_scope.count
