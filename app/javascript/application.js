@@ -2,8 +2,10 @@
 import "@hotwired/turbo-rails"
 import "controllers"
 import Chartkick from "chartkick"
-import Chart from "chart.js"
+import { Chart } from "chart.js"
 Chartkick.addAdapter(Chart)
+
+document.addEventListener("turbo:load", () => Chartkick.eachChart(chart => chart.redraw()))
 
 Turbo.StreamActions.visit = function() {
   Turbo.visit(this.getAttribute("target"))
