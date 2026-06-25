@@ -14,6 +14,13 @@ class HomeController < ApplicationController
     @recent_records    = ordered_scope.limit(3).load
     @month_head_count  = @recent_records.first&.head_count
 
+    latest_record = DailyRecord.order(date: :desc).first
+    if latest_record && latest_record.feed_stock <= DailyRecord::FEED_STOCK_ALERT_THRESHOLD
+      @feed_stock_alert = true
+      usage = latest_record.feed_usage.to_i
+      @feed_remaining_days = usage > 0 ? (latest_record.feed_stock.to_f / usage).floor : nil
+    end
+
     chart_start = 5.months.ago.beginning_of_month
     chart_records = DailyRecord
       .where(date: chart_start..@today.end_of_month)

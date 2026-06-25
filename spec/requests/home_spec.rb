@@ -48,6 +48,41 @@ RSpec.describe "/", type: :request do
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("今月はまだ記録がありません")
     end
+
+    context "飼料残量アラート" do
+      before { DailyRecord.delete_all }
+
+      it "feed_stockがしきい値以下のときアラートバーを表示する" do
+        create_daily_record(feed_stock: 300, feed_usage: 100)
+
+        get root_path
+
+        expect(response.body).to include("alert-bar")
+        expect(response.body).to include("飼料残量が少なくなっています")
+      end
+
+      it "残日数を計算して表示する" do
+        create_daily_record(feed_stock: 200, feed_usage: 50)
+
+        get root_path
+
+        expect(response.body).to include("残り4日分程度")
+      end
+
+      it "feed_stockがしきい値を超えているときアラートバーを表示しない" do
+        create_daily_record(feed_stock: 301, feed_usage: 100)
+
+        get root_path
+
+        expect(response.body).not_to include("alert-bar")
+      end
+
+      it "日次記録がない場合はアラートバーを表示しない" do
+        get root_path
+
+        expect(response.body).not_to include("alert-bar")
+      end
+    end
   end
 
   private

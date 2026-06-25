@@ -201,6 +201,22 @@ tr:hover td { background: var(--matcha-lt); }
 td a { color: var(--matcha); text-decoration: none; font-weight: 600; }
 td a:hover { text-decoration: underline; }
 
+/* アラートバー（飼料残量警告など） */
+.alert-bar {
+  background: var(--alert-bg);
+  border: 1px solid var(--alert-bdr);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--alert-txt);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.alert-bar i { font-size: 14px; flex-shrink: 0; }
+
 /* フラッシュメッセージ */
 .flash-notice {
   background: var(--matcha-lt);
