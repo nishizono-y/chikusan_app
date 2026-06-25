@@ -9,6 +9,7 @@ ja:
     attributes:
       daily_record:
         date: 日付
+        head_count: 飼養頭数
         death_count: 死亡頭数
         feed_usage: 飼料使用量
         feed_stock: 飼料残量

@@ -6,6 +6,7 @@
   <thead>
     <tr>
       <th>日付</th>
+      <th>飼養頭数</th>
       <th>死亡頭数</th>
       <th>飼料使用量</th>
       <th>飼料残量</th>
@@ -17,6 +18,7 @@
     <% @daily_records.each do |daily_record| %>
       <tr id="<%= dom_id(daily_record) %>">
         <td><%= ja_date_full(daily_record.date) %></td>
+        <td><%= daily_record.head_count %></td>
         <td><%= daily_record.death_count %></td>
         <td><%= daily_record.feed_usage %></td>
         <td><%= daily_record.feed_stock %></td>
