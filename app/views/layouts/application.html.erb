@@ -22,10 +22,10 @@
     <header>
       <div class="header-left">
         <h1><i class="fa-solid fa-cow"></i> 薩摩畜産日誌</h1>
-        <div class="subtitle"><%= l(Date.today, format: :long) %></div>
+        <div class="subtitle"><%= l(@today, format: :long) %></div>
       </div>
       <div class="header-right">
-        <strong><%= Date.today.month %></strong>月
+        <strong><%= @today.month %></strong>月
       </div>
     </header>
 

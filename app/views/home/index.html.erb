@@ -9,7 +9,7 @@
   <div class="summary-grid">
     <div class="summary-item">
       <div class="summary-icon"><i class="fa-solid fa-pig"></i></div>
-      <div class="summary-num"><%= @month_head_count %></div>
+      <div class="summary-num"><%= @month_head_count || "—" %></div>
       <div class="summary-label">現在の飼養頭数</div>
     </div>
     <div class="<%= class_names('summary-item', warn: @month_deaths > 0) %>">
