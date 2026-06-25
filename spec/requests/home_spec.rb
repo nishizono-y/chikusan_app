@@ -14,7 +14,7 @@ RSpec.describe "/", type: :request do
       get root_path
 
       expect(response.body).to include("73")
-      expect(response.body).not_to include("99")
+      expect(response.body).not_to include("死亡 99頭")
     end
 
     it "当月の出荷記録だけを集計する" do

@@ -14,6 +14,13 @@ RSpec.describe DailyRecord, type: :model do
         expect(subject).not_to be_valid
         expect(subject.errors[:date]).to be_present
       end
+
+      it '同じ日付は登録できない' do
+        create(:daily_record, date: Date.current)
+        subject.date = Date.current
+        expect(subject).not_to be_valid
+        expect(subject.errors[:date]).to be_present
+      end
     end
 
     describe 'death_count' do
