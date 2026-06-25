@@ -82,6 +82,24 @@ RSpec.describe "/", type: :request do
 
         expect(response.body).not_to include("alert-bar")
       end
+
+      it "feed_stockが0のときアラートバーを表示するが残日数は表示しない" do
+        create_daily_record(feed_stock: 0, feed_usage: 100)
+
+        get root_path
+
+        expect(response.body).to include("alert-bar")
+        expect(response.body).not_to include("日分程度")
+      end
+
+      it "feed_usageが0のときアラートバーを表示するが残日数は表示しない" do
+        create_daily_record(feed_stock: 200, feed_usage: 0)
+
+        get root_path
+
+        expect(response.body).to include("alert-bar")
+        expect(response.body).not_to include("日分程度")
+      end
     end
   end
 

@@ -3,7 +3,7 @@
 <% if @feed_stock_alert %>
   <div class="alert-bar">
     <i class="fa-solid fa-triangle-exclamation"></i>
-    飼料残量が少なくなっています<% if @feed_remaining_days %>（残り<%= @feed_remaining_days %>日分程度）<% end %>
+    飼料残量が少なくなっています<% if @feed_remaining_days && @feed_remaining_days > 0 %>（残り<%= @feed_remaining_days %>日分程度）<% end %>
   </div>
 <% end %>
 
