@@ -19,7 +19,7 @@
         <td>月初飼養頭数</td>
         <td class="report-num"><%= @month_start_count.present? ? "#{@month_start_count} 頭" : "―" %></td>
       </tr>
-      <tr><td>今月の死亡頭数</td><td class="report-num-warn"><%= @deaths %> 頭</td></tr>
+      <tr><td>今月の死亡頭数</td><td class="<%= @deaths > 0 ? 'report-num-warn' : 'report-num' %>"><%= @deaths %> 頭</td></tr>
       <tr><td>今月の出荷頭数</td><td class="report-num"><%= @ship_count %> 頭</td></tr>
       <tr>
         <td>月末飼養頭数</td>

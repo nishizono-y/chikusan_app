@@ -1,7 +1,11 @@
 class ReportsController < ApplicationController
   def index
-    @target = params[:month].present? ? Date.parse("#{params[:month]}-01") : Date.current.beginning_of_month
-    month_range = @target.beginning_of_month..@target.end_of_month
+    @target = begin
+      params[:month].present? ? Date.parse("#{params[:month]}-01") : Date.current.beginning_of_month
+    rescue Date::Error
+      Date.current.beginning_of_month
+    end
+    month_range = @target..@target.end_of_month
     prev_range  = (@target - 1.month).beginning_of_month..(@target - 1.month).end_of_month
 
     @month_label = @target.strftime("%-m月")
@@ -16,9 +20,9 @@ class ReportsController < ApplicationController
     @mortality_rate    = (@month_start_count.to_i > 0) ? (@deaths.to_f / @month_start_count * 100).round(1) : nil
 
     ship_scope         = Shipment.where(shipped_at: month_range).order(:shipped_at)
-    @ship_count        = ship_scope.sum(:count)
-    @ship_total_weight = ship_scope.sum(Arel.sql("count * avg_weight")).to_f.round(1)
     @shipments         = ship_scope.load
+    @ship_count        = @shipments.sum(&:count)
+    @ship_total_weight = @shipments.sum { |s| s.count.to_i * s.avg_weight.to_f }.round(1)
 
     @feed_days = daily_scope.count
     @feed_per_head_day = (@feed_days > 0 && @month_start_count.to_i > 0) ? (@feed_total.to_f / @feed_days / @month_start_count).round(1) : nil
