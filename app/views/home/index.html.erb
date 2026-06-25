@@ -7,8 +7,13 @@
     <i class="fa-solid fa-chart-simple"></i> <%= @month_label %>の飼養記録
   </div>
   <div class="summary-grid">
+    <div class="summary-item">
+      <div class="summary-icon"><i class="fa-solid fa-pig"></i></div>
+      <div class="summary-num"><%= @month_head_count || "—" %></div>
+      <div class="summary-label">現在の飼養頭数</div>
+    </div>
     <div class="<%= class_names('summary-item', warn: @month_deaths > 0) %>">
-      <div class="summary-icon"><i class="fa-solid fa-skull-crossbones"></i></div>
+      <div class="summary-icon"><i class="fa-solid fa-circle-exclamation"></i></div>
       <div class="summary-num"><%= @month_deaths %></div>
       <div class="summary-label">今月の死亡頭数</div>
     </div>
