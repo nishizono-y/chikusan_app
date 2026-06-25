@@ -85,7 +85,7 @@
   <div class="card-title" style="margin-top: 1rem;">
     <i class="fa-solid fa-chart-column"></i> 死亡頭数の推移（月次合計）
   </div>
-  <% if @chart_death_count.any? %>
+  <% if @chart_death_count.any? { |_, v| v > 0 } %>
     <%= bar_chart @chart_death_count,
           height: "160px",
           colors: ["#c0392b"],
