@@ -64,6 +64,40 @@
   <% end %>
 </div>
 
+<div class="section-label">過去6ヶ月の推移</div>
+
+<div class="card">
+  <div class="card-title">
+    <i class="fa-solid fa-chart-line"></i> 飼養頭数の推移
+  </div>
+  <% if @chart_head_count.any? { |_, v| v } %>
+    <%= line_chart @chart_head_count,
+          height: "160px",
+          colors: ["#4a7c59"],
+          library: {
+            scales: { y: { beginAtZero: false, ticks: { stepSize: 1 } } },
+            plugins: { legend: { display: false } }
+          } %>
+  <% else %>
+    <p class="empty-message">グラフを表示するデータがありません</p>
+  <% end %>
+
+  <div class="card-title" style="margin-top: 1rem;">
+    <i class="fa-solid fa-chart-column"></i> 死亡頭数の推移（月次合計）
+  </div>
+  <% if @chart_death_count.any? { |_, v| v > 0 } %>
+    <%= bar_chart @chart_death_count,
+          height: "160px",
+          colors: ["#c0392b"],
+          library: {
+            scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } },
+            plugins: { legend: { display: false } }
+          } %>
+  <% else %>
+    <p class="empty-message">グラフを表示するデータがありません</p>
+  <% end %>
+</div>
+
 <div class="actions">
   <%= link_to daily_records_path, class: "btn btn-report" do %>
     <i class="fa-solid fa-file-lines"></i> 日次記録の一覧を見る

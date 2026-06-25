@@ -1,4 +1,5 @@
 module ApplicationHelper
+  include Chartkick::Helper
   # 年なし・曜日付き（ホーム画面など当月限定のコンテキスト向け）
   def ja_date(date)
     return nil if date.nil?

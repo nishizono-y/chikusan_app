@@ -84,6 +84,7 @@ GEM
     brakeman (8.0.5)
       racc
     builder (3.3.0)
+    chartkick (5.2.1)
     concurrent-ruby (1.3.7)
     connection_pool (3.0.2)
     crass (1.0.6)
@@ -330,6 +331,7 @@ PLATFORMS
 DEPENDENCIES
   bootsnap
   brakeman
+  chartkick
   debug
   factory_bot_rails
   faker

@@ -13,5 +13,17 @@ class HomeController < ApplicationController
     ordered_scope      = scope.order(date: :desc)
     @recent_records    = ordered_scope.limit(3).load
     @month_head_count  = @recent_records.first&.head_count
+
+    chart_start = 5.months.ago.beginning_of_month
+    chart_records = DailyRecord
+      .where(date: chart_start..@today.end_of_month)
+      .order(:date)
+
+    monthly = chart_records
+      .group_by { |r| r.date.beginning_of_month }
+      .transform_keys { |d| d.strftime("%Y年%-m月") }
+
+    @chart_head_count  = monthly.transform_values { |rs| rs.max_by(&:date)&.head_count }
+    @chart_death_count = monthly.transform_values { |rs| rs.sum { |r| r.death_count.to_i } }
   end
 end
