@@ -5,7 +5,11 @@ import Chartkick from "chartkick"
 import { Chart } from "chart.js"
 Chartkick.addAdapter(Chart)
 
-document.addEventListener("turbo:load", () => Chartkick.eachChart(chart => chart.redraw()))
+document.addEventListener("turbo:load", (event) => {
+  if (event.detail.timing.visitStart) {
+    Chartkick.eachChart(chart => chart.redraw())
+  }
+})
 
 Turbo.StreamActions.visit = function() {
   Turbo.visit(this.getAttribute("target"))

@@ -70,7 +70,7 @@
   <div class="card-title">
     <i class="fa-solid fa-chart-line"></i> 飼養頭数の推移
   </div>
-  <% if @chart_head_count.any? %>
+  <% if @chart_head_count.any? { |_, v| v } %>
     <%= line_chart @chart_head_count,
           height: "160px",
           colors: ["#4a7c59"],
