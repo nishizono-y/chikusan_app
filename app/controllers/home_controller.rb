@@ -10,6 +10,7 @@ class HomeController < ApplicationController
     @month_deaths      = deaths.to_i
     @month_feed_usage  = feed_usage.to_i
     @month_ship_count  = Shipment.where(shipped_at: month_range).sum(:count)
+    @month_head_count  = scope.order(date: :desc).pick(:head_count).to_i
 
     @recent_records    = scope.order(date: :desc).limit(3).load
   end
