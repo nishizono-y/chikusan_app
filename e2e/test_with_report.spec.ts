@@ -55,7 +55,7 @@ test('No.2 新規作成して一覧に反映される', async ({ page }) => {
     });
 
     await test.step('フォームに入力する', async () => {
-      await page.fill('input[name="daily_record[date]"]', '2026-06-18');
+      await page.fill('input[name="daily_record[date]"]', '2026-06-19');
       await page.fill('input[name="daily_record[death_count]"]', '0');
       await page.fill('input[name="daily_record[feed_usage]"]', '130');
       await page.fill('input[name="daily_record[feed_stock]"]', '380');

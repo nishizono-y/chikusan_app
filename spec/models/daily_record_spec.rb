@@ -66,12 +66,12 @@ RSpec.describe DailyRecord, type: :model do
 
     describe '#feed_stock_low?' do
       it 'feed_stockがしきい値以下のとき真を返す' do
-        subject.feed_stock = 300
+        subject.feed_stock = DailyRecord::FEED_STOCK_ALERT_THRESHOLD
         expect(subject.feed_stock_low?).to be true
       end
 
       it 'feed_stockがしきい値を超えているとき偽を返す' do
-        subject.feed_stock = 301
+        subject.feed_stock = DailyRecord::FEED_STOCK_ALERT_THRESHOLD + 1
         expect(subject.feed_stock_low?).to be false
       end
 
@@ -107,7 +107,7 @@ RSpec.describe DailyRecord, type: :model do
       end
 
       it 'feed_stockがしきい値を超えているときnilを返す' do
-        subject.feed_stock = 301
+        subject.feed_stock = DailyRecord::FEED_STOCK_ALERT_THRESHOLD + 1
         subject.feed_usage = 100
         expect(subject.estimated_remaining_days).to be_nil
       end

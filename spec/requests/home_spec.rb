@@ -14,7 +14,8 @@ RSpec.describe "/", type: :request do
       get root_path
 
       expect(response.body).to include("73")
-      expect(response.body).not_to include("死亡 99頭")
+      expect(response.body).not_to include("死亡 99頭")  # 直近記録セクションに前月データが出ないこと
+      expect(response.body).not_to include(">99<")       # サマリー統計に前月データが集計されないこと
     end
 
     it "当月の出荷記録だけを集計する" do
@@ -53,7 +54,7 @@ RSpec.describe "/", type: :request do
       before { DailyRecord.delete_all }
 
       it "feed_stockがしきい値以下のときアラートバーを表示する" do
-        create_daily_record(feed_stock: 300, feed_usage: 100)
+        create_daily_record(feed_stock: DailyRecord::FEED_STOCK_ALERT_THRESHOLD, feed_usage: 100)
 
         get root_path
 
@@ -70,7 +71,7 @@ RSpec.describe "/", type: :request do
       end
 
       it "feed_stockがしきい値を超えているときアラートバーを表示しない" do
-        create_daily_record(feed_stock: 301, feed_usage: 100)
+        create_daily_record(feed_stock: DailyRecord::FEED_STOCK_ALERT_THRESHOLD + 1, feed_usage: 100)
 
         get root_path
 
