@@ -15,7 +15,7 @@ RSpec.describe "/", type: :request do
 
       expect(response.body).to include("73")
       expect(response.body).not_to include("死亡 99頭")  # 直近記録セクションに前月データが出ないこと
-      expect(response.body).not_to include(">99<")       # サマリー統計に前月データが集計されないこと
+      expect(response.body).to include(">73<")           # サマリー統計が当月のみ集計すること（バグ時は172になり失敗）
     end
 
     it "当月の出荷記録だけを集計する" do

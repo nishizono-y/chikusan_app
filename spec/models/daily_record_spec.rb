@@ -83,13 +83,13 @@ RSpec.describe DailyRecord, type: :model do
 
     describe '#estimated_remaining_days' do
       it '在庫と使用量から残日数を切り上げで返す' do
-        subject.feed_stock = 200
+        subject.feed_stock = 200 # FEED_STOCK_ALERT_THRESHOLD(300)以下であることが前提
         subject.feed_usage = 50
         expect(subject.estimated_remaining_days).to eq(4)
       end
 
       it '在庫が使用量未満のとき1を返す' do
-        subject.feed_stock = 10
+        subject.feed_stock = 10 # FEED_STOCK_ALERT_THRESHOLD(300)以下であることが前提
         subject.feed_usage = 50
         expect(subject.estimated_remaining_days).to eq(1)
       end
