@@ -7,6 +7,6 @@ class ApplicationController < ActionController::Base
   private
 
   def set_today
-    @today = Date.current
+    @today ||= Date.current
   end
 end
