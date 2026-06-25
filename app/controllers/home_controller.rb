@@ -19,7 +19,7 @@ class HomeController < ApplicationController
     if stock && stock <= DailyRecord::FEED_STOCK_ALERT_THRESHOLD
       @feed_stock_alert = true
       usage = latest_record.feed_usage.to_i
-      remaining = usage > 0 ? (stock.to_f / usage).ceil : nil
+      remaining = usage > 0 ? stock.fdiv(usage).ceil : nil
       @feed_remaining_days = remaining if remaining&.positive?
     end
 
