@@ -57,6 +57,55 @@ RSpec.describe DailyRecord, type: :model do
       end
     end
 
+    describe '#feed_stock_low?' do
+      it 'feed_stockがしきい値以下のとき真を返す' do
+        subject.feed_stock = 300
+        expect(subject.feed_stock_low?).to be true
+      end
+
+      it 'feed_stockがしきい値を超えているとき偽を返す' do
+        subject.feed_stock = 301
+        expect(subject.feed_stock_low?).to be false
+      end
+
+      it 'feed_stockがnilのとき偽を返す' do
+        subject.feed_stock = nil
+        expect(subject.feed_stock_low?).to be_falsey
+      end
+    end
+
+    describe '#estimated_remaining_days' do
+      it '在庫と使用量から残日数を切り上げで返す' do
+        subject.feed_stock = 200
+        subject.feed_usage = 50
+        expect(subject.estimated_remaining_days).to eq(4)
+      end
+
+      it '在庫が使用量未満のとき1を返す' do
+        subject.feed_stock = 10
+        subject.feed_usage = 50
+        expect(subject.estimated_remaining_days).to eq(1)
+      end
+
+      it '在庫が0のときnilを返す' do
+        subject.feed_stock = 0
+        subject.feed_usage = 100
+        expect(subject.estimated_remaining_days).to be_nil
+      end
+
+      it 'feed_usageが0のときnilを返す' do
+        subject.feed_stock = 200
+        subject.feed_usage = 0
+        expect(subject.estimated_remaining_days).to be_nil
+      end
+
+      it 'feed_stockがしきい値を超えているときnilを返す' do
+        subject.feed_stock = 301
+        subject.feed_usage = 100
+        expect(subject.estimated_remaining_days).to be_nil
+      end
+    end
+
     describe 'vaccine' do
       it '空白は有効' do
         subject.vaccine = ''

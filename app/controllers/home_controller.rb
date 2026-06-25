@@ -15,12 +15,9 @@ class HomeController < ApplicationController
     @month_head_count  = @recent_records.first&.head_count
 
     latest_record = @recent_records.first || DailyRecord.order(date: :desc).first
-    stock = latest_record&.feed_stock
-    if stock && stock <= DailyRecord::FEED_STOCK_ALERT_THRESHOLD
+    if latest_record&.feed_stock_low?
       @feed_stock_alert = true
-      usage = latest_record.feed_usage.to_i
-      remaining = usage > 0 ? stock.fdiv(usage).ceil : nil
-      @feed_remaining_days = remaining if remaining&.positive?
+      @feed_remaining_days = latest_record.estimated_remaining_days
     end
 
     chart_start = 5.months.ago.beginning_of_month
