@@ -103,7 +103,7 @@ RSpec.describe DailyRecord, type: :model do
     end
 
     it '設定画面で変更したしきい値が反映される' do
-      Setting.create!(name: "feed_stock_threshold", value: 500)
+      Setting.create!(name: Setting::FEED_STOCK_KEY, value: 500)
       subject.feed_stock = 400
       expect(subject.feed_stock_low?).to be true
       subject.feed_stock = 501

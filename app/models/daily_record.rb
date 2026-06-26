@@ -16,7 +16,7 @@ class DailyRecord < ApplicationRecord
     usage = feed_usage.to_i
     return nil unless usage > 0
     remaining = feed_stock.fdiv(usage).ceil
-    remaining if remaining.positive?
+    remaining unless remaining.negative?
   end
 
   # 死亡率の異常検知アラートを返す。
