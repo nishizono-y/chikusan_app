@@ -14,6 +14,13 @@ RSpec.describe DailyRecord, type: :model do
         expect(subject).not_to be_valid
         expect(subject.errors[:date]).to be_present
       end
+
+      it '同じ日付は登録できない' do
+        create(:daily_record, date: Date.current)
+        subject.date = Date.current
+        expect(subject).not_to be_valid
+        expect(subject.errors[:date]).to be_present
+      end
     end
 
     describe 'death_count' do
@@ -74,6 +81,59 @@ RSpec.describe DailyRecord, type: :model do
         subject.vaccine = '無効な値'
         expect(subject).not_to be_valid
       end
+    end
+  end
+
+  describe '#feed_stock_low?' do
+    subject { build(:daily_record) }
+
+    it 'feed_stockがしきい値以下のとき真を返す' do
+      subject.feed_stock = DailyRecord::FEED_STOCK_ALERT_THRESHOLD
+      expect(subject.feed_stock_low?).to be true
+    end
+
+    it 'feed_stockがしきい値を超えているとき偽を返す' do
+      subject.feed_stock = DailyRecord::FEED_STOCK_ALERT_THRESHOLD + 1
+      expect(subject.feed_stock_low?).to be false
+    end
+
+    it 'feed_stockがnilのとき偽を返す' do
+      subject.feed_stock = nil
+      expect(subject.feed_stock_low?).to be_falsey
+    end
+  end
+
+  describe '#estimated_remaining_days' do
+    subject { build(:daily_record) }
+
+    it '在庫と使用量から残日数を切り上げで返す' do
+      subject.feed_stock = 200 # FEED_STOCK_ALERT_THRESHOLD(300)以下であることが前提
+      subject.feed_usage = 50
+      expect(subject.estimated_remaining_days).to eq(4)
+    end
+
+    it '在庫が使用量未満のとき1を返す' do
+      subject.feed_stock = 10 # FEED_STOCK_ALERT_THRESHOLD(300)以下であることが前提
+      subject.feed_usage = 50
+      expect(subject.estimated_remaining_days).to eq(1)
+    end
+
+    it '在庫が0のときnilを返す' do
+      subject.feed_stock = 0
+      subject.feed_usage = 100
+      expect(subject.estimated_remaining_days).to be_nil
+    end
+
+    it 'feed_usageが0のときnilを返す' do
+      subject.feed_stock = 200
+      subject.feed_usage = 0
+      expect(subject.estimated_remaining_days).to be_nil
+    end
+
+    it 'feed_stockがしきい値を超えているときnilを返す' do
+      subject.feed_stock = DailyRecord::FEED_STOCK_ALERT_THRESHOLD + 1
+      subject.feed_usage = 100
+      expect(subject.estimated_remaining_days).to be_nil
     end
   end
 end
