@@ -10,6 +10,9 @@ class SettingsController < ApplicationController
     else
       render :edit, status: :unprocessable_entity
     end
+  rescue ActiveRecord::RecordNotUnique
+    @setting = Setting.fetch("feed_stock_threshold")
+    retry
   end
 
   private
