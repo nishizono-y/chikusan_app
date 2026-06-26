@@ -110,13 +110,12 @@ RSpec.describe "/", type: :request do
         expect(response.body).not_to include("日分程度")
       end
 
-      it "当月記録がなく前月の在庫が閾値以下のときアラートバーを表示する" do
+      it "当月記録がない場合はアラートバーを表示しない" do
         create_daily_record(date: Date.current.prev_month, feed_stock: 100, feed_usage: 50)
 
         get root_path
 
-        expect(response.body).to include("alert-bar")
-        expect(response.body).to include("残り2日分程度")
+        expect(response.body).not_to include("alert-bar")
       end
     end
   end

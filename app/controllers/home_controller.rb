@@ -14,7 +14,7 @@ class HomeController < ApplicationController
     @recent_records    = ordered_scope.limit(3).load
     @month_head_count  = @recent_records.first&.head_count
 
-    latest_record = @recent_records.first || DailyRecord.order(date: :desc).first
+    latest_record = @recent_records.first
     if latest_record&.feed_stock_low?
       @feed_stock_alert = true
       @feed_remaining_days = latest_record.estimated_remaining_days
