@@ -10,16 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_23_021847) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_25_052428) do
   create_table "daily_records", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.date "date"
     t.integer "death_count"
     t.integer "feed_stock"
     t.integer "feed_usage"
+    t.integer "head_count"
     t.text "memo"
     t.datetime "updated_at", null: false
     t.string "vaccine"
+    t.index ["date"], name: "index_daily_records_on_date", unique: true
   end
 
   create_table "shipments", force: :cascade do |t|

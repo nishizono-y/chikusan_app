@@ -14,7 +14,8 @@ RSpec.describe "/", type: :request do
       get root_path
 
       expect(response.body).to include("73")
-      expect(response.body).not_to include("99")
+      expect(response.body).not_to include("死亡 99頭")  # 直近記録セクションに前月データが出ないこと
+      expect(response.body).to include(">73<")           # サマリー統計が当月のみ集計すること（バグ時は172になり失敗）
     end
 
     it "当月の出荷記録だけを集計する" do
@@ -47,6 +48,75 @@ RSpec.describe "/", type: :request do
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("今月はまだ記録がありません")
+    end
+
+    context "飼料残量アラート" do
+      before { DailyRecord.delete_all }
+
+      it "feed_stockがしきい値以下のときアラートバーを表示する" do
+        create_daily_record(feed_stock: DailyRecord::FEED_STOCK_ALERT_THRESHOLD, feed_usage: 100)
+
+        get root_path
+
+        expect(response.body).to include("alert-bar")
+        expect(response.body).to include("飼料残量が少なくなっています")
+      end
+
+      it "残日数を計算して表示する" do
+        create_daily_record(feed_stock: 200, feed_usage: 50)
+
+        get root_path
+
+        expect(response.body).to include("残り4日分程度")
+      end
+
+      it "feed_stockがしきい値を超えているときアラートバーを表示しない" do
+        create_daily_record(feed_stock: DailyRecord::FEED_STOCK_ALERT_THRESHOLD + 1, feed_usage: 100)
+
+        get root_path
+
+        expect(response.body).not_to include("alert-bar")
+      end
+
+      it "日次記録がない場合はアラートバーを表示しない" do
+        get root_path
+
+        expect(response.body).not_to include("alert-bar")
+      end
+
+      it "feed_stockがfeed_usage未満（1日分未満）のとき残り1日分程度と表示する" do
+        create_daily_record(feed_stock: 10, feed_usage: 50)
+
+        get root_path
+
+        expect(response.body).to include("残り1日分程度")
+      end
+
+      it "feed_stockが0のときアラートバーを表示するが残日数は表示しない" do
+        create_daily_record(feed_stock: 0, feed_usage: 100)
+
+        get root_path
+
+        expect(response.body).to include("alert-bar")
+        expect(response.body).not_to include("日分程度")
+      end
+
+      it "feed_usageが0のときアラートバーを表示するが残日数は表示しない" do
+        create_daily_record(feed_stock: 200, feed_usage: 0)
+
+        get root_path
+
+        expect(response.body).to include("alert-bar")
+        expect(response.body).not_to include("日分程度")
+      end
+
+      it "当月記録がない場合はアラートバーを表示しない" do
+        create_daily_record(date: Date.current.prev_month, feed_stock: 100, feed_usage: 50)
+
+        get root_path
+
+        expect(response.body).not_to include("alert-bar")
+      end
     end
   end
 

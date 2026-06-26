@@ -1,0 +1,9 @@
+<% is_danger = alert[:level] == :danger %>
+<div class="alert-bar alert-bar--<%= alert[:level] %>" role="alert">
+  <span aria-hidden="true">⚠️</span>
+  <span>
+    <strong><%= is_danger ? "【要注意】" : "【警告】" %></strong>
+    今日の死亡率は直近<%= alert[:days] %>日間平均の<%= alert[:ratio] %>倍です。
+    <%= is_danger ? "速やかに獣医師へご相談ください。" : "引き続き様子を確認してください。" %>
+  </span>
+</div>

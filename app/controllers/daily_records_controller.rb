@@ -4,6 +4,8 @@ class DailyRecordsController < ApplicationController
   # GET /daily_records or /daily_records.json
   def index
     @daily_records = DailyRecord.all
+    today_record = DailyRecord.find_by(date: Date.current)
+    @mortality_alert = DailyRecord.mortality_alert(today_record)
   end
 
   # GET /daily_records/1 or /daily_records/1.json
@@ -66,6 +68,6 @@ class DailyRecordsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def daily_record_params
-      params.require(:daily_record).permit(:date, :death_count, :feed_usage, :feed_stock, :vaccine, :memo)
+      params.require(:daily_record).permit(:date, :head_count, :death_count, :feed_usage, :feed_stock, :vaccine, :memo)
     end
 end

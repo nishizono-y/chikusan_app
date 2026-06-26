@@ -8,6 +8,14 @@
   </div>
 
   <div class="form-group">
+    <%= form.label :head_count %>
+    <%= form.number_field :head_count, min: 0 %>
+    <% daily_record.errors.where(:head_count).each do |error| %>
+      <span class="field-error"><%= error.full_message %></span>
+    <% end %>
+  </div>
+
+  <div class="form-group">
     <%= form.label :death_count %>
     <%= form.number_field :death_count, min: 0 %>
     <% daily_record.errors.where(:death_count).each do |error| %>

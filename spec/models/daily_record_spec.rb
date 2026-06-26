@@ -14,6 +14,13 @@ RSpec.describe DailyRecord, type: :model do
         expect(subject).not_to be_valid
         expect(subject.errors[:date]).to be_present
       end
+
+      it '同じ日付は登録できない' do
+        create(:daily_record, date: Date.current)
+        subject.date = Date.current
+        expect(subject).not_to be_valid
+        expect(subject.errors[:date]).to be_present
+      end
     end
 
     describe 'death_count' do
@@ -74,6 +81,138 @@ RSpec.describe DailyRecord, type: :model do
         subject.vaccine = '無効な値'
         expect(subject).not_to be_valid
       end
+    end
+  end
+
+  describe '#feed_stock_low?' do
+    subject { build(:daily_record) }
+
+    it 'feed_stockがしきい値以下のとき真を返す' do
+      subject.feed_stock = DailyRecord::FEED_STOCK_ALERT_THRESHOLD
+      expect(subject.feed_stock_low?).to be true
+    end
+
+    it 'feed_stockがしきい値を超えているとき偽を返す' do
+      subject.feed_stock = DailyRecord::FEED_STOCK_ALERT_THRESHOLD + 1
+      expect(subject.feed_stock_low?).to be false
+    end
+
+    it 'feed_stockがnilのとき偽を返す' do
+      subject.feed_stock = nil
+      expect(subject.feed_stock_low?).to be_falsey
+    end
+  end
+
+  describe '.mortality_alert' do
+    let(:base_date) { Date.new(2026, 6, 25) }
+
+    def build_past(date:, death_count:, head_count:)
+      create(:daily_record, date: date, death_count: death_count, head_count: head_count)
+    end
+
+    context '当日の記録がnil' do
+      it 'nilを返す' do
+        expect(DailyRecord.mortality_alert(nil)).to be_nil
+      end
+    end
+
+    context '当日の死亡頭数が0' do
+      it 'nilを返す' do
+        today = create(:daily_record, date: base_date, death_count: 0, head_count: 100)
+        expect(DailyRecord.mortality_alert(today)).to be_nil
+      end
+    end
+
+    context '当日の飼養頭数が0' do
+      it 'nilを返す' do
+        today = create(:daily_record, date: base_date, death_count: 3, head_count: 0)
+        expect(DailyRecord.mortality_alert(today)).to be_nil
+      end
+    end
+
+    context '過去30日間に死亡ゼロ（平均死亡率が0）' do
+      it 'nilを返す' do
+        (1..5).each { |i| build_past(date: base_date - i, death_count: 0, head_count: 100) }
+        today = create(:daily_record, date: base_date, death_count: 3, head_count: 100)
+        expect(DailyRecord.mortality_alert(today)).to be_nil
+      end
+    end
+
+    context '当日死亡率が平均の2倍以上3倍未満' do
+      it 'level: :warning を返す' do
+        # 過去30日: 死亡率 1% (1/100)
+        (1..5).each { |i| build_past(date: base_date - i, death_count: 1, head_count: 100) }
+        # 当日: 死亡率 2.5% (25/1000)
+        today = create(:daily_record, date: base_date, death_count: 25, head_count: 1000)
+        result = DailyRecord.mortality_alert(today)
+        expect(result[:level]).to eq(:warning)
+        expect(result[:ratio]).to be >= 2.0
+        expect(result[:ratio]).to be < 3.0
+      end
+    end
+
+    context '当日死亡率が平均の3倍以上' do
+      it 'level: :danger を返す' do
+        # 過去30日: 死亡率 1% (1/100)
+        (1..5).each { |i| build_past(date: base_date - i, death_count: 1, head_count: 100) }
+        # 当日: 死亡率 4% (4/100)
+        today = create(:daily_record, date: base_date, death_count: 40, head_count: 1000)
+        result = DailyRecord.mortality_alert(today)
+        expect(result[:level]).to eq(:danger)
+        expect(result[:ratio]).to be >= 3.0
+      end
+    end
+
+    context '当日死亡率が平均の2倍未満' do
+      it 'nilを返す' do
+        (1..5).each { |i| build_past(date: base_date - i, death_count: 2, head_count: 100) }
+        today = create(:daily_record, date: base_date, death_count: 3, head_count: 100)
+        expect(DailyRecord.mortality_alert(today)).to be_nil
+      end
+    end
+
+    context '30日より前の記録は除外される' do
+      it '31日前のデータは計算に含まれない' do
+        # 31日前に高死亡率の記録があっても影響しない
+        build_past(date: base_date - 31, death_count: 10, head_count: 100)
+        today = create(:daily_record, date: base_date, death_count: 5, head_count: 100)
+        # 過去30日にデータがないためnilを返す
+        expect(DailyRecord.mortality_alert(today)).to be_nil
+      end
+    end
+  end
+
+  describe '#estimated_remaining_days' do
+    subject { build(:daily_record) }
+
+    it '在庫と使用量から残日数を切り上げで返す' do
+      subject.feed_stock = 200 # FEED_STOCK_ALERT_THRESHOLD(300)以下であることが前提
+      subject.feed_usage = 50
+      expect(subject.estimated_remaining_days).to eq(4)
+    end
+
+    it '在庫が使用量未満のとき1を返す' do
+      subject.feed_stock = 10 # FEED_STOCK_ALERT_THRESHOLD(300)以下であることが前提
+      subject.feed_usage = 50
+      expect(subject.estimated_remaining_days).to eq(1)
+    end
+
+    it '在庫が0のときnilを返す' do
+      subject.feed_stock = 0
+      subject.feed_usage = 100
+      expect(subject.estimated_remaining_days).to be_nil
+    end
+
+    it 'feed_usageが0のときnilを返す' do
+      subject.feed_stock = 200
+      subject.feed_usage = 0
+      expect(subject.estimated_remaining_days).to be_nil
+    end
+
+    it 'feed_stockがしきい値を超えているときnilを返す' do
+      subject.feed_stock = DailyRecord::FEED_STOCK_ALERT_THRESHOLD + 1
+      subject.feed_usage = 100
+      expect(subject.estimated_remaining_days).to be_nil
     end
   end
 end
