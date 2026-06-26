@@ -1,4 +1,6 @@
 class SettingsController < ApplicationController
+  SETTING_KEY = "feed_stock_threshold"
+
   before_action :set_setting
 
   def edit
@@ -11,14 +13,14 @@ class SettingsController < ApplicationController
       render :edit, status: :unprocessable_entity
     end
   rescue ActiveRecord::RecordNotUnique
-    @setting = Setting.fetch("feed_stock_threshold")
+    @setting = Setting.fetch(SETTING_KEY)
     retry
   end
 
   private
 
   def set_setting
-    @setting = Setting.fetch("feed_stock_threshold")
+    @setting = Setting.fetch(SETTING_KEY)
   end
 
   def setting_params
