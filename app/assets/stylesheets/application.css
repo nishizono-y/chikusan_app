@@ -233,6 +233,18 @@ td a:hover { text-decoration: underline; }
   gap: 8px;
 }
 .alert-bar i { font-size: 14px; flex-shrink: 0; }
+.alert-bar--warning {
+  background: var(--alert-bg);
+  border: 1px solid var(--alert-bdr);
+  border-left: 3px solid var(--accent);
+  color: var(--alert-txt);
+}
+.alert-bar--danger {
+  background: #FEF0EF;
+  border: 1px solid #F5B3AF;
+  border-left: 3px solid #c0392b;
+  color: #7B1D1A;
+}
 
 /* エラーメッセージ */
 #error_explanation {

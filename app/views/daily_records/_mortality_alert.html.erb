@@ -1,0 +1,11 @@
+<% level = alert[:level] %>
+<% ratio = alert[:ratio] %>
+<% days = alert[:days] %>
+<div class="alert-bar alert-bar--<%= level %>" role="alert">
+  <i>⚠️</i>
+  <span>
+    <strong><%= level == :danger ? "【要注意】" : "【警告】" %></strong>
+    今日の死亡率は直近<%= days %>日間平均の<%= ratio %>倍です。
+    <%= level == :danger ? "速やかに獣医師へご相談ください。" : "引き続き様子を確認してください。" %>
+  </span>
+</div>
