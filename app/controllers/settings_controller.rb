@@ -1,10 +1,10 @@
 class SettingsController < ApplicationController
+  before_action :set_setting
+
   def edit
-    @setting = Setting.instance
   end
 
   def update
-    @setting = Setting.instance
     if @setting.update(setting_params)
       redirect_to edit_setting_path, notice: "設定を保存しました"
     else
@@ -14,7 +14,11 @@ class SettingsController < ApplicationController
 
   private
 
+  def set_setting
+    @setting = Setting.fetch("feed_stock_threshold")
+  end
+
   def setting_params
-    params.require(:setting).permit(:feed_stock_threshold)
+    params.require(:setting).permit(:value)
   end
 end

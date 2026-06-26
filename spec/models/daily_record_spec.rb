@@ -88,18 +88,26 @@ RSpec.describe DailyRecord, type: :model do
     subject { build(:daily_record) }
 
     it 'feed_stockがしきい値以下のとき真を返す' do
-      subject.feed_stock = DailyRecord::FEED_STOCK_ALERT_THRESHOLD
+      subject.feed_stock = Setting.feed_stock_threshold
       expect(subject.feed_stock_low?).to be true
     end
 
     it 'feed_stockがしきい値を超えているとき偽を返す' do
-      subject.feed_stock = DailyRecord::FEED_STOCK_ALERT_THRESHOLD + 1
+      subject.feed_stock = Setting.feed_stock_threshold + 1
       expect(subject.feed_stock_low?).to be false
     end
 
     it 'feed_stockがnilのとき偽を返す' do
       subject.feed_stock = nil
       expect(subject.feed_stock_low?).to be_falsey
+    end
+
+    it '設定画面で変更したしきい値が反映される' do
+      Setting.create!(name: "feed_stock_threshold", value: 500)
+      subject.feed_stock = 400
+      expect(subject.feed_stock_low?).to be true
+      subject.feed_stock = 501
+      expect(subject.feed_stock_low?).to be false
     end
   end
 
@@ -186,13 +194,13 @@ RSpec.describe DailyRecord, type: :model do
     subject { build(:daily_record) }
 
     it '在庫と使用量から残日数を切り上げで返す' do
-      subject.feed_stock = 200 # FEED_STOCK_ALERT_THRESHOLD(300)以下であることが前提
+      subject.feed_stock = 200
       subject.feed_usage = 50
       expect(subject.estimated_remaining_days).to eq(4)
     end
 
     it '在庫が使用量未満のとき1を返す' do
-      subject.feed_stock = 10 # FEED_STOCK_ALERT_THRESHOLD(300)以下であることが前提
+      subject.feed_stock = 10
       subject.feed_usage = 50
       expect(subject.estimated_remaining_days).to eq(1)
     end
@@ -210,7 +218,7 @@ RSpec.describe DailyRecord, type: :model do
     end
 
     it 'feed_stockがしきい値を超えているときnilを返す' do
-      subject.feed_stock = DailyRecord::FEED_STOCK_ALERT_THRESHOLD + 1
+      subject.feed_stock = Setting.feed_stock_threshold + 1
       subject.feed_usage = 100
       expect(subject.estimated_remaining_days).to be_nil
     end
