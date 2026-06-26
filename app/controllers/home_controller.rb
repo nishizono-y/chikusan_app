@@ -15,10 +15,12 @@ class HomeController < ApplicationController
     @month_head_count  = @recent_records.first&.head_count
 
     latest_record = @recent_records.first
-    threshold = Setting.feed_stock_threshold
-    if latest_record&.feed_stock_low?(threshold)
-      @feed_stock_alert = true
-      @feed_remaining_days = latest_record.estimated_remaining_days(threshold)
+    if latest_record
+      threshold = Setting.feed_stock_threshold
+      if latest_record.feed_stock_low?(threshold)
+        @feed_stock_alert = true
+        @feed_remaining_days = latest_record.estimated_remaining_days(threshold)
+      end
     end
 
     chart_start = 5.months.ago.beginning_of_month
