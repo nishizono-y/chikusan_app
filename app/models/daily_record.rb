@@ -44,10 +44,10 @@ class DailyRecord < ApplicationRecord
     avg_rate = total_death.to_f / total_head
     return nil unless avg_rate > 0
 
-    ratio = (today_rate / avg_rate).round(1)
+    ratio = today_rate / avg_rate
     return nil unless ratio >= 2
 
     level = ratio >= 3 ? :danger : :warning
-    { level: level, ratio: ratio, days: days }
+    { level: level, ratio: ratio.round(1), days: days }
   end
 end
