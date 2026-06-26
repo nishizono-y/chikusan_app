@@ -1,5 +1,6 @@
 class Setting < ApplicationRecord
-  DEFAULTS = { "feed_stock_threshold" => 300 }.freeze
+  FEED_STOCK_KEY = "feed_stock_threshold"
+  DEFAULTS = { FEED_STOCK_KEY => 300 }.freeze
 
   validates :name, presence: true, uniqueness: true
   validates :value, presence: true, numericality: { only_integer: true, greater_than: 0 }
@@ -9,7 +10,7 @@ class Setting < ApplicationRecord
   end
 
   def self.feed_stock_threshold
-    self["feed_stock_threshold"]
+    self[FEED_STOCK_KEY]
   end
 
   def self.fetch(name)

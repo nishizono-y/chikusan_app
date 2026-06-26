@@ -11,7 +11,7 @@
     <div class="form-group">
       <%= form.label :value, "アラートしきい値（kg）" %>
       <%= form.number_field :value, min: 1, class: "form-control" %>
-      <p class="form-hint">残量がこの値以下になるとアラートを表示します（デフォルト: <%= Setting::DEFAULTS["feed_stock_threshold"] %>kg）</p>
+      <p class="form-hint">残量がこの値以下になるとアラートを表示します（デフォルト: <%= Setting::DEFAULTS[Setting::FEED_STOCK_KEY] %>kg）</p>
       <% @setting.errors.where(:value).each do |error| %>
         <span class="field-error"><%= error.full_message %></span>
       <% end %>
