@@ -1,0 +1,24 @@
+<% content_for :title, "設定" %>
+
+<div class="page-header">
+  <h2>設定</h2>
+</div>
+
+<section class="card">
+  <h3 class="card-title">飼料残量アラート</h3>
+
+  <%= form_with model: @setting, url: setting_path do |form| %>
+    <div class="form-group">
+      <%= form.label :feed_stock_threshold, "アラートしきい値（kg）" %>
+      <%= form.number_field :feed_stock_threshold, min: 1, class: "form-control" %>
+      <p class="form-hint">残量がこの値以下になるとアラートを表示します（デフォルト: <%= Setting::DEFAULT_FEED_STOCK_THRESHOLD %>kg）</p>
+      <% @setting.errors.where(:feed_stock_threshold).each do |error| %>
+        <span class="field-error"><%= error.full_message %></span>
+      <% end %>
+    </div>
+
+    <div class="actions">
+      <%= form.submit "保存する", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</section>

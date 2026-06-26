@@ -9,7 +9,7 @@ class DailyRecord < ApplicationRecord
   validates :vaccine, inclusion: { in: VACCINE_OPTIONS }, allow_blank: true
 
   def feed_stock_low?
-    feed_stock && feed_stock <= FEED_STOCK_ALERT_THRESHOLD
+    feed_stock && feed_stock <= Setting.feed_stock_threshold
   end
 
   # nil を返すケースが2種ある:

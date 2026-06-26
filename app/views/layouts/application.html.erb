@@ -51,6 +51,10 @@
         <i class="fa-solid fa-file-lines"></i>
         月次報告
       <% end %>
+      <%= link_to edit_setting_path, class: class_names("nav-item", active: controller_name == "settings") do %>
+        <i class="fa-solid fa-gear"></i>
+        設定
+      <% end %>
     </nav>
   </body>
 </html>

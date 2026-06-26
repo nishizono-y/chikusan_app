@@ -14,5 +14,7 @@ Rails.application.routes.draw do
 
   get "report" => "reports#index", as: :report
 
+  resource :setting, only: %i[edit update]
+
   root "home#index"
 end
