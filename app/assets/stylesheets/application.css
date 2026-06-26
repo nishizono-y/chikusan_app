@@ -19,6 +19,10 @@
   --alert-bg:   #FDF6EC;
   --alert-txt:  #7A5200;
   --alert-bdr:  #E0B87A;
+  --danger-bg:  #FEF0EF;
+  --danger-txt: #7B1D1A;
+  --danger-bdr: #F5B3AF;
+  --danger:     #c0392b;
   --matcha-border:  #D4E5CE;
   --report-border:  #C8DFC0;
   --radius:     8px;
@@ -233,6 +237,18 @@ td a:hover { text-decoration: underline; }
   gap: 8px;
 }
 .alert-bar i { font-size: 14px; flex-shrink: 0; }
+.alert-bar--warning {
+  background: var(--alert-bg);
+  border: 1px solid var(--alert-bdr);
+  border-left: 3px solid var(--accent);
+  color: var(--alert-txt);
+}
+.alert-bar--danger {
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-bdr);
+  border-left: 3px solid var(--danger);
+  color: var(--danger-txt);
+}
 
 /* エラーメッセージ */
 #error_explanation {

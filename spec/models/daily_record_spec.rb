@@ -103,6 +103,85 @@ RSpec.describe DailyRecord, type: :model do
     end
   end
 
+  describe '.mortality_alert' do
+    let(:base_date) { Date.new(2026, 6, 25) }
+
+    def build_past(date:, death_count:, head_count:)
+      create(:daily_record, date: date, death_count: death_count, head_count: head_count)
+    end
+
+    context '当日の記録がnil' do
+      it 'nilを返す' do
+        expect(DailyRecord.mortality_alert(nil)).to be_nil
+      end
+    end
+
+    context '当日の死亡頭数が0' do
+      it 'nilを返す' do
+        today = create(:daily_record, date: base_date, death_count: 0, head_count: 100)
+        expect(DailyRecord.mortality_alert(today)).to be_nil
+      end
+    end
+
+    context '当日の飼養頭数が0' do
+      it 'nilを返す' do
+        today = create(:daily_record, date: base_date, death_count: 3, head_count: 0)
+        expect(DailyRecord.mortality_alert(today)).to be_nil
+      end
+    end
+
+    context '過去30日間に死亡ゼロ（平均死亡率が0）' do
+      it 'nilを返す' do
+        (1..5).each { |i| build_past(date: base_date - i, death_count: 0, head_count: 100) }
+        today = create(:daily_record, date: base_date, death_count: 3, head_count: 100)
+        expect(DailyRecord.mortality_alert(today)).to be_nil
+      end
+    end
+
+    context '当日死亡率が平均の2倍以上3倍未満' do
+      it 'level: :warning を返す' do
+        # 過去30日: 死亡率 1% (1/100)
+        (1..5).each { |i| build_past(date: base_date - i, death_count: 1, head_count: 100) }
+        # 当日: 死亡率 2.5% (25/1000)
+        today = create(:daily_record, date: base_date, death_count: 25, head_count: 1000)
+        result = DailyRecord.mortality_alert(today)
+        expect(result[:level]).to eq(:warning)
+        expect(result[:ratio]).to be >= 2.0
+        expect(result[:ratio]).to be < 3.0
+      end
+    end
+
+    context '当日死亡率が平均の3倍以上' do
+      it 'level: :danger を返す' do
+        # 過去30日: 死亡率 1% (1/100)
+        (1..5).each { |i| build_past(date: base_date - i, death_count: 1, head_count: 100) }
+        # 当日: 死亡率 4% (4/100)
+        today = create(:daily_record, date: base_date, death_count: 40, head_count: 1000)
+        result = DailyRecord.mortality_alert(today)
+        expect(result[:level]).to eq(:danger)
+        expect(result[:ratio]).to be >= 3.0
+      end
+    end
+
+    context '当日死亡率が平均の2倍未満' do
+      it 'nilを返す' do
+        (1..5).each { |i| build_past(date: base_date - i, death_count: 2, head_count: 100) }
+        today = create(:daily_record, date: base_date, death_count: 3, head_count: 100)
+        expect(DailyRecord.mortality_alert(today)).to be_nil
+      end
+    end
+
+    context '30日より前の記録は除外される' do
+      it '31日前のデータは計算に含まれない' do
+        # 31日前に高死亡率の記録があっても影響しない
+        build_past(date: base_date - 31, death_count: 10, head_count: 100)
+        today = create(:daily_record, date: base_date, death_count: 5, head_count: 100)
+        # 過去30日にデータがないためnilを返す
+        expect(DailyRecord.mortality_alert(today)).to be_nil
+      end
+    end
+  end
+
   describe '#estimated_remaining_days' do
     subject { build(:daily_record) }
 
