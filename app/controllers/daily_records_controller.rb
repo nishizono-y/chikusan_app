@@ -4,7 +4,7 @@ class DailyRecordsController < ApplicationController
   # GET /daily_records or /daily_records.json
   def index
     @daily_records = DailyRecord.all
-    today_record = DailyRecord.find_by(date: Date.today)
+    today_record = DailyRecord.find_by(date: Date.current)
     @mortality_alert = DailyRecord.mortality_alert(today_record)
   end
 
