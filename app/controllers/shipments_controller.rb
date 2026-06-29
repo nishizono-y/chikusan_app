@@ -56,6 +56,12 @@ class ShipmentsController < ApplicationController
       format.html { redirect_to shipments_path, notice: "出荷記録を削除しました。", status: :see_other }
       format.json { head :no_content }
     end
+  rescue ActiveRecord::RecordNotDestroyed
+    respond_to do |format|
+      format.turbo_stream { head :unprocessable_entity }
+      format.html { redirect_to shipments_path, alert: "出荷記録を削除できませんでした。", status: :see_other }
+      format.json { head :unprocessable_entity }
+    end
   end
 
   private

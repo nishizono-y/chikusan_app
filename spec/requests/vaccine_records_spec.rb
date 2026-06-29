@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "/vaccine_records", type: :request do
   let(:valid_attributes) do
-    { vaccine_name: "FMD vaccine", vaccinated_on: Date.today - 30, head_count: 50, next_due_on: Date.today + 60 }
+    { vaccine_name: "FMD vaccine", vaccinated_on: Date.current - 30, head_count: 50, next_due_on: Date.current + 60 }
   end
 
   let(:invalid_attributes) do
