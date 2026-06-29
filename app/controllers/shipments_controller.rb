@@ -58,9 +58,9 @@ class ShipmentsController < ApplicationController
     end
   rescue ActiveRecord::RecordNotDestroyed
     respond_to do |format|
-      format.turbo_stream { head :unprocessable_entity }
+      format.turbo_stream { head :unprocessable_content }
       format.html { redirect_to shipments_path, alert: "出荷記録を削除できませんでした。", status: :see_other }
-      format.json { head :unprocessable_entity }
+      format.json { head :unprocessable_content }
     end
   end
 

@@ -44,7 +44,7 @@ class VaccineRecordsController < ApplicationController
     end
   rescue ActiveRecord::RecordNotDestroyed
     respond_to do |format|
-      format.turbo_stream { head :unprocessable_entity }
+      format.turbo_stream { head :unprocessable_content }
       format.html { redirect_to vaccine_records_path, alert: "接種記録を削除できませんでした。", status: :see_other }
     end
   end
