@@ -2,3 +2,4 @@
 <%= turbo_stream.update "flash" do %>
   <div class="flash-notice">接種記録を削除しました。</div>
 <% end %>
+<%= turbo_stream.action :visit, vaccine_records_path %>

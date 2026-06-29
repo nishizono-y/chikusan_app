@@ -37,10 +37,13 @@ class VaccineRecordsController < ApplicationController
   end
 
   def destroy
-    @vaccine_record.destroy
-    respond_to do |format|
-      format.turbo_stream
-      format.html { redirect_to vaccine_records_path, notice: "接種記録を削除しました。" }
+    if @vaccine_record.destroy
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to vaccine_records_path, notice: "接種記録を削除しました。" }
+      end
+    else
+      redirect_to vaccine_records_path, alert: "削除できませんでした。"
     end
   end
 
