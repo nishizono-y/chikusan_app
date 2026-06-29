@@ -1,0 +1,31 @@
+<% content_for :title, "ワクチン接種記録" %>
+
+<h2 class="page-title">ワクチン接種記録</h2>
+
+<div class="table-scroll">
+  <table>
+    <thead>
+      <tr>
+        <th>接種日</th>
+        <th>ワクチン名</th>
+        <th>対象頭数</th>
+        <th>次回接種予定日</th>
+        <th>状態</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="vaccine_records">
+      <% @vaccine_records.each do |vaccine_record| %>
+        <%= render vaccine_record %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<% if @vaccine_records.empty? %>
+  <p class="empty-message">接種記録がまだありません</p>
+<% end %>
+
+<div class="actions">
+  <%= link_to "新規登録", new_vaccine_record_path, class: "btn btn-primary" %>
+</div>

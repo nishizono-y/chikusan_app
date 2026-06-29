@@ -1,0 +1,43 @@
+<%= form_with(model: vaccine_record) do |form| %>
+  <div class="form-group">
+    <%= form.label :vaccine_name, "ワクチン名" %>
+    <%= form.text_field :vaccine_name, placeholder: "例：豚丹毒ワクチン" %>
+    <% vaccine_record.errors.where(:vaccine_name).each do |error| %>
+      <span class="field-error"><%= error.full_message %></span>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :vaccinated_on, "接種日" %>
+    <%= form.date_field :vaccinated_on %>
+    <% vaccine_record.errors.where(:vaccinated_on).each do |error| %>
+      <span class="field-error"><%= error.full_message %></span>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :head_count, "対象頭数" %>
+    <%= form.number_field :head_count, min: 1, placeholder: "例：50" %>
+    <% vaccine_record.errors.where(:head_count).each do |error| %>
+      <span class="field-error"><%= error.full_message %></span>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :next_due_on, "次回接種予定日" %>
+    <%= form.date_field :next_due_on %>
+    <% vaccine_record.errors.where(:next_due_on).each do |error| %>
+      <span class="field-error"><%= error.full_message %></span>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :notes, "備考" %>
+    <%= form.text_area :notes, placeholder: "気になることがあれば記入してください" %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit class: "btn btn-primary" %>
+    <%= link_to "キャンセル", vaccine_records_path, class: "btn btn-secondary" %>
+  </div>
+<% end %>

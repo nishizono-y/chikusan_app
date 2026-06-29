@@ -50,9 +50,9 @@
         <i class="fa-solid fa-truck"></i>
         出荷記録
       <% end %>
-      <%= link_to report_path, class: class_names("nav-item", active: controller_name == "reports") do %>
-        <i class="fa-solid fa-file-lines"></i>
-        月次報告
+      <%= link_to vaccine_records_path, class: class_names("nav-item", active: controller_name == "vaccine_records") do %>
+        <i class="fa-solid fa-syringe"></i>
+        ワクチン
       <% end %>
     </nav>
   </body>

@@ -1,0 +1,29 @@
+<tr id="<%= dom_id(vaccine_record) %>">
+  <td><%= ja_date_full(vaccine_record.vaccinated_on) %></td>
+  <td><%= vaccine_record.vaccine_name %></td>
+  <td><%= vaccine_record.head_count ? "#{vaccine_record.head_count}頭" : "—" %></td>
+  <td>
+    <% if vaccine_record.next_due_on.present? %>
+      <%= ja_date_full(vaccine_record.next_due_on) %>
+    <% else %>
+      —
+    <% end %>
+  </td>
+  <td>
+    <% if vaccine_record.overdue? %>
+      <span class="badge-ng"><i class="fa-solid fa-circle-exclamation"></i> 期限切れ</span>
+    <% elsif vaccine_record.due_soon? %>
+      <span class="badge-warn"><i class="fa-solid fa-triangle-exclamation"></i> まもなく期限</span>
+    <% elsif vaccine_record.next_due_on.present? %>
+      <span class="badge-ok"><i class="fa-solid fa-circle-check"></i> 予定あり</span>
+    <% else %>
+      <span>—</span>
+    <% end %>
+  </td>
+  <td>
+    <%= link_to "編集", edit_vaccine_record_path(vaccine_record) %>
+    <%= button_to "削除", vaccine_record_path(vaccine_record), method: :delete,
+          data: { turbo_confirm: "削除しますか？" },
+          class: "btn-link-danger" %>
+  </td>
+</tr>

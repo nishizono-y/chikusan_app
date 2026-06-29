@@ -1,5 +1,20 @@
 <% content_for :title, "ホーム" %>
 
+<% if @vaccine_alerts.any? %>
+  <% @vaccine_alerts.each do |vr| %>
+    <div class="alert-bar alert-bar--vaccine">
+      <i class="fa-solid fa-syringe"></i>
+      <%= vr.vaccine_name %>の次回接種予定：<%= ja_date_full(vr.next_due_on) %>
+      <% if vr.overdue? %>
+        <strong>（期限切れ）</strong>
+      <% elsif vr.due_soon? %>
+        <strong>（まもなく期限）</strong>
+      <% end %>
+      <%= link_to "詳細", vaccine_records_path, class: "alert-link" %>
+    </div>
+  <% end %>
+<% end %>
+
 <% if @feed_stock_alert %>
   <div class="alert-bar">
     <i class="fa-solid fa-triangle-exclamation"></i>
@@ -106,7 +121,7 @@
 </div>
 
 <div class="actions">
-  <%= link_to daily_records_path, class: "btn btn-report" do %>
-    <i class="fa-solid fa-file-lines"></i> 日次記録の一覧を見る
+  <%= link_to report_path, class: "btn btn-report" do %>
+    <i class="fa-solid fa-file-lines"></i> 月次報告を見る
   <% end %>
 </div>
