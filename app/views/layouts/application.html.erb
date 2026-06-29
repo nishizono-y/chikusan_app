@@ -19,22 +19,25 @@
   </head>
 
   <body>
-    <header>
+    <header class="no-print">
       <div class="header-left">
         <h1><i class="fa-solid fa-pig"></i> 薩摩畜産日誌</h1>
         <div class="subtitle"><%= l(@today, format: :long) %></div>
       </div>
+      <%= link_to edit_setting_path, class: class_names("header-setting", active: controller_name == "settings") do %>
+        <i class="fa-solid fa-gear"></i>
+      <% end %>
     </header>
 
     <main>
-      <div id="flash">
+      <div id="flash" class="no-print">
         <%= render "shared/flash" %>
       </div>
 
       <%= yield %>
     </main>
 
-    <nav class="bottom-nav">
+    <nav class="bottom-nav no-print">
       <%= link_to root_path, class: class_names("nav-item", active: controller_name == "home") do %>
         <i class="fa-solid fa-house"></i>
         ホーム
@@ -50,10 +53,6 @@
       <%= link_to report_path, class: class_names("nav-item", active: controller_name == "reports") do %>
         <i class="fa-solid fa-file-lines"></i>
         月次報告
-      <% end %>
-      <%= link_to edit_setting_path, class: class_names("nav-item", active: controller_name == "settings") do %>
-        <i class="fa-solid fa-gear"></i>
-        設定
       <% end %>
     </nav>
   </body>

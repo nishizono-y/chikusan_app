@@ -72,6 +72,8 @@ header {
   letter-spacing: 0.04em;
 }
 .header-right strong { display: block; font-size: 19px; line-height: 1.1; }
+.header-setting { color: rgba(255,255,255,0.8); font-size: 20px; line-height: 1; padding: 4px; }
+.header-setting.active { color: #fff; }
 .bottom-nav {
   position: fixed;
   bottom: 0; left: 0; right: 0;
@@ -396,3 +398,17 @@ td a:hover { text-decoration: underline; }
 .memo-item:last-child { border-bottom: none; }
 .memo-date { white-space: nowrap; color: var(--sub); font-size: 12px; padding-top: 1px; }
 .memo-text { color: var(--text); line-height: 1.6; }
+
+/* PDF出力ボタン */
+.report-actions { margin: 12px 0; text-align: right; }
+.btn-pdf { background: var(--matcha); color: #fff; border: none; border-radius: 6px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.btn-pdf:active { opacity: 0.8; }
+
+/* 印刷用スタイル */
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; }
+  main { padding: 0; max-width: 100%; }
+  .card { box-shadow: none; border: 1px solid #ccc; margin-bottom: 12px; page-break-inside: avoid; }
+  .report-header { border: 1px solid #ccc; }
+}
