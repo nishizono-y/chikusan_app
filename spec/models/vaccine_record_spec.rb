@@ -48,9 +48,9 @@ RSpec.describe VaccineRecord, type: :model do
       expect(record.overdue?).to be true
     end
 
-    it "next_due_on が今日以降の場合は false" do
+    it "next_due_on が今日の場合は true" do
       record = build(:vaccine_record, next_due_on: Date.today)
-      expect(record.overdue?).to be false
+      expect(record.overdue?).to be true
     end
 
     it "next_due_on が nil の場合は false" do
@@ -60,9 +60,14 @@ RSpec.describe VaccineRecord, type: :model do
   end
 
   describe "#due_soon?" do
-    it "next_due_on が今日から7日以内なら true" do
+    it "next_due_on が明日から7日以内なら true" do
       record = build(:vaccine_record, next_due_on: Date.today + 3)
       expect(record.due_soon?).to be true
+    end
+
+    it "next_due_on が今日の場合は false（overdue に分類される）" do
+      record = build(:vaccine_record, next_due_on: Date.today)
+      expect(record.due_soon?).to be false
     end
 
     it "next_due_on が8日後なら false" do
