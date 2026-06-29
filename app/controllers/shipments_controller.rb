@@ -58,7 +58,7 @@ class ShipmentsController < ApplicationController
     end
   rescue ActiveRecord::RecordNotDestroyed
     respond_to do |format|
-      format.turbo_stream { head :unprocessable_content }
+      format.turbo_stream { render turbo_stream: turbo_stream.update("flash", partial: "shared/flash_alert", locals: { message: "出荷記録を削除できませんでした。" }) }
       format.html { redirect_to shipments_path, alert: "出荷記録を削除できませんでした。", status: :see_other }
       format.json { head :unprocessable_content }
     end
