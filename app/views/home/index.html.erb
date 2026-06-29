@@ -1,5 +1,12 @@
 <% content_for :title, "ホーム" %>
 
+<% if @weather&.heat_stress? %>
+  <div class="alert-bar alert-bar--heat">
+    <i class="fa-solid fa-temperature-high"></i>
+    気温 <%= @weather.temp %>℃ — <strong>熱ストレス注意</strong>（家畜の状態を確認してください）
+  </div>
+<% end %>
+
 <% if @vaccine_alerts.any? %>
   <% @vaccine_alerts.each do |vr| %>
     <div class="alert-bar alert-bar--vaccine">
@@ -19,6 +26,34 @@
   <div class="alert-bar">
     <i class="fa-solid fa-triangle-exclamation"></i>
     飼料残量が少なくなっています<% if @feed_remaining_days %>（残り<%= @feed_remaining_days %>日分程度）<% end %>
+  </div>
+<% end %>
+
+<% if @weather %>
+  <div class="section-label">今日の気象情報</div>
+  <div class="card">
+    <div class="card-title">
+      <i class="fa-solid fa-cloud-sun"></i> 農場周辺の気象
+    </div>
+    <div class="summary-grid">
+      <div class="<%= class_names('summary-item', warn: @weather.heat_stress?) %>">
+        <div class="summary-icon"><i class="fa-solid fa-temperature-half"></i></div>
+        <div class="summary-num"><%= @weather.temp %><span class="summary-unit">℃</span></div>
+        <div class="summary-label">気温</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-icon"><i class="fa-solid fa-droplet"></i></div>
+        <div class="summary-num"><%= @weather.humidity %><span class="summary-unit">%</span></div>
+        <div class="summary-label">湿度</div>
+      </div>
+      <div class="summary-item" style="grid-column: span 2;">
+        <div class="summary-icon">
+          <img src="https://openweathermap.org/img/wn/<%= @weather.icon_code %>.png" alt="<%= @weather.description %>" style="width:40px;height:40px;">
+        </div>
+        <div class="summary-num" style="font-size: 1rem;"><%= @weather.description %></div>
+        <div class="summary-label">天気</div>
+      </div>
+    </div>
   </div>
 <% end %>
 
