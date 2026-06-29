@@ -112,7 +112,7 @@ main { padding: 16px; max-width: 800px; margin: 0 auto; }
 .page-title-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
 .page-title-row .page-title { margin-bottom: 0; }
 .page-title-actions { display: flex; gap: 8px; }
-.btn-sm { padding: 6px 12px; font-size: 12px; }
+.btn-sm { padding: 4px 10px; font-size: 11px; font-weight: 600; }
 .page-title {
   font-size: 16px;
   font-weight: 700;
