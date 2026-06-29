@@ -16,13 +16,13 @@ test.describe('設定', () => {
     });
   });
 
-  test('ボトムナビの設定リンクから遷移できる', async ({ page }) => {
+  test('ヘッダーの設定リンクから遷移できる', async ({ page }) => {
     await test.step('ホームページにアクセスする', async () => {
       await page.goto('/');
     });
 
-    await test.step('ボトムナビの「設定」をクリックする', async () => {
-      await page.getByRole('link', { name: '設定' }).click();
+    await test.step('ヘッダーの設定アイコンをクリックする', async () => {
+      await page.locator('header .header-setting').click();
     });
 
     await test.step('設定ページに遷移することを確認する', async () => {
