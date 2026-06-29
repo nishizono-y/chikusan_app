@@ -23,7 +23,7 @@ class HomeController < ApplicationController
       end
     end
 
-    @vaccine_alerts = VaccineRecord.overdue.or(VaccineRecord.due_soon).order(:next_due_on)
+    @vaccine_alerts = VaccineRecord.overdue.or(VaccineRecord.due_soon).order(:next_due_on).load
 
     chart_start = 5.months.ago.beginning_of_month
     chart_records = DailyRecord

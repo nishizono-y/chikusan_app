@@ -49,7 +49,7 @@ RSpec.describe "/vaccine_records", type: :request do
     context "無効なパラメータのとき" do
       it "422を返す" do
         post vaccine_records_path, params: { vaccine_record: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
 
       it "レコードを作成しない" do
@@ -74,7 +74,7 @@ RSpec.describe "/vaccine_records", type: :request do
       it "422を返す" do
         record = create(:vaccine_record)
         patch vaccine_record_path(record), params: { vaccine_record: { vaccine_name: "" } }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
   end

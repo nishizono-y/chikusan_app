@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_29_012542) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_29_052034) do
   create_table "daily_records", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.date "date"
@@ -47,7 +47,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_29_012542) do
     t.date "next_due_on"
     t.text "notes"
     t.datetime "updated_at", null: false
-    t.date "vaccinated_on"
-    t.string "vaccine_name"
+    t.date "vaccinated_on", null: false
+    t.string "vaccine_name", null: false
   end
 end

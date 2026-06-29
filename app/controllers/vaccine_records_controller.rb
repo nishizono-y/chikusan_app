@@ -21,7 +21,7 @@ class VaccineRecordsController < ApplicationController
       if @vaccine_record.save
         format.html { redirect_to vaccine_records_path, notice: "接種記録を登録しました。" }
       else
-        format.html { render :new, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_content }
       end
     end
   end
@@ -31,7 +31,7 @@ class VaccineRecordsController < ApplicationController
       if @vaccine_record.update(vaccine_record_params)
         format.html { redirect_to vaccine_records_path, notice: "接種記録を更新しました。" }
       else
-        format.html { render :edit, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_content }
       end
     end
   end
