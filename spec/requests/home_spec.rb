@@ -54,7 +54,7 @@ RSpec.describe "/", type: :request do
       before { DailyRecord.delete_all }
 
       it "feed_stockがしきい値以下のときアラートバーを表示する" do
-        create_daily_record(feed_stock: DailyRecord::FEED_STOCK_ALERT_THRESHOLD, feed_usage: 100)
+        create_daily_record(feed_stock: Setting.feed_stock_threshold, feed_usage: 100)
 
         get root_path
 
@@ -71,7 +71,7 @@ RSpec.describe "/", type: :request do
       end
 
       it "feed_stockがしきい値を超えているときアラートバーを表示しない" do
-        create_daily_record(feed_stock: DailyRecord::FEED_STOCK_ALERT_THRESHOLD + 1, feed_usage: 100)
+        create_daily_record(feed_stock: Setting.feed_stock_threshold + 1, feed_usage: 100)
 
         get root_path
 
