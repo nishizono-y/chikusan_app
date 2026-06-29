@@ -407,12 +407,8 @@ td a:hover { text-decoration: underline; }
 /* 印刷用スタイル */
 @media print {
   .no-print { display: none !important; }
-  header { display: none !important; }
-  nav.bottom-nav { display: none !important; }
-  #flash { display: none !important; }
   body { background: #fff; }
   main { padding: 0; max-width: 100%; }
-  .note-box { display: none !important; }
   .card { box-shadow: none; border: 1px solid #ccc; margin-bottom: 12px; page-break-inside: avoid; }
   .report-header { border: 1px solid #ccc; }
 }

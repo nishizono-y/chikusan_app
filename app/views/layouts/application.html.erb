@@ -19,7 +19,7 @@
   </head>
 
   <body>
-    <header>
+    <header class="no-print">
       <div class="header-left">
         <h1><i class="fa-solid fa-pig"></i> 薩摩畜産日誌</h1>
         <div class="subtitle"><%= l(@today, format: :long) %></div>
@@ -30,14 +30,14 @@
     </header>
 
     <main>
-      <div id="flash">
+      <div id="flash" class="no-print">
         <%= render "shared/flash" %>
       </div>
 
       <%= yield %>
     </main>
 
-    <nav class="bottom-nav">
+    <nav class="bottom-nav no-print">
       <%= link_to root_path, class: class_names("nav-item", active: controller_name == "home") do %>
         <i class="fa-solid fa-house"></i>
         ホーム
