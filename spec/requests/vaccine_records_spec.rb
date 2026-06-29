@@ -86,5 +86,17 @@ RSpec.describe "/vaccine_records", type: :request do
         delete vaccine_record_path(record)
       }.to change(VaccineRecord, :count).by(-1)
     end
+
+    it "HTML フォーマットで一覧にリダイレクトする" do
+      record = create(:vaccine_record)
+      delete vaccine_record_path(record)
+      expect(response).to redirect_to(vaccine_records_path)
+    end
+
+    it "Turbo Stream フォーマットで 200 を返す" do
+      record = create(:vaccine_record)
+      delete vaccine_record_path(record), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+      expect(response).to have_http_status(:ok)
+    end
   end
 end
