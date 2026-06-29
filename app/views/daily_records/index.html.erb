@@ -1,9 +1,13 @@
 <% content_for :title, "日次記録一覧" %>
 
-<h2 class="page-title">日次記録一覧</h2>
-<div class="sub-actions">
-  <%= link_to "+ 新規作成", new_daily_record_path, class: "sub-link" %>
-  <%= link_to "月次報告を見る →", report_path, class: "sub-link" %>
+<div class="page-title-row">
+  <h2 class="page-title">日次記録一覧</h2>
+  <div class="page-title-actions">
+    <%= link_to "新規作成", new_daily_record_path, class: "btn btn-primary btn-sm" %>
+    <%= link_to report_path, class: "btn btn-secondary btn-sm" do %>
+      <i class="fa-solid fa-file-lines"></i> 月次報告
+    <% end %>
+  </div>
 </div>
 
 <%= render "mortality_alert", alert: @mortality_alert if @mortality_alert %>
