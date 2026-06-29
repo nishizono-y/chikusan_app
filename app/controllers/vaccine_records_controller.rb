@@ -1,11 +1,8 @@
 class VaccineRecordsController < ApplicationController
-  before_action :set_vaccine_record, only: %i[show edit update destroy]
+  before_action :set_vaccine_record, only: %i[edit update destroy]
 
   def index
     @vaccine_records = VaccineRecord.order(vaccinated_on: :desc)
-  end
-
-  def show
   end
 
   def new

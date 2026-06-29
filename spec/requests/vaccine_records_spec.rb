@@ -87,9 +87,10 @@ RSpec.describe "/vaccine_records", type: :request do
       }.to change(VaccineRecord, :count).by(-1)
     end
 
-    it "HTML フォーマットで一覧にリダイレクトする" do
+    it "HTML フォーマットで一覧に 303 リダイレクトする" do
       record = create(:vaccine_record)
       delete vaccine_record_path(record)
+      expect(response).to have_http_status(:see_other)
       expect(response).to redirect_to(vaccine_records_path)
     end
 
