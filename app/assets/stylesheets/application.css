@@ -344,6 +344,10 @@ td a:hover { text-decoration: underline; }
 }
 .badge-ok { background: var(--matcha-lt); color: var(--matcha); }
 .badge-ng { background: var(--alert-bg); color: var(--accent); }
+.badge-warn { background: #fff8e1; color: #b45309; }
+.alert-bar--vaccine { background: #e8f5e9; border-left-color: #388e3c; color: #1b5e20; }
+.alert-link { margin-left: auto; color: inherit; font-weight: bold; text-decoration: underline; }
+.btn-link-danger { background: none; border: none; color: var(--danger, #c0392b); cursor: pointer; font-size: inherit; padding: 0; text-decoration: underline; }
 
 /* レポートへのボタン */
 .btn-report { background: var(--kinari); color: var(--accent); border: 1.5px solid var(--alert-bdr); width: 100%; }

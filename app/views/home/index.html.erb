@@ -1,5 +1,18 @@
 <% content_for :title, "ホーム" %>
 
+<% if @vaccine_alerts.any? %>
+  <% @vaccine_alerts.each do |vr| %>
+    <div class="alert-bar alert-bar--vaccine">
+      <i class="fa-solid fa-syringe"></i>
+      <%= vr.vaccine_name %>の次回接種予定：<%= ja_date(vr.next_due_on) %>
+      <% if vr.overdue? %>
+        <strong>（期限切れ）</strong>
+      <% end %>
+      <%= link_to "詳細", vaccine_records_path, class: "alert-link" %>
+    </div>
+  <% end %>
+<% end %>
+
 <% if @feed_stock_alert %>
   <div class="alert-bar">
     <i class="fa-solid fa-triangle-exclamation"></i>

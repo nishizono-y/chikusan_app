@@ -23,6 +23,11 @@ class HomeController < ApplicationController
       end
     end
 
+    @vaccine_alerts = VaccineRecord
+      .where("next_due_on IS NOT NULL")
+      .where("next_due_on <= ?", 7.days.from_now.to_date)
+      .order(:next_due_on)
+
     chart_start = 5.months.ago.beginning_of_month
     chart_records = DailyRecord
       .where(date: chart_start..@today.end_of_month)

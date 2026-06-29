@@ -1,0 +1,4 @@
+<%= turbo_stream.remove @vaccine_record %>
+<%= turbo_stream.update "flash" do %>
+  <div class="flash-notice">接種記録を削除しました。</div>
+<% end %>
