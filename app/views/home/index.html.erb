@@ -29,33 +29,47 @@
   </div>
 <% end %>
 
-<% if @weather %>
-  <div class="section-label">今日の気象情報</div>
-  <div class="card">
-    <div class="card-title">
-      <i class="fa-solid fa-cloud-sun"></i> 農場周辺の気象
+<div class="section-label">今日の気象情報</div>
+<div class="card">
+  <div class="card-title">
+    <i class="fa-solid fa-cloud-sun"></i> 農場周辺の気象
+  </div>
+  <div class="summary-grid">
+    <div class="<%= class_names('summary-item', warn: @weather&.heat_stress?) %>">
+      <div class="summary-icon"><i class="fa-solid fa-temperature-half"></i></div>
+      <div class="summary-num">
+        <% if @weather %>
+          <%= @weather.temp %><span class="summary-unit">℃</span>
+        <% else %>
+          —
+        <% end %>
+      </div>
+      <div class="summary-label">気温</div>
     </div>
-    <div class="summary-grid">
-      <div class="<%= class_names('summary-item', warn: @weather.heat_stress?) %>">
-        <div class="summary-icon"><i class="fa-solid fa-temperature-half"></i></div>
-        <div class="summary-num"><%= @weather.temp %><span class="summary-unit">℃</span></div>
-        <div class="summary-label">気温</div>
+    <div class="summary-item">
+      <div class="summary-icon"><i class="fa-solid fa-droplet"></i></div>
+      <div class="summary-num">
+        <% if @weather %>
+          <%= @weather.humidity %><span class="summary-unit">%</span>
+        <% else %>
+          —
+        <% end %>
       </div>
-      <div class="summary-item">
-        <div class="summary-icon"><i class="fa-solid fa-droplet"></i></div>
-        <div class="summary-num"><%= @weather.humidity %><span class="summary-unit">%</span></div>
-        <div class="summary-label">湿度</div>
-      </div>
-      <div class="summary-item" style="grid-column: span 2;">
+      <div class="summary-label">湿度</div>
+    </div>
+    <div class="summary-item" style="grid-column: span 2;">
+      <% if @weather %>
         <div class="summary-icon">
           <img src="https://openweathermap.org/img/wn/<%= @weather.icon_code %>.png" alt="<%= @weather.description %>" style="width:40px;height:40px;">
         </div>
         <div class="summary-num" style="font-size: 1rem;"><%= @weather.description %></div>
-        <div class="summary-label">天気</div>
-      </div>
+      <% else %>
+        <div class="summary-num">—</div>
+      <% end %>
+      <div class="summary-label">天気</div>
     </div>
   </div>
-<% end %>
+</div>
 
 <div class="section-label"><%= @month_label %>の状況</div>
 
