@@ -6,7 +6,7 @@ RSpec.describe WeatherService do
   let(:api_response) do
     {
       "main" => { "temp" => 28.5, "humidity" => 72 },
-      "weather" => [{ "description" => "晴れ", "icon" => "01d" }]
+      "weather" => [ { "description" => "晴れ", "icon" => "01d" } ]
     }.to_json
   end
 
@@ -39,7 +39,7 @@ RSpec.describe WeatherService do
       let(:api_response) do
         {
           "main" => { "temp" => 37.2, "humidity" => 60 },
-          "weather" => [{ "description" => "快晴", "icon" => "01d" }]
+          "weather" => [ { "description" => "快晴", "icon" => "01d" } ]
         }.to_json
       end
 
