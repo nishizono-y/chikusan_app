@@ -5,6 +5,8 @@ class WeatherService
   BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
 
   HEAT_STRESS_THRESHOLD = 35
+  OPEN_TIMEOUT = 3
+  READ_TIMEOUT = 5
 
   Result = Data.define(:temp, :humidity, :description, :icon_code, :heat_stress?)
 
@@ -18,7 +20,15 @@ class WeatherService
   end
 
   def fetch
-    response = Net::HTTP.get_response(uri)
+    return nil unless api_key.present?
+
+    u = uri
+    http = Net::HTTP.new(u.host, u.port)
+    http.use_ssl = true
+    http.open_timeout = OPEN_TIMEOUT
+    http.read_timeout = READ_TIMEOUT
+
+    response = http.get(u.request_uri)
     return nil unless response.is_a?(Net::HTTPSuccess)
 
     data = JSON.parse(response.body)
@@ -33,7 +43,8 @@ class WeatherService
       icon_code: weather&.dig("icon") || "",
       heat_stress?: temp >= HEAT_STRESS_THRESHOLD
     )
-  rescue StandardError
+  rescue StandardError => e
+    Rails.logger.error "[WeatherService] #{e.class}: #{e.message}"
     nil
   end
 

@@ -59,9 +59,11 @@
     </div>
     <div class="summary-item" style="grid-column: span 2;">
       <% if @weather %>
-        <div class="summary-icon">
-          <img src="https://openweathermap.org/img/wn/<%= @weather.icon_code %>.png" alt="<%= @weather.description %>" style="width:40px;height:40px;">
-        </div>
+        <% if @weather.icon_code.present? %>
+          <div class="summary-icon">
+            <img src="https://openweathermap.org/img/wn/<%= @weather.icon_code %>.png" alt="<%= @weather.description %>" style="width:40px;height:40px;">
+          </div>
+        <% end %>
         <div class="summary-num" style="font-size: 1rem;"><%= @weather.description %></div>
       <% else %>
         <div class="summary-num">—</div>

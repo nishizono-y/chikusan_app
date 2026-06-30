@@ -73,5 +73,17 @@ RSpec.describe WeatherService do
         expect(described_class.fetch(lat:, lon:)).to be_nil
       end
     end
+
+    context "APIキーが未設定の場合" do
+      before do
+        allow(Rails.application.credentials).to receive(:dig).with(:openweathermap, :api_key).and_return(nil)
+        stub_const("ENV", ENV.to_h.except("OPENWEATHERMAP_API_KEY"))
+      end
+
+      it "リクエストを送らず nil を返す" do
+        expect(described_class.fetch(lat:, lon:)).to be_nil
+        expect(a_request(:get, /api.openweathermap.org/)).not_to have_been_made
+      end
+    end
   end
 end
