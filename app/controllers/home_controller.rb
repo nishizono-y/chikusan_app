@@ -1,5 +1,11 @@
 class HomeController < ApplicationController
+  # 薩摩川内市（鹿児島）
+  FARM_LAT = 31.8159
+  FARM_LON = 130.3006
+
   def index
+    @weather = WeatherService.fetch(lat: FARM_LAT, lon: FARM_LON)
+
     month_range = @today.beginning_of_month..@today.end_of_month
 
     @month_label = @today.strftime("%-m月")

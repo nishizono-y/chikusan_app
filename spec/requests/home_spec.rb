@@ -1,6 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "/", type: :request do
+  before do
+    stub_request(:get, /api.openweathermap.org/).to_return(status: 500)
+  end
+
   describe "GET /" do
     it "200を返す" do
       get root_path
