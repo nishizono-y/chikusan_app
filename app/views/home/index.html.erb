@@ -1,7 +1,4 @@
 <% content_for :title, "ホーム" %>
-<% content_for :extra_js do %>
-  <%= javascript_import_module_tag "chartkick_setup" %>
-<% end %>
 
 <% if @weather&.heat_stress? %>
   <div class="alert-bar alert-bar--heat">

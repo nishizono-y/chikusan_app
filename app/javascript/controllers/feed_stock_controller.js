@@ -5,18 +5,13 @@ export default class extends Controller {
   static values = { prevStock: Number }
 
   connect() {
-    const poll = setInterval(() => {
-      if (this.usageTarget.value !== "") {
-        this.calculate()
-        clearInterval(poll)
-      }
-    }, 100)
-    setTimeout(() => clearInterval(poll), 3000)
+    if (!this.hasUsageTarget) return
+    this.calculate()
   }
 
   calculate() {
     const usage = parseInt(this.usageTarget.value, 10)
-    if (!isNaN(usage) && this.hasPrevStockValue && this.prevStockValue > 0) {
+    if (!isNaN(usage) && this.hasPrevStockValue) {
       this.stockTarget.value = Math.max(this.prevStockValue - usage, 0)
     }
   }

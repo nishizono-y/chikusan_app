@@ -14,19 +14,20 @@ class DailyRecordsController < ApplicationController
 
   # GET /daily_records/new
   def new
-    prev = DailyRecord.order(date: :desc).first
+    prev = fetch_prev_record(before_date: Date.tomorrow)
     @daily_record = DailyRecord.new
     if prev
-      @daily_record.head_count = [prev.head_count.to_i - prev.death_count.to_i, 0].max
-      @daily_record.feed_stock = prev.feed_stock.to_i
-      @prev_feed_stock = prev.feed_stock.to_i
+      @daily_record.head_count = [(prev.head_count || 0) - (prev.death_count || 0), 0].max
+      @daily_record.feed_stock = prev.feed_stock
+      @prev_feed_stock = prev.feed_stock
+      @auto_calculated_head_count = true
     end
   end
 
   # GET /daily_records/1/edit
   def edit
-    prev = DailyRecord.where("date < ?", @daily_record.date).order(date: :desc).first
-    @prev_feed_stock = prev.feed_stock.to_i if prev
+    prev = fetch_prev_record(before_date: @daily_record.date)
+    @prev_feed_stock = prev.feed_stock if prev
   end
 
   # POST /daily_records or /daily_records.json
@@ -38,8 +39,9 @@ class DailyRecordsController < ApplicationController
         format.html { redirect_to @daily_record, notice: "日次記録を登録しました。" }
         format.json { render :show, status: :created, location: @daily_record }
       else
-        prev = DailyRecord.order(date: :desc).first
-        @prev_feed_stock = prev.feed_stock.to_i if prev
+        before_date = @daily_record.date || Date.tomorrow
+        prev = fetch_prev_record(before_date: before_date)
+        @prev_feed_stock = prev.feed_stock if prev
         format.html { render :new, status: :unprocessable_content }
         format.json { render json: @daily_record.errors, status: :unprocessable_content }
       end
@@ -53,6 +55,8 @@ class DailyRecordsController < ApplicationController
         format.html { redirect_to @daily_record, notice: "日次記録を更新しました。", status: :see_other }
         format.json { render :show, status: :ok, location: @daily_record }
       else
+        prev = fetch_prev_record(before_date: @daily_record.date)
+        @prev_feed_stock = prev.feed_stock if prev
         format.html { render :edit, status: :unprocessable_content }
         format.json { render json: @daily_record.errors, status: :unprocessable_content }
       end
@@ -77,13 +81,15 @@ class DailyRecordsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_daily_record
       @daily_record = DailyRecord.find(params[:id])
     end
 
-    # Only allow a list of trusted parameters through.
     def daily_record_params
       params.require(:daily_record).permit(:date, :head_count, :death_count, :feed_usage, :feed_stock, :vaccine, :memo)
+    end
+
+    def fetch_prev_record(before_date:)
+      DailyRecord.where("date < ?", before_date).order(date: :desc).first
     end
 end
