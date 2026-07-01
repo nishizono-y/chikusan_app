@@ -10,6 +10,9 @@
   <div class="form-group">
     <%= form.label :head_count %>
     <%= form.number_field :head_count, min: 0 %>
+    <% if local_assigns[:auto_calculated_head_count] %>
+      <span class="field-hint">前日の記録から自動計算しました</span>
+    <% end %>
     <% daily_record.errors.where(:head_count).each do |error| %>
       <span class="field-error"><%= error.full_message %></span>
     <% end %>
@@ -23,20 +26,27 @@
     <% end %>
   </div>
 
-  <div class="form-group">
-    <%= form.label :feed_usage %>
-    <%= form.number_field :feed_usage, min: 0 %>
-    <% daily_record.errors.where(:feed_usage).each do |error| %>
-      <span class="field-error"><%= error.full_message %></span>
-    <% end %>
-  </div>
+  <div data-controller="feed-stock"<% unless local_assigns[:prev_feed_stock].nil? %> data-feed-stock-prev-stock-value="<%= local_assigns[:prev_feed_stock] %>"<% end %>>
+    <div class="form-group">
+      <%= form.label :feed_usage %>
+      <%= form.number_field :feed_usage, min: 0, autocomplete: "off",
+            data: { feed_stock_target: "usage", action: "input->feed-stock#calculate change->feed-stock#calculate" } %>
+      <% daily_record.errors.where(:feed_usage).each do |error| %>
+        <span class="field-error"><%= error.full_message %></span>
+      <% end %>
+    </div>
 
-  <div class="form-group">
-    <%= form.label :feed_stock %>
-    <%= form.number_field :feed_stock, min: 0 %>
-    <% daily_record.errors.where(:feed_stock).each do |error| %>
-      <span class="field-error"><%= error.full_message %></span>
-    <% end %>
+    <div class="form-group">
+      <%= form.label :feed_stock %>
+      <%= form.number_field :feed_stock, min: 0,
+            data: { feed_stock_target: "stock" } %>
+      <% unless local_assigns[:prev_feed_stock].nil? %>
+        <span class="field-hint">飼料使用量を入力すると自動計算されます（前日残量: <%= local_assigns[:prev_feed_stock] %>）</span>
+      <% end %>
+      <% daily_record.errors.where(:feed_stock).each do |error| %>
+        <span class="field-error"><%= error.full_message %></span>
+      <% end %>
+    </div>
   </div>
 
   <div class="form-group">

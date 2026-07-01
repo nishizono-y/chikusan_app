@@ -280,6 +280,13 @@ td a:hover { text-decoration: underline; }
   margin-top: 4px;
 }
 
+.field-hint {
+  display: block;
+  font-size: 12px;
+  color: #7f8c8d;
+  margin-top: 4px;
+}
+
 /* セクションラベル */
 .section-label {
   font-size: 11px;
