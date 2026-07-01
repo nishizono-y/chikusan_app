@@ -14,11 +14,19 @@ class DailyRecordsController < ApplicationController
 
   # GET /daily_records/new
   def new
+    prev = DailyRecord.order(date: :desc).first
     @daily_record = DailyRecord.new
+    if prev
+      @daily_record.head_count = [prev.head_count.to_i - prev.death_count.to_i, 0].max
+      @daily_record.feed_stock = prev.feed_stock.to_i
+      @prev_feed_stock = prev.feed_stock.to_i
+    end
   end
 
   # GET /daily_records/1/edit
   def edit
+    prev = DailyRecord.where("date < ?", @daily_record.date).order(date: :desc).first
+    @prev_feed_stock = prev.feed_stock.to_i if prev
   end
 
   # POST /daily_records or /daily_records.json
@@ -30,6 +38,8 @@ class DailyRecordsController < ApplicationController
         format.html { redirect_to @daily_record, notice: "日次記録を登録しました。" }
         format.json { render :show, status: :created, location: @daily_record }
       else
+        prev = DailyRecord.order(date: :desc).first
+        @prev_feed_stock = prev.feed_stock.to_i if prev
         format.html { render :new, status: :unprocessable_content }
         format.json { render json: @daily_record.errors, status: :unprocessable_content }
       end
