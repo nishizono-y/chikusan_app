@@ -9,7 +9,10 @@
 </div>
 
 <details class="card"<%= " open" if @setting.errors.any? %>>
-  <summary class="card-title">飼料残量アラート</summary>
+  <summary class="card-title">
+    飼料残量アラート
+    <i class="fa-solid fa-chevron-down accordion-icon"></i>
+  </summary>
 
   <%= form_with model: @setting, url: threshold_feed_orders_path, method: :patch, html: { novalidate: true } do |form| %>
     <div class="form-group">
@@ -21,7 +24,7 @@
       <% end %>
     </div>
 
-    <div class="actions">
+    <div class="actions actions--end">
       <%= form.submit "保存する", class: "btn btn-primary" %>
     </div>
   <% end %>

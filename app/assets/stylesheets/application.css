@@ -177,6 +177,7 @@ main { padding: 16px; max-width: 800px; margin: 0 auto; }
 .btn-sm { padding: 4px 10px; font-size: 12px; }
 .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
 .actions.back-nav { margin-top: 0; margin-bottom: 16px; }
+.actions--end { justify-content: flex-end; }
 
 /* テーブル */
 .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -314,7 +315,10 @@ td a:hover { text-decoration: underline; }
 }
 .card-title i { font-size: 14px; }
 summary.card-title { cursor: pointer; }
-summary.card-title::-webkit-details-marker { color: var(--matcha); }
+summary.card-title::-webkit-details-marker { display: none; }
+summary.card-title::marker { content: ""; }
+summary.card-title .accordion-icon { margin-left: auto; transition: transform 0.2s; }
+details[open] > summary.card-title .accordion-icon { transform: rotate(180deg); }
 
 /* サマリーグリッド（ホーム画面） */
 .summary-grid {
