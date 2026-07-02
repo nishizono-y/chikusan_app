@@ -34,7 +34,7 @@
     <% end %>
   </div>
 
-  <div class="actions">
+  <div class="actions actions--center">
     <%= form.submit class: "btn btn-primary" %>
     <%= link_to "キャンセル", (feed_order.persisted? ? feed_order : feed_orders_path), class: "btn btn-secondary" %>
   </div>
