@@ -3,7 +3,18 @@ class DailyRecordsController < ApplicationController
 
   # GET /daily_records or /daily_records.json
   def index
-    @daily_records = DailyRecord.all
+    @target = begin
+      params[:month].present? ? Date.parse("#{params[:month]}-01") : Date.current.beginning_of_month
+    rescue Date::Error
+      Date.current.beginning_of_month
+    end
+    month_range = @target..@target.end_of_month
+
+    @month_label = @target.strftime("%Y年%-m月")
+    @prev_month  = (@target - 1.month).strftime("%Y-%m")
+    @next_month  = (@target + 1.month).strftime("%Y-%m")
+
+    @daily_records = DailyRecord.where(date: month_range).order(:date)
     today_record = DailyRecord.find_by(date: Date.current)
     @mortality_alert = DailyRecord.mortality_alert(today_record)
   end
