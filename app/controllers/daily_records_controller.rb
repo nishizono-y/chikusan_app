@@ -1,13 +1,11 @@
 class DailyRecordsController < ApplicationController
+  include MonthScoped
+
   before_action :set_daily_record, only: %i[ show edit update destroy ]
 
   # GET /daily_records or /daily_records.json
   def index
-    @target = begin
-      params[:month].present? ? Date.parse("#{params[:month]}-01") : Date.current.beginning_of_month
-    rescue Date::Error
-      Date.current.beginning_of_month
-    end
+    @target = parse_target_month
     month_range = @target..@target.end_of_month
 
     @month_label = @target.strftime("%Y年%-m月")

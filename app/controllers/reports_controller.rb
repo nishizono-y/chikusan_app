@@ -1,10 +1,8 @@
 class ReportsController < ApplicationController
+  include MonthScoped
+
   def index
-    @target = begin
-      params[:month].present? ? Date.parse("#{params[:month]}-01") : Date.current.beginning_of_month
-    rescue Date::Error
-      Date.current.beginning_of_month
-    end
+    @target = parse_target_month
     month_range = @target..@target.end_of_month
     prev_range  = (@target - 1.month).beginning_of_month..(@target - 1.month).end_of_month
 
