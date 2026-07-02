@@ -1,6 +1,11 @@
 <% content_for :title, "出荷記録一覧" %>
 
-<h2 class="page-title">出荷記録一覧</h2>
+<div class="page-title-row">
+  <h2 class="page-title">出荷記録一覧</h2>
+  <div class="page-title-actions">
+    <%= link_to "新規作成", new_shipment_path, class: "btn btn-primary btn-sm" %>
+  </div>
+</div>
 
 <div class="table-scroll">
 <table>
@@ -25,8 +30,4 @@
     <% end %>
   </tbody>
 </table>
-</div>
-
-<div class="actions">
-  <%= link_to "新規作成", new_shipment_path, class: "btn btn-primary" %>
 </div>

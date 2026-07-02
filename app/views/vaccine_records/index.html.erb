@@ -1,6 +1,11 @@
 <% content_for :title, "ワクチン接種記録" %>
 
-<h2 class="page-title">ワクチン接種記録</h2>
+<div class="page-title-row">
+  <h2 class="page-title">ワクチン接種記録</h2>
+  <div class="page-title-actions">
+    <%= link_to "新規登録", new_vaccine_record_path, class: "btn btn-primary btn-sm" %>
+  </div>
+</div>
 
 <div class="table-scroll">
   <table>
@@ -25,7 +30,3 @@
 <% if @vaccine_records.empty? %>
   <p class="empty-message">接種記録がまだありません</p>
 <% end %>
-
-<div class="actions">
-  <%= link_to "新規登録", new_vaccine_record_path, class: "btn btn-primary" %>
-</div>
