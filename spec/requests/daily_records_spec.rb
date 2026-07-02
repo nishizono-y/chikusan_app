@@ -63,6 +63,29 @@ RSpec.describe "/daily_records", type: :request do
     end
   end
 
+  describe "GET /show, GET /edit の「一覧に戻る」リンク" do
+    let!(:record) { create(:daily_record, date: Date.new(2026, 6, 15)) }
+
+    it "GET /show は記録の月を引き継いだ一覧リンクを表示する" do
+      get daily_record_url(record)
+      expect(response.body).to include(daily_records_path(month: "2026-06"))
+    end
+
+    it "GET /edit は記録の月を引き継いだ一覧リンクを表示する" do
+      get edit_daily_record_url(record)
+      expect(response.body).to include(daily_records_path(month: "2026-06"))
+    end
+  end
+
+  describe "DELETE /destroy の月引き継ぎ" do
+    let!(:record) { create(:daily_record, date: Date.new(2026, 6, 15)) }
+
+    it "削除後、削除した記録の月の一覧にリダイレクトする" do
+      delete daily_record_url(record)
+      expect(response).to redirect_to(daily_records_url(month: "2026-06"))
+    end
+  end
+
   describe "GET /show" do
     it "renders a successful response" do
       daily_record = DailyRecord.create! valid_attributes

@@ -8,5 +8,5 @@
 
 <div class="actions">
   <%= link_to "詳細に戻る", @daily_record, class: "btn btn-secondary" %>
-  <%= link_to "一覧に戻る", daily_records_path, class: "btn btn-secondary" %>
+  <%= link_to "一覧に戻る", daily_records_path(month: daily_record_month), class: "btn btn-secondary" %>
 </div>
