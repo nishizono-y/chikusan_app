@@ -1,0 +1,4 @@
+<%= turbo_stream.update "flash" do %>
+  <div class="flash-notice">畜種を削除しました。</div>
+<% end %>
+<%= turbo_stream.action :visit, livestock_types_path %>

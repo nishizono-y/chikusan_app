@@ -23,6 +23,18 @@ RSpec.describe DailyRecord, type: :model do
       end
     end
 
+    describe 'livestock_type' do
+      it '未設定でも保存できる' do
+        subject.livestock_type = nil
+        expect(subject).to be_valid
+      end
+
+      it '畜種を設定して保存できる' do
+        subject.livestock_type = create(:livestock_type)
+        expect(subject).to be_valid
+      end
+    end
+
     describe 'death_count' do
       it '必須である' do
         subject.death_count = nil

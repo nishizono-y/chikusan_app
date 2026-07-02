@@ -1,0 +1,34 @@
+<% content_for :title, "畜種一覧" %>
+
+<h2 class="page-title">畜種一覧</h2>
+
+<div class="actions back-nav">
+  <%= link_to daily_records_path, class: "btn btn-secondary btn-sm" do %>
+    <i class="fa-solid fa-arrow-left"></i> 日次記録一覧に戻る
+  <% end %>
+</div>
+
+<div class="table-scroll">
+<table>
+  <thead>
+    <tr>
+      <th>畜種名</th>
+      <th>単位</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="livestock_types">
+    <% @livestock_types.each do |livestock_type| %>
+      <tr id="<%= dom_id(livestock_type) %>">
+        <td><%= livestock_type.name %></td>
+        <td><%= livestock_type.unit %></td>
+        <td><%= link_to "詳細", livestock_type %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
+
+<div class="actions">
+  <%= link_to "新規作成", new_livestock_type_path, class: "btn btn-primary" %>
+</div>

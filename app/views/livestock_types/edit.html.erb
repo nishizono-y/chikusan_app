@@ -1,0 +1,12 @@
+<% content_for :title, "畜種 編集" %>
+
+<h2 class="page-title">畜種 編集</h2>
+
+<div class="card">
+  <%= render "form", livestock_type: @livestock_type %>
+</div>
+
+<div class="actions">
+  <%= link_to "詳細に戻る", @livestock_type, class: "btn btn-secondary" %>
+  <%= link_to "一覧に戻る", livestock_types_path, class: "btn btn-secondary" %>
+</div>

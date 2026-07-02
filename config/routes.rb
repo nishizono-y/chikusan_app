@@ -19,5 +19,8 @@ Rails.application.routes.draw do
 
   resource :setting, only: %i[edit update]
 
+  # 畜種マスタの CRUD ルート
+  resources :livestock_types
+
   root "home#index"
 end

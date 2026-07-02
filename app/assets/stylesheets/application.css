@@ -140,6 +140,7 @@ main { padding: 16px; max-width: 800px; margin: 0 auto; }
   margin-bottom: 5px;
   letter-spacing: 0.04em;
 }
+.unit-badge { color: var(--sub); font-weight: 400; }
 .form-group input,
 .form-group select,
 .form-group textarea {
@@ -183,6 +184,7 @@ main { padding: 16px; max-width: 800px; margin: 0 auto; }
 .btn + .btn { margin-left: 8px; }
 .btn-sm { padding: 4px 10px; font-size: 12px; }
 .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+.actions.back-nav { margin-top: 0; margin-bottom: 16px; }
 
 /* テーブル */
 .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }

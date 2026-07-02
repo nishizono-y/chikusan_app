@@ -2,6 +2,7 @@
   <table>
     <tbody>
       <tr><th>日付</th><td><%= ja_date_full(daily_record.date) %></td></tr>
+      <tr><th>畜種</th><td><%= daily_record.livestock_type&.name || "—" %></td></tr>
       <tr><th>飼養頭数</th><td><%= daily_record.head_count %></td></tr>
       <tr><th>死亡頭数</th><td><%= daily_record.death_count %></td></tr>
       <tr><th>飼料使用量</th><td><%= daily_record.feed_usage %></td></tr>
