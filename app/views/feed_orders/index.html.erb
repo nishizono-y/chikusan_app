@@ -1,11 +1,13 @@
 <% content_for :title, "発注履歴一覧" %>
 
-<h2 class="page-title">発注履歴一覧</h2>
-
-<div class="actions back-nav">
-  <%= link_to daily_records_path, class: "btn btn-secondary btn-sm" do %>
-    <i class="fa-solid fa-arrow-left"></i> 日次記録一覧に戻る
-  <% end %>
+<div class="page-title-row">
+  <h2 class="page-title">発注履歴一覧</h2>
+  <div class="page-title-actions">
+    <%= link_to daily_records_path, class: "btn btn-secondary btn-sm" do %>
+      <i class="fa-solid fa-arrow-left"></i> 日次記録一覧に戻る
+    <% end %>
+    <%= link_to "新規作成", new_feed_order_path, class: "btn btn-primary btn-sm" %>
+  </div>
 </div>
 
 <details class="card"<%= " open" if @setting.errors.any? %>>
@@ -51,8 +53,4 @@
     <% end %>
   </tbody>
 </table>
-</div>
-
-<div class="actions">
-  <%= link_to "新規作成", new_feed_order_path, class: "btn btn-primary" %>
 </div>
