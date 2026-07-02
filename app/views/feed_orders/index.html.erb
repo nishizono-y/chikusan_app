@@ -8,6 +8,25 @@
   <% end %>
 </div>
 
+<section class="card">
+  <h3 class="card-title">飼料残量アラート</h3>
+
+  <%= form_with model: @setting, url: threshold_feed_orders_path, method: :patch, html: { novalidate: true } do |form| %>
+    <div class="form-group">
+      <%= form.label :value, "アラートしきい値（kg）" %>
+      <%= form.number_field :value, min: 1, class: "form-control" %>
+      <p class="form-hint">残量がこの値以下になるとホームにアラートを表示します（デフォルト: <%= Setting::DEFAULTS[Setting::FEED_STOCK_KEY] %>kg）</p>
+      <% @setting.errors.where(:value).each do |error| %>
+        <span class="field-error"><%= error.full_message %></span>
+      <% end %>
+    </div>
+
+    <div class="actions">
+      <%= form.submit "保存する", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</section>
+
 <div class="table-scroll">
 <table>
   <thead>

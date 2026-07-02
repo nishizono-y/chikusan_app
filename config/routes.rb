@@ -6,7 +6,12 @@ Rails.application.routes.draw do
   resources :shipments
 
   # 飼料発注記録の CRUD ルート（一覧・新規・登録・詳細・編集・更新・削除）
-  resources :feed_orders
+  # 飼料残量アラートのしきい値も発注履歴一覧にまとめて設定する
+  resources :feed_orders do
+    collection do
+      patch :threshold, action: :update_threshold
+    end
+  end
 
   # 日次記録の CRUD ルート（一覧・新規・登録・詳細・編集・更新・削除）
   resources :daily_records
@@ -19,8 +24,6 @@ Rails.application.routes.draw do
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
   get "report" => "reports#index", as: :report
-
-  resource :setting, only: %i[edit update]
 
   # 畜種マスタの CRUD ルート
   resources :livestock_types

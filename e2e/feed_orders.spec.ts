@@ -84,4 +84,44 @@ test.describe('飼料発注記録', () => {
       await expect(page.getByText('発注履歴一覧')).toBeVisible();
     });
   });
+
+  test('アラートしきい値を変更して保存できる', async ({ page }) => {
+    await test.step('発注履歴の一覧ページにアクセスする', async () => {
+      await page.goto('/feed_orders');
+    });
+
+    await test.step('しきい値に新しい値を入力する', async () => {
+      await page.fill('input[name="setting[value]"]', '500');
+    });
+
+    await test.step('保存するボタンをクリックする', async () => {
+      await page.click('input[type="submit"]');
+    });
+
+    await test.step('保存成功メッセージが表示されることを確認する', async () => {
+      await expect(page.getByText('アラートしきい値を保存しました')).toBeVisible();
+    });
+
+    await test.step('保存した値が入力欄に反映されていることを確認する', async () => {
+      await expect(page.locator('input[name="setting[value]"]')).toHaveValue('500');
+    });
+  });
+
+  test('しきい値に無効な値を送信するとバリデーションエラーが表示される', async ({ page }) => {
+    await test.step('発注履歴の一覧ページにアクセスする', async () => {
+      await page.goto('/feed_orders');
+    });
+
+    await test.step('しきい値に 0 を入力する', async () => {
+      await page.fill('input[name="setting[value]"]', '0');
+    });
+
+    await test.step('保存するボタンをクリックする', async () => {
+      await page.click('input[type="submit"]');
+    });
+
+    await test.step('バリデーションエラーが表示されることを確認する', async () => {
+      await expect(page.locator('.field-error')).toBeVisible();
+    });
+  });
 });

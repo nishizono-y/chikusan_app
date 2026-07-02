@@ -72,14 +72,6 @@ header {
   letter-spacing: 0.04em;
 }
 .header-right strong { display: block; font-size: 19px; line-height: 1.1; }
-.header-setting {
-  color: rgba(250,250,245,0.85);
-  font-size: 20px;
-  padding: 4px 6px;
-  border-radius: 6px;
-  transition: opacity 0.15s;
-}
-.header-setting:hover, .header-setting.active { opacity: 1; color: #fff; }
 .bottom-nav {
   position: fixed;
   bottom: 0; left: 0; right: 0;

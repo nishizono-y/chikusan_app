@@ -15,6 +15,11 @@ RSpec.describe "/feed_orders", type: :request do
       get feed_orders_path
       expect(response).to have_http_status(:ok)
     end
+
+    it "しきい値入力フォームを表示する" do
+      get feed_orders_path
+      expect(response.body).to include("アラートしきい値")
+    end
   end
 
   describe "GET /show" do
@@ -107,6 +112,42 @@ RSpec.describe "/feed_orders", type: :request do
       feed_order = create(:feed_order)
       delete feed_order_path(feed_order), headers: { "Accept" => "text/vnd.turbo-stream.html" }
       expect(response).to have_http_status(:ok)
+    end
+  end
+
+  describe "PATCH /threshold" do
+    context "有効な値を送信したとき" do
+      it "設定を保存して一覧ページにリダイレクトする" do
+        patch threshold_feed_orders_path, params: { setting: { value: 500 } }
+        expect(response).to redirect_to(feed_orders_path)
+        follow_redirect!
+        expect(response.body).to include("アラートしきい値を保存しました")
+      end
+
+      it "DBにしきい値が保存される" do
+        patch threshold_feed_orders_path, params: { setting: { value: 500 } }
+        expect(Setting.feed_stock_threshold).to eq(500)
+      end
+
+      it "value 以外のパラメータは無視される（strong parameters）" do
+        patch threshold_feed_orders_path, params: { setting: { value: 400, name: "tampered" } }
+        expect(response).to redirect_to(feed_orders_path)
+        expect(Setting.find_by(name: "tampered")).to be_nil
+      end
+    end
+
+    context "無効な値を送信したとき" do
+      it "422を返して一覧を再表示する" do
+        patch threshold_feed_orders_path, params: { setting: { value: 0 } }
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.body).to include("field-error")
+      end
+
+      it "DBの値が変更されないこと" do
+        Setting.create!(name: Setting::FEED_STOCK_KEY, value: 300)
+        patch threshold_feed_orders_path, params: { setting: { value: -1 } }
+        expect(Setting.feed_stock_threshold).to eq(300)
+      end
     end
   end
 end

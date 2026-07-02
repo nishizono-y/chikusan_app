@@ -24,9 +24,6 @@
         <h1><i class="fa-solid fa-pig"></i> 薩摩畜産日誌</h1>
         <div class="subtitle"><%= l(@today, format: :long) %></div>
       </div>
-      <%= link_to edit_setting_path, class: class_names("header-setting", active: controller_name == "settings") do %>
-        <i class="fa-solid fa-gear"></i>
-      <% end %>
     </header>
 
     <main>
