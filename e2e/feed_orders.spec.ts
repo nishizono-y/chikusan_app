@@ -12,6 +12,26 @@ test.describe('飼料発注記録', () => {
     });
   });
 
+  test('直近の日次記録があるとき現在の飼料残量が参考表示される', async ({ page }) => {
+    await test.step('日次記録を1件登録する', async () => {
+      await page.goto('/daily_records/new');
+      await page.fill('input[name="daily_record[date]"]', '2026-07-02');
+      await page.fill('input[name="daily_record[head_count]"]', '100');
+      await page.fill('input[name="daily_record[death_count]"]', '0');
+      await page.fill('input[name="daily_record[feed_usage]"]', '20');
+      await page.fill('input[name="daily_record[feed_stock]"]', '380');
+      await page.click('input[type="submit"]');
+    });
+
+    await test.step('発注記録の新規作成ページにアクセスする', async () => {
+      await page.goto('/feed_orders/new');
+    });
+
+    await test.step('現在の飼料残量が表示されることを確認する', async () => {
+      await expect(page.getByText('現在の飼料残量：380kg')).toBeVisible();
+    });
+  });
+
   test('新規作成して一覧に反映される', async ({ page }) => {
     await test.step('新規作成ページにアクセスする', async () => {
       await page.goto('/feed_orders/new');

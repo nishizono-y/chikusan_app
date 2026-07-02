@@ -9,6 +9,9 @@
 
   <div class="form-group">
     <%= form.label :quantity, "数量（kg）" %>
+    <% if @latest_daily_record&.feed_stock %>
+      <p class="field-hint">現在の飼料残量：<%= @latest_daily_record.feed_stock %>kg（<%= ja_date_full(@latest_daily_record.date) %>時点の日次記録）</p>
+    <% end %>
     <%= form.number_field :quantity, min: 1, placeholder: "例：300" %>
     <% feed_order.errors.where(:quantity).each do |error| %>
       <span class="field-error"><%= error.full_message %></span>

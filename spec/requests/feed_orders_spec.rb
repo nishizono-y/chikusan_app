@@ -35,6 +35,18 @@ RSpec.describe "/feed_orders", type: :request do
       get new_feed_order_path
       expect(response).to have_http_status(:ok)
     end
+
+    it "直近の日次記録があるとき現在の飼料残量を表示する" do
+      create(:daily_record, date: Date.current, feed_stock: 250)
+      get new_feed_order_path
+      expect(response.body).to include("現在の飼料残量：250kg")
+    end
+
+    it "日次記録がないとき飼料残量を表示しない" do
+      DailyRecord.delete_all
+      get new_feed_order_path
+      expect(response.body).not_to include("現在の飼料残量")
+    end
   end
 
   describe "GET /edit" do

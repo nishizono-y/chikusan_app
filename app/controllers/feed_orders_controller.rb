@@ -14,6 +14,7 @@ class FeedOrdersController < ApplicationController
   # GET /feed_orders/new
   def new
     @feed_order = FeedOrder.new(ordered_on: @today)
+    @latest_daily_record = DailyRecord.order(date: :desc).first
   end
 
   # GET /feed_orders/1/edit
@@ -29,6 +30,7 @@ class FeedOrdersController < ApplicationController
         format.html { redirect_to @feed_order, notice: "発注記録を登録しました。" }
         format.json { render :show, status: :created, location: @feed_order }
       else
+        @latest_daily_record = DailyRecord.order(date: :desc).first
         format.html { render :new, status: :unprocessable_content }
         format.json { render json: @feed_order.errors, status: :unprocessable_content }
       end
