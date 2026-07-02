@@ -6,6 +6,9 @@
 </div>
 
 <div class="report-actions no-print">
+  <%= link_to daily_records_path(month: @target.strftime("%Y-%m")), class: "btn btn-secondary btn-sm" do %>
+    <i class="fa-solid fa-arrow-left"></i> 日次記録一覧に戻る
+  <% end %>
   <button class="btn btn-pdf" onclick="window.print()">
     <i class="fa-solid fa-file-pdf"></i> PDFとして保存
   </button>

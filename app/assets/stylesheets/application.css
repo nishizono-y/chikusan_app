@@ -444,7 +444,7 @@ td a:hover { text-decoration: underline; }
 .memo-text { color: var(--text); line-height: 1.6; }
 
 /* PDF出力ボタン */
-.report-actions { margin: 12px 0; text-align: right; }
+.report-actions { margin: 12px 0; display: flex; align-items: center; justify-content: space-between; }
 .btn-pdf { background: var(--matcha); color: #fff; border: none; border-radius: 6px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
 .btn-pdf:active { opacity: 0.8; }
 
