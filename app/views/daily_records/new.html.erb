@@ -5,7 +5,3 @@
 <div class="card">
   <%= render "form", daily_record: @daily_record, prev_feed_stock: @prev_feed_stock, auto_calculated_head_count: @auto_calculated_head_count %>
 </div>
-
-<div class="actions">
-  <%= link_to "一覧に戻る", daily_records_path(month: daily_record_month), class: "btn btn-secondary" %>
-</div>

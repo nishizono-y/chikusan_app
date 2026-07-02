@@ -17,5 +17,6 @@
 
   <div class="actions">
     <%= form.submit class: "btn btn-primary" %>
+    <%= link_to "キャンセル", (livestock_type.persisted? ? livestock_type : livestock_types_path), class: "btn btn-secondary" %>
   </div>
 <% end %>

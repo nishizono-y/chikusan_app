@@ -1,13 +1,6 @@
 <% content_for :title, "発注記録 編集" %>
 
-<div class="page-title-row">
-  <h2 class="page-title">発注記録 編集</h2>
-  <div class="page-title-actions">
-    <%= link_to @feed_order, class: "btn btn-secondary btn-sm" do %>
-      <i class="fa-solid fa-arrow-left"></i> キャンセル
-    <% end %>
-  </div>
-</div>
+<h2 class="page-title">発注記録 編集</h2>
 
 <div class="card">
   <%= render "form", feed_order: @feed_order %>
