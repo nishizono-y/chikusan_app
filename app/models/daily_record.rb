@@ -1,6 +1,8 @@
 class DailyRecord < ApplicationRecord
   VACCINE_OPTIONS = %w[なし 口蹄疫 ブルセラ その他].freeze
 
+  belongs_to :livestock_type, optional: true
+
   validates :date, presence: true, uniqueness: true
   validates :death_count, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, allow_blank: true }
   validates :feed_usage, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, allow_blank: true }

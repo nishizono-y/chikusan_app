@@ -1,0 +1,21 @@
+<%= form_with(model: livestock_type) do |form| %>
+  <div class="form-group">
+    <%= form.label :name, "畜種名" %>
+    <%= form.text_field :name, placeholder: "例：肉用牛" %>
+    <% livestock_type.errors.where(:name).each do |error| %>
+      <span class="field-error"><%= error.full_message %></span>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :unit, "単位" %>
+    <%= form.text_field :unit, placeholder: "例：頭" %>
+    <% livestock_type.errors.where(:unit).each do |error| %>
+      <span class="field-error"><%= error.full_message %></span>
+    <% end %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit class: "btn btn-primary" %>
+  </div>
+<% end %>

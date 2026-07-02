@@ -7,23 +7,40 @@
     <% end %>
   </div>
 
-  <div class="form-group">
-    <%= form.label :head_count %>
-    <%= form.number_field :head_count, min: 0 %>
-    <% if local_assigns[:auto_calculated_head_count] %>
-      <span class="field-hint">前日の記録から自動計算しました</span>
-    <% end %>
-    <% daily_record.errors.where(:head_count).each do |error| %>
-      <span class="field-error"><%= error.full_message %></span>
-    <% end %>
-  </div>
+  <div data-controller="livestock-unit">
+    <div class="form-group">
+      <%= form.label :livestock_type_id %>
+      <%= form.select :livestock_type_id,
+            options_for_select(LivestockType.order(:name).map { |lt| [ lt.name, lt.id, { data: { unit: lt.unit } } ] }, daily_record.livestock_type_id),
+            { include_blank: "選択してください" },
+            { data: { livestock_unit_target: "select", action: "change->livestock-unit#updateUnit" } } %>
+      <% daily_record.errors.where(:livestock_type).each do |error| %>
+        <span class="field-error"><%= error.full_message %></span>
+      <% end %>
+    </div>
 
-  <div class="form-group">
-    <%= form.label :death_count %>
-    <%= form.number_field :death_count, min: 0 %>
-    <% daily_record.errors.where(:death_count).each do |error| %>
-      <span class="field-error"><%= error.full_message %></span>
-    <% end %>
+    <div class="form-group">
+      <%= form.label :head_count do %>
+        <%= DailyRecord.human_attribute_name(:head_count) %><span class="unit-badge" data-livestock-unit-target="unit"></span>
+      <% end %>
+      <%= form.number_field :head_count, min: 0 %>
+      <% if local_assigns[:auto_calculated_head_count] %>
+        <span class="field-hint">前日の記録から自動計算しました</span>
+      <% end %>
+      <% daily_record.errors.where(:head_count).each do |error| %>
+        <span class="field-error"><%= error.full_message %></span>
+      <% end %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :death_count do %>
+        <%= DailyRecord.human_attribute_name(:death_count) %><span class="unit-badge" data-livestock-unit-target="unit"></span>
+      <% end %>
+      <%= form.number_field :death_count, min: 0 %>
+      <% daily_record.errors.where(:death_count).each do |error| %>
+        <span class="field-error"><%= error.full_message %></span>
+      <% end %>
+    </div>
   </div>
 
   <div data-controller="feed-stock"<% unless local_assigns[:prev_feed_stock].nil? %> data-feed-stock-prev-stock-value="<%= local_assigns[:prev_feed_stock] %>"<% end %>>

@@ -101,7 +101,7 @@ class DailyRecordsController < ApplicationController
     end
 
     def daily_record_params
-      params.require(:daily_record).permit(:date, :head_count, :death_count, :feed_usage, :feed_stock, :vaccine, :memo)
+      params.require(:daily_record).permit(:date, :livestock_type_id, :head_count, :death_count, :feed_usage, :feed_stock, :vaccine, :memo)
     end
 
     def fetch_prev_record(before_date:)
