@@ -125,6 +125,7 @@ test.describe('日次記録', () => {
     });
 
     await test.step('畜種未選択のときは単位が表示されない', async () => {
+      await page.selectOption('select[name="daily_record[livestock_type_id]"]', '');
       await expect(page.getByText('飼養頭数', { exact: true })).toBeVisible();
       await expect(page.getByText('死亡頭数', { exact: true })).toBeVisible();
     });

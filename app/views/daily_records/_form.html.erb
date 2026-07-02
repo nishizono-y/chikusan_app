@@ -14,9 +14,6 @@
             options_for_select(LivestockType.order(:name).map { |lt| [ lt.name, lt.id, { data: { unit: lt.unit } } ] }, daily_record.livestock_type_id),
             { include_blank: "選択してください" },
             { data: { livestock_unit_target: "select", action: "change->livestock-unit#updateUnit" } } %>
-      <% daily_record.errors.where(:livestock_type).each do |error| %>
-        <span class="field-error"><%= error.full_message %></span>
-      <% end %>
     </div>
 
     <div class="form-group">

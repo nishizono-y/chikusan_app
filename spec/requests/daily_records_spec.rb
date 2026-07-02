@@ -99,6 +99,15 @@ RSpec.describe "/daily_records", type: :request do
       get new_daily_record_url
       expect(response).to be_successful
     end
+
+    it "前日の畜種を引き継ぐ" do
+      livestock_type = create(:livestock_type)
+      create(:daily_record, date: Date.current - 1, livestock_type: livestock_type)
+
+      get new_daily_record_url
+
+      expect(response.body).to include(%(selected="selected" value="#{livestock_type.id}"))
+    end
   end
 
   describe "GET /edit" do

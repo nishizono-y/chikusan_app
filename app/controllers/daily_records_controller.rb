@@ -26,6 +26,7 @@ class DailyRecordsController < ApplicationController
     prev = fetch_prev_record(before_date: Date.tomorrow)
     @daily_record = DailyRecord.new
     if prev
+      @daily_record.livestock_type_id = prev.livestock_type_id
       @daily_record.head_count = [ (prev.head_count || 0) - (prev.death_count || 0), 0 ].max
       @daily_record.feed_stock = prev.feed_stock
       @prev_feed_stock = prev.feed_stock
