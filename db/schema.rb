@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_02_012857) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_02_062340) do
   create_table "daily_records", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.date "date"
@@ -24,6 +24,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_012857) do
     t.string "vaccine"
     t.index ["date"], name: "index_daily_records_on_date", unique: true
     t.index ["livestock_type_id"], name: "index_daily_records_on_livestock_type_id"
+  end
+
+  create_table "feed_orders", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "memo"
+    t.date "ordered_on", null: false
+    t.integer "quantity", null: false
+    t.string "supplier", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "livestock_types", force: :cascade do |t|

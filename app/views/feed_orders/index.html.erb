@@ -1,0 +1,30 @@
+<% content_for :title, "発注履歴一覧" %>
+
+<h2 class="page-title">発注履歴一覧</h2>
+
+<div class="table-scroll">
+<table>
+  <thead>
+    <tr>
+      <th>発注日</th>
+      <th>数量（kg）</th>
+      <th>発注先</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="feed_orders">
+    <% @feed_orders.each do |feed_order| %>
+      <tr id="<%= dom_id(feed_order) %>">
+        <td><%= ja_date_full(feed_order.ordered_on) %></td>
+        <td><%= feed_order.quantity %></td>
+        <td><%= feed_order.supplier %></td>
+        <td><%= link_to "詳細", feed_order %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
+
+<div class="actions">
+  <%= link_to "新規作成", new_feed_order_path, class: "btn btn-primary" %>
+</div>

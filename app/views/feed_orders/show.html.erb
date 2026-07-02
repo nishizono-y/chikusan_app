@@ -1,0 +1,13 @@
+<% content_for :title, "発注記録 詳細" %>
+
+<h2 class="page-title">発注記録 詳細</h2>
+
+<div class="card">
+  <%= render @feed_order %>
+</div>
+
+<div class="actions">
+  <%= link_to "編集", edit_feed_order_path(@feed_order), class: "btn btn-secondary" %>
+  <%= button_to "削除", @feed_order, method: :delete, class: "btn btn-danger", data: { turbo_confirm: "本当に削除しますか？" } %>
+  <%= link_to "一覧に戻る", feed_orders_path, class: "btn btn-secondary" %>
+</div>

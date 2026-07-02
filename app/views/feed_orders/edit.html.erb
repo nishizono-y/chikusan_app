@@ -1,0 +1,12 @@
+<% content_for :title, "発注記録 編集" %>
+
+<h2 class="page-title">発注記録 編集</h2>
+
+<div class="card">
+  <%= render "form", feed_order: @feed_order %>
+</div>
+
+<div class="actions">
+  <%= link_to "詳細に戻る", @feed_order, class: "btn btn-secondary" %>
+  <%= link_to "一覧に戻る", feed_orders_path, class: "btn btn-secondary" %>
+</div>

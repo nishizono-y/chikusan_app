@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   # 出荷記録の CRUD ルート（一覧・新規・登録・詳細・編集・更新・削除）
   resources :shipments
 
+  # 飼料発注記録の CRUD ルート（一覧・新規・登録・詳細・編集・更新・削除）
+  resources :feed_orders
+
   # 日次記録の CRUD ルート（一覧・新規・登録・詳細・編集・更新・削除）
   resources :daily_records
 

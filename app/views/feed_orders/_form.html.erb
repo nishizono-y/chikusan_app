@@ -1,0 +1,37 @@
+<%= form_with(model: feed_order) do |form| %>
+  <div class="form-group">
+    <%= form.label :ordered_on, "発注日" %>
+    <%= form.date_field :ordered_on %>
+    <% feed_order.errors.where(:ordered_on).each do |error| %>
+      <span class="field-error"><%= error.full_message %></span>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :quantity, "数量（kg）" %>
+    <%= form.number_field :quantity, min: 1, placeholder: "例：300" %>
+    <% feed_order.errors.where(:quantity).each do |error| %>
+      <span class="field-error"><%= error.full_message %></span>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :supplier, "発注先" %>
+    <%= form.text_field :supplier, placeholder: "例：JA薩摩川内" %>
+    <% feed_order.errors.where(:supplier).each do |error| %>
+      <span class="field-error"><%= error.full_message %></span>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :memo, "メモ（任意）" %>
+    <%= form.text_area :memo %>
+    <% feed_order.errors.where(:memo).each do |error| %>
+      <span class="field-error"><%= error.full_message %></span>
+    <% end %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit class: "btn btn-primary" %>
+  </div>
+<% end %>

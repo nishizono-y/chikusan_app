@@ -24,8 +24,12 @@ class HomeController < ApplicationController
     if latest_record
       threshold = Setting.feed_stock_threshold
       if latest_record.feed_stock_low?(threshold)
-        @feed_stock_alert = true
-        @feed_remaining_days = latest_record.estimated_remaining_days(threshold)
+        if FeedOrder.where(ordered_on: latest_record.date..).exists?
+          @feed_ordered = true
+        else
+          @feed_stock_alert = true
+          @feed_remaining_days = latest_record.estimated_remaining_days(threshold)
+        end
       end
     end
 
