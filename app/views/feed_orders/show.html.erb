@@ -13,7 +13,7 @@
   <%= render @feed_order %>
 </div>
 
-<div class="actions">
+<div class="actions actions--center">
   <%= link_to "編集", edit_feed_order_path(@feed_order), class: "btn btn-secondary" %>
   <%= button_to "削除", @feed_order, method: :delete, class: "btn btn-danger", data: { turbo_confirm: "本当に削除しますか？" } %>
 </div>
