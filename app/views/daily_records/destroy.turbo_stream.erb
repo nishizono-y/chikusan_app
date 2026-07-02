@@ -1,4 +1,4 @@
 <%= turbo_stream.update "flash" do %>
   <div class="flash-notice">日次記録を削除しました。</div>
 <% end %>
-<%= turbo_stream.action :visit, daily_records_path %>
+<%= turbo_stream.action :visit, daily_records_path(month: daily_record_month) %>

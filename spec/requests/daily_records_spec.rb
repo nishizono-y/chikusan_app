@@ -32,6 +32,60 @@ RSpec.describe "/daily_records", type: :request do
     end
   end
 
+  describe "GET /index (月ごとの絞り込み)" do
+    let!(:this_month_record) { create(:daily_record, date: Date.new(2026, 7, 15)) }
+    let!(:prev_month_record) { create(:daily_record, date: Date.new(2026, 6, 15)) }
+    let!(:next_month_record) { create(:daily_record, date: Date.new(2026, 8, 15)) }
+
+    def full_date(date)
+      date.strftime("%Y年%-m月%-d日")
+    end
+
+    it "monthパラメータなしの場合は当月の記録のみ表示する" do
+      travel_to(Date.new(2026, 7, 1)) do
+        get daily_records_url
+        expect(response.body).to include(full_date(this_month_record.date))
+        expect(response.body).not_to include(full_date(prev_month_record.date))
+        expect(response.body).not_to include(full_date(next_month_record.date))
+      end
+    end
+
+    it "monthパラメータを指定するとその月の記録のみ表示する" do
+      get daily_records_url(month: "2026-06")
+      expect(response.body).to include(full_date(prev_month_record.date))
+      expect(response.body).not_to include(full_date(this_month_record.date))
+    end
+
+    it "前月・次月へのリンクを表示する" do
+      get daily_records_url(month: "2026-07")
+      expect(response.body).to include(daily_records_path(month: "2026-06"))
+      expect(response.body).to include(daily_records_path(month: "2026-08"))
+    end
+  end
+
+  describe "GET /show, GET /edit の「一覧に戻る」リンク" do
+    let!(:record) { create(:daily_record, date: Date.new(2026, 6, 15)) }
+
+    it "GET /show は記録の月を引き継いだ一覧リンクを表示する" do
+      get daily_record_url(record)
+      expect(response.body).to include(daily_records_path(month: "2026-06"))
+    end
+
+    it "GET /edit は記録の月を引き継いだ一覧リンクを表示する" do
+      get edit_daily_record_url(record)
+      expect(response.body).to include(daily_records_path(month: "2026-06"))
+    end
+  end
+
+  describe "DELETE /destroy の月引き継ぎ" do
+    let!(:record) { create(:daily_record, date: Date.new(2026, 6, 15)) }
+
+    it "削除後、削除した記録の月の一覧にリダイレクトする" do
+      delete daily_record_url(record)
+      expect(response).to redirect_to(daily_records_url(month: "2026-06"))
+    end
+  end
+
   describe "GET /show" do
     it "renders a successful response" do
       daily_record = DailyRecord.create! valid_attributes

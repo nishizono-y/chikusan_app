@@ -4,40 +4,54 @@
   <h2 class="page-title">日次記録一覧</h2>
   <div class="page-title-actions">
     <%= link_to "新規作成", new_daily_record_path, class: "btn btn-primary btn-sm" %>
-    <%= link_to report_path, class: "btn btn-secondary btn-sm" do %>
+    <%= link_to report_path(month: @target.strftime("%Y-%m")), class: "btn btn-secondary btn-sm" do %>
       <i class="fa-solid fa-file-lines"></i> 月次報告
     <% end %>
   </div>
 </div>
 
+<div class="month-nav">
+  <%= link_to daily_records_path(month: @prev_month), class: "month-nav-btn" do %>
+    <i class="fa-solid fa-chevron-left"></i> 前月
+  <% end %>
+  <span class="month-nav-label"><%= @month_label %></span>
+  <%= link_to daily_records_path(month: @next_month), class: "month-nav-btn" do %>
+    次月 <i class="fa-solid fa-chevron-right"></i>
+  <% end %>
+</div>
+
 <%= render "mortality_alert", alert: @mortality_alert if @mortality_alert %>
 
-<div class="table-scroll">
-<table>
-  <thead>
-    <tr>
-      <th>日付</th>
-      <th>飼養頭数</th>
-      <th>死亡頭数</th>
-      <th>飼料使用量</th>
-      <th>飼料残量</th>
-      <th>ワクチン</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody id="daily_records">
-    <% @daily_records.each do |daily_record| %>
-      <tr id="<%= dom_id(daily_record) %>">
-        <td><%= ja_date_full(daily_record.date) %></td>
-        <td><%= daily_record.head_count %></td>
-        <td><%= daily_record.death_count %></td>
-        <td><%= daily_record.feed_usage %></td>
-        <td><%= daily_record.feed_stock %></td>
-        <td><%= daily_record.vaccine %></td>
-        <td><%= link_to "詳細", daily_record %></td>
+<% if @daily_records.any? %>
+  <div class="table-scroll">
+  <table>
+    <thead>
+      <tr>
+        <th>日付</th>
+        <th>飼養頭数</th>
+        <th>死亡頭数</th>
+        <th>飼料使用量</th>
+        <th>飼料残量</th>
+        <th>ワクチン</th>
+        <th></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
-</div>
+    </thead>
+    <tbody id="daily_records">
+      <% @daily_records.each do |daily_record| %>
+        <tr id="<%= dom_id(daily_record) %>">
+          <td><%= ja_date_full(daily_record.date) %></td>
+          <td><%= daily_record.head_count %></td>
+          <td><%= daily_record.death_count %></td>
+          <td><%= daily_record.feed_usage %></td>
+          <td><%= daily_record.feed_stock %></td>
+          <td><%= daily_record.vaccine %></td>
+          <td><%= link_to "詳細", daily_record %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  </div>
+<% else %>
+  <p class="empty-message">この月の記録はありません</p>
+<% end %>
 

@@ -95,7 +95,7 @@ test('No.3 登録したデータを編集できる', async ({ page }) => {
 
   try {
     await test.step('日次記録の一覧ページにアクセスする', async () => {
-      await page.goto('/daily_records');
+      await page.goto('/daily_records?month=2026-06');
       const p = path.join(SCREENSHOT_DIR, '03_step1_一覧アクセス.png');
       await page.screenshot({ path: p, fullPage: true });
       shots.push(p);

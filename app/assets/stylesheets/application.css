@@ -375,6 +375,28 @@ td a:hover { text-decoration: underline; }
 /* 空状態メッセージ */
 .empty-message { font-size: 13px; color: var(--sub); text-align: center; padding: 16px 0; }
 
+/* 月切り替えナビゲーション */
+.month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--warm-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  margin-bottom: 16px;
+}
+.month-nav-btn {
+  color: var(--matcha);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.month-nav-label { font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: 0.04em; }
+
 /* 月次報告書 */
 .report-header {
   text-align: center;
@@ -422,7 +444,7 @@ td a:hover { text-decoration: underline; }
 .memo-text { color: var(--text); line-height: 1.6; }
 
 /* PDF出力ボタン */
-.report-actions { margin: 12px 0; text-align: right; }
+.report-actions { margin: 12px 0; display: flex; align-items: center; justify-content: space-between; }
 .btn-pdf { background: var(--matcha); color: #fff; border: none; border-radius: 6px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
 .btn-pdf:active { opacity: 0.8; }
 

@@ -53,7 +53,7 @@ test.describe('日次記録', () => {
 
   test('登録したデータを編集できる', async ({ page }) => {
     await test.step('日次記録の一覧ページにアクセスする', async () => {
-      await page.goto('/daily_records');
+      await page.goto('/daily_records?month=2026-06');
     });
 
     await test.step('最初のレコードの詳細ページに移動する', async () => {
