@@ -7,6 +7,9 @@
     <%= link_to report_path(month: @target.strftime("%Y-%m")), class: "btn btn-secondary btn-sm" do %>
       <i class="fa-solid fa-file-lines"></i> 月次報告
     <% end %>
+    <%= link_to feed_orders_path, class: "btn btn-secondary btn-sm", title: "発注履歴" do %>
+      <i class="fa-solid fa-cart-shopping"></i>
+    <% end %>
     <%= link_to livestock_types_path, class: "btn btn-secondary btn-sm", title: "畜種管理" do %>
       <i class="fa-solid fa-gear"></i>
     <% end %>
