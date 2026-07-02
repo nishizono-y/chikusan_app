@@ -6,13 +6,12 @@
   <%= link_to feed_orders_path, class: "btn btn-secondary btn-sm" do %>
     <i class="fa-solid fa-arrow-left"></i> 一覧に戻る
   <% end %>
+  <div class="page-title-actions">
+    <%= link_to "編集", edit_feed_order_path(@feed_order), class: "btn btn-secondary btn-sm" %>
+    <%= button_to "削除", @feed_order, method: :delete, class: "btn btn-danger btn-sm", data: { turbo_confirm: "本当に削除しますか？" } %>
+  </div>
 </div>
 
 <div class="card">
   <%= render @feed_order %>
-
-  <div class="actions actions--center actions--divider">
-    <%= link_to "編集", edit_feed_order_path(@feed_order), class: "btn btn-secondary" %>
-    <%= button_to "削除", @feed_order, method: :delete, class: "btn btn-danger", data: { turbo_confirm: "本当に削除しますか？" } %>
-  </div>
 </div>
