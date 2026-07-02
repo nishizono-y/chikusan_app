@@ -90,6 +90,10 @@ test.describe('飼料発注記録', () => {
       await page.goto('/feed_orders');
     });
 
+    await test.step('飼料残量アラートのアコーディオンを開く', async () => {
+      await page.click('summary.card-title');
+    });
+
     await test.step('しきい値に新しい値を入力する', async () => {
       await page.fill('input[name="setting[value]"]', '500');
     });
@@ -110,6 +114,10 @@ test.describe('飼料発注記録', () => {
   test('しきい値に無効な値を送信するとバリデーションエラーが表示される', async ({ page }) => {
     await test.step('発注履歴の一覧ページにアクセスする', async () => {
       await page.goto('/feed_orders');
+    });
+
+    await test.step('飼料残量アラートのアコーディオンを開く', async () => {
+      await page.click('summary.card-title');
     });
 
     await test.step('しきい値に 0 を入力する', async () => {

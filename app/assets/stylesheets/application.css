@@ -313,6 +313,8 @@ td a:hover { text-decoration: underline; }
   gap: 7px;
 }
 .card-title i { font-size: 14px; }
+summary.card-title { cursor: pointer; }
+summary.card-title::-webkit-details-marker { color: var(--matcha); }
 
 /* サマリーグリッド（ホーム画面） */
 .summary-grid {
