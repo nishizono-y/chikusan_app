@@ -22,14 +22,16 @@ RSpec.describe "/vaccine_records", type: :request do
       create(:vaccine_record, vaccine_name: "牛白血病", vaccinated_on: Date.current - 10)
 
       get vaccine_records_path
+      doc = Nokogiri::HTML5(response.body)
 
       # グループは最新の接種日が新しい順（牛白血病: -10日 → 口蹄疫: -30日）に並ぶ
-      vaccine_name_positions = %w[牛白血病 口蹄疫].map { |name| response.body.index(name) }
-      # 口蹄疫グループ内は接種日の降順（-30日 → -400日）に並ぶ
-      vaccinated_on_positions = [ Date.current - 30, Date.current - 400 ].map { |date| response.body.index(date.strftime("%Y年%-m月%-d日")) }
+      group_names = doc.css("details.card summary").map { |summary| summary.text.strip.lines.first.strip }
+      expect(group_names.first(2)).to eq(%w[牛白血病 口蹄疫])
 
-      expect(vaccine_name_positions).to eq(vaccine_name_positions.sort)
-      expect(vaccinated_on_positions).to eq(vaccinated_on_positions.sort)
+      # 口蹄疫グループ内は接種日の降順（-30日 → -400日）に並ぶ
+      kuchitei_group = doc.css("details.card").find { |group| group.at_css("summary").text.include?("口蹄疫") }
+      vaccinated_on_cells = kuchitei_group.css("tbody tr td:first-child").map(&:text)
+      expect(vaccinated_on_cells).to eq([ Date.current - 30, Date.current - 400 ].map { |date| date.strftime("%Y年%-m月%-d日") })
     end
   end
 

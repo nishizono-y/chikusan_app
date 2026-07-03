@@ -8,16 +8,6 @@
       —
     <% end %>
   </td>
-  <td>
-    <% if vaccine_record.overdue?(local_assigns[:latest_vaccine_ids]) %>
-      <span class="badge-ng"><i class="fa-solid fa-circle-exclamation"></i> 期限切れ</span>
-    <% elsif vaccine_record.due_soon?(local_assigns[:latest_vaccine_ids]) %>
-      <span class="badge-warn"><i class="fa-solid fa-triangle-exclamation"></i> まもなく期限</span>
-    <% elsif vaccine_record.next_due_on.present? %>
-      <span class="badge-ok"><i class="fa-solid fa-circle-check"></i> 予定あり</span>
-    <% else %>
-      <span>—</span>
-    <% end %>
-  </td>
+  <td><%= render "vaccine_records/status_badge", vaccine_record: vaccine_record, latest_vaccine_ids: local_assigns[:latest_vaccine_ids] %></td>
   <td><%= link_to "詳細", vaccine_record %></td>
 </tr>

@@ -12,13 +12,7 @@
   <details class="card" open>
     <summary class="card-title">
       <%= vaccine_name %>
-      <% if latest_record.overdue?(@latest_vaccine_ids) %>
-        <span class="badge-ng"><i class="fa-solid fa-circle-exclamation"></i> 期限切れ</span>
-      <% elsif latest_record.due_soon?(@latest_vaccine_ids) %>
-        <span class="badge-warn"><i class="fa-solid fa-triangle-exclamation"></i> まもなく期限</span>
-      <% elsif latest_record.next_due_on.present? %>
-        <span class="badge-ok"><i class="fa-solid fa-circle-check"></i> 予定あり</span>
-      <% end %>
+      <%= render "vaccine_records/status_badge", vaccine_record: latest_record, latest_vaccine_ids: @latest_vaccine_ids %>
       <i class="fa-solid fa-chevron-down accordion-icon"></i>
     </summary>
 
@@ -33,7 +27,7 @@
             <th></th>
           </tr>
         </thead>
-        <tbody id="vaccine_records_<%= latest_record.id %>">
+        <tbody id="<%= dom_id(latest_record, :vaccine_group) %>">
           <% vaccine_records.each do |vaccine_record| %>
             <%= render vaccine_record, latest_vaccine_ids: @latest_vaccine_ids %>
           <% end %>
