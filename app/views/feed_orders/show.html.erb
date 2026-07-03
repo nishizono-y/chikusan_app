@@ -2,19 +2,7 @@
 
 <h2 class="page-title">発注記録 詳細</h2>
 
-<div class="list-actions">
-  <%= link_to feed_orders_path, class: "btn btn-secondary btn-sm" do %>
-    <i class="fa-solid fa-arrow-left"></i> 一覧に戻る
-  <% end %>
-  <div class="page-title-actions">
-    <%= link_to edit_feed_order_path(@feed_order), class: "btn btn-secondary btn-sm" do %>
-      <i class="fa-solid fa-pen"></i> 編集
-    <% end %>
-    <%= button_to @feed_order, method: :delete, class: "btn btn-danger btn-sm", data: { turbo_confirm: "本当に削除しますか？" } do %>
-      <i class="fa-solid fa-trash"></i> 削除
-    <% end %>
-  </div>
-</div>
+<%= render "shared/detail_actions", back_path: feed_orders_path, edit_path: edit_feed_order_path(@feed_order), record: @feed_order %>
 
 <div class="card">
   <%= render @feed_order %>

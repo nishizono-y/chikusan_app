@@ -1,5 +1,6 @@
 class FeedOrdersController < ApplicationController
   before_action :set_feed_order, only: %i[ show edit update destroy ]
+  before_action :set_latest_daily_record, only: %i[ new edit create update ]
 
   # GET /feed_orders or /feed_orders.json
   def index
@@ -14,7 +15,6 @@ class FeedOrdersController < ApplicationController
   # GET /feed_orders/new
   def new
     @feed_order = FeedOrder.new(ordered_on: @today)
-    @latest_daily_record = DailyRecord.order(date: :desc).first
   end
 
   # GET /feed_orders/1/edit
@@ -30,7 +30,6 @@ class FeedOrdersController < ApplicationController
         format.html { redirect_to @feed_order, notice: "発注記録を登録しました。" }
         format.json { render :show, status: :created, location: @feed_order }
       else
-        @latest_daily_record = DailyRecord.order(date: :desc).first
         format.html { render :new, status: :unprocessable_content }
         format.json { render json: @feed_order.errors, status: :unprocessable_content }
       end
@@ -71,6 +70,7 @@ class FeedOrdersController < ApplicationController
       render :index, status: :unprocessable_content
     end
   rescue ActiveRecord::RecordNotUnique
+    raise if (@threshold_retry_count = (@threshold_retry_count || 0) + 1) > 1
     @setting = Setting.fetch(Setting::FEED_STOCK_KEY)
     retry
   end
@@ -79,6 +79,10 @@ class FeedOrdersController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_feed_order
       @feed_order = FeedOrder.find(params[:id])
+    end
+
+    def set_latest_daily_record
+      @latest_daily_record = DailyRecord.order(date: :desc).first
     end
 
     # Only allow a list of trusted parameters through.

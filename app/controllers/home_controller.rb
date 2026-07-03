@@ -24,7 +24,7 @@ class HomeController < ApplicationController
     if latest_record
       threshold = Setting.feed_stock_threshold
       if latest_record.feed_stock_low?(threshold)
-        if FeedOrder.where(ordered_on: latest_record.date..).exists?
+        if FeedOrder.ordered_since?(latest_record.date)
           @feed_ordered = true
         else
           @feed_stock_alert = true

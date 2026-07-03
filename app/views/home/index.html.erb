@@ -29,7 +29,7 @@
     <%= link_to "発注する", new_feed_order_path, class: "alert-link" %>
   </div>
 <% elsif @feed_ordered %>
-  <div class="alert-bar alert-bar--vaccine">
+  <div class="alert-bar alert-bar--success">
     <i class="fa-solid fa-circle-check"></i>
     <span>飼料は発注済みです</span>
     <%= link_to "発注履歴", feed_orders_path, class: "alert-link" %>

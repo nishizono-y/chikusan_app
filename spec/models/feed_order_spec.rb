@@ -53,4 +53,20 @@ RSpec.describe FeedOrder, type: :model do
       end
     end
   end
+
+  describe '.ordered_since?' do
+    it '指定日以降の発注記録があればtrueを返す' do
+      create(:feed_order, ordered_on: Date.current)
+      expect(FeedOrder.ordered_since?(Date.current)).to be true
+    end
+
+    it '指定日より前の発注記録しかなければfalseを返す' do
+      create(:feed_order, ordered_on: Date.current - 10)
+      expect(FeedOrder.ordered_since?(Date.current)).to be false
+    end
+
+    it '発注記録がなければfalseを返す' do
+      expect(FeedOrder.ordered_since?(Date.current)).to be false
+    end
+  end
 end

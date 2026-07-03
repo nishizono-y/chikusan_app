@@ -71,9 +71,14 @@ RSpec.describe "/daily_records", type: :request do
       expect(response.body).to include(daily_records_path(month: "2026-06"))
     end
 
-    it "GET /edit は記録の月を引き継いだ一覧リンクを表示する" do
+    it "GET /edit はキャンセルで詳細ページに戻るリンクを表示する" do
       get edit_daily_record_url(record)
-      expect(response.body).to include(daily_records_path(month: "2026-06"))
+      expect(response.body).to include(daily_record_path(record))
+    end
+
+    it "GET /new はキャンセルで一覧リンクを表示する" do
+      get new_daily_record_url
+      expect(response.body).to include(%(href="#{daily_records_path}"))
     end
   end
 
