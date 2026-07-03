@@ -21,7 +21,7 @@
     </thead>
     <tbody id="vaccine_records">
       <% @vaccine_records.each do |vaccine_record| %>
-        <%= render vaccine_record %>
+        <%= render vaccine_record, latest_vaccine_ids: @latest_vaccine_ids %>
       <% end %>
     </tbody>
   </table>

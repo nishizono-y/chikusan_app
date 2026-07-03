@@ -14,6 +14,12 @@ RSpec.describe VaccineRecord, type: :model do
         expect(subject).not_to be_valid
         expect(subject.errors[:vaccine_name]).to be_present
       end
+
+      it "前後の空白は保存時に取り除かれる" do
+        subject.vaccine_name = "  口蹄疫  "
+        subject.save!
+        expect(subject.vaccine_name).to eq("口蹄疫")
+      end
     end
 
     describe "vaccinated_on" do
@@ -152,6 +158,62 @@ RSpec.describe VaccineRecord, type: :model do
     it "next_due_on が過去なら false" do
       record = build(:vaccine_record, next_due_on: Date.yesterday)
       expect(record.due_soon?).to be false
+    end
+  end
+
+  describe "再接種時の期限判定" do
+    it "同じワクチンを再接種すると、古い記録は overdue? が false になる" do
+      old_record = create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: Date.current - 90, next_due_on: Date.yesterday)
+      create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: Date.current, next_due_on: Date.current + 60)
+
+      expect(old_record.reload.overdue?).to be false
+    end
+
+    it "同じワクチンを再接種すると、古い記録は due_soon? が false になる" do
+      old_record = create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: Date.current - 90, next_due_on: Date.current + 3)
+      create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: Date.current, next_due_on: Date.current + 60)
+
+      expect(old_record.reload.due_soon?).to be false
+    end
+
+    it "最新の接種記録は次回接種予定日に応じて overdue?/due_soon? が有効なままである" do
+      create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: Date.current - 90, next_due_on: Date.yesterday)
+      latest_record = create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: Date.current, next_due_on: Date.yesterday)
+
+      expect(latest_record.overdue?).to be true
+    end
+
+    it "異なるワクチン名の記録には影響しない" do
+      other_vaccine_latest = create(:vaccine_record, vaccine_name: "ブルセラ", vaccinated_on: Date.current - 90, next_due_on: Date.yesterday)
+      create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: Date.current, next_due_on: Date.current + 60)
+
+      expect(other_vaccine_latest.overdue?).to be true
+    end
+
+    it "ワクチン名の前後に空白が入って再入力されても同じグループとして扱われる" do
+      old_record = create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: Date.current - 90, next_due_on: Date.yesterday)
+      create(:vaccine_record, vaccine_name: "  口蹄疫  ", vaccinated_on: Date.current, next_due_on: Date.current + 60)
+
+      expect(old_record.reload.overdue?).to be false
+    end
+
+    it "latest_vaccine_ids を渡すとその集合を使って判定する（一覧表示のクエリ削減用）" do
+      old_record = create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: Date.current - 90, next_due_on: Date.yesterday)
+      latest_record = create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: Date.current, next_due_on: Date.yesterday)
+
+      latest_ids = Set[latest_record.id]
+      expect(old_record.overdue?(latest_ids)).to be false
+      expect(latest_record.overdue?(latest_ids)).to be true
+    end
+  end
+
+  describe ".overdue / .due_soon スコープ" do
+    it "同じワクチン名の最新記録のみを対象にする" do
+      old_overdue = create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: Date.current - 90, next_due_on: Date.yesterday)
+      latest = create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: Date.current, next_due_on: Date.current + 3)
+
+      expect(VaccineRecord.overdue).not_to include(old_overdue)
+      expect(VaccineRecord.due_soon).to include(latest)
     end
   end
 end
