@@ -9,7 +9,10 @@ class VaccineRecordsController < ApplicationController
   end
 
   def new
-    @vaccine_record = VaccineRecord.new
+    @vaccine_record = VaccineRecord.new(
+      vaccinated_on: params[:vaccinated_on],
+      vaccine_name: params[:vaccine_name]
+    )
   end
 
   def edit

@@ -9,6 +9,10 @@ class DailyRecord < ApplicationRecord
   validates :feed_stock, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, allow_blank: true }
   validates :vaccine, inclusion: { in: VACCINE_OPTIONS }, allow_blank: true
 
+  def vaccine_given?
+    vaccine.present? && vaccine != "なし"
+  end
+
   def feed_stock_low?(threshold = Setting.feed_stock_threshold)
     feed_stock && feed_stock <= threshold
   end

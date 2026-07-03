@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_03_021232) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_03_054104) do
   create_table "daily_records", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.date "date"
@@ -69,6 +69,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_021232) do
     t.datetime "updated_at", null: false
     t.date "vaccinated_on", null: false
     t.string "vaccine_name", null: false
+    t.index ["vaccinated_on"], name: "index_vaccine_records_on_vaccinated_on"
   end
 
   add_foreign_key "daily_records", "livestock_types"

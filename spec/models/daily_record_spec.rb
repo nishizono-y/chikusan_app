@@ -96,6 +96,25 @@ RSpec.describe DailyRecord, type: :model do
     end
   end
 
+  describe '#vaccine_given?' do
+    subject { build(:daily_record) }
+
+    it 'vaccineが「なし」のとき偽を返す' do
+      subject.vaccine = 'なし'
+      expect(subject.vaccine_given?).to be false
+    end
+
+    it 'vaccineが空のとき偽を返す' do
+      subject.vaccine = ''
+      expect(subject.vaccine_given?).to be false
+    end
+
+    it 'vaccineが「なし」以外のとき真を返す' do
+      subject.vaccine = '口蹄疫'
+      expect(subject.vaccine_given?).to be true
+    end
+  end
+
   describe '#feed_stock_low?' do
     subject { build(:daily_record) }
 

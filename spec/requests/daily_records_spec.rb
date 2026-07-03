@@ -82,6 +82,42 @@ RSpec.describe "/daily_records", type: :request do
     end
   end
 
+  describe "GET /show のワクチン接種記録への導線" do
+    it "vaccineが「なし」のときは導線を表示しない" do
+      record = create(:daily_record, date: Date.new(2026, 6, 18), vaccine: "なし")
+      get daily_record_url(record)
+      expect(response.body).not_to include("接種記録を追加")
+      expect(response.body).not_to include("接種記録を見る")
+    end
+
+    it "vaccineが「なし」以外で該当するワクチン記録が無いときは新規作成への導線を表示する" do
+      record = create(:daily_record, date: Date.new(2026, 6, 18), vaccine: "口蹄疫")
+      get daily_record_url(record)
+      expect(response.body).to include("接種記録を追加")
+      expected_path = CGI.escapeHTML(new_vaccine_record_path(vaccinated_on: record.date, vaccine_name: record.vaccine))
+      expect(response.body).to include(expected_path)
+    end
+
+    it "同じ日付のワクチン記録が既にあるときはその詳細への導線を表示する" do
+      record = create(:daily_record, date: Date.new(2026, 6, 18), vaccine: "口蹄疫")
+      vaccine_record = create(:vaccine_record, vaccinated_on: record.date)
+      get daily_record_url(record)
+      expect(response.body).to include("#{vaccine_record.vaccine_name}を見る")
+      expect(response.body).to include(vaccine_record_path(vaccine_record))
+    end
+
+    it "同じ日付に複数のワクチン記録があるときはそれぞれへの導線を表示する" do
+      record = create(:daily_record, date: Date.new(2026, 6, 18), vaccine: "口蹄疫")
+      first_record = create(:vaccine_record, vaccinated_on: record.date, vaccine_name: "口蹄疫ワクチン")
+      second_record = create(:vaccine_record, vaccinated_on: record.date, vaccine_name: "ブルセラワクチン")
+      get daily_record_url(record)
+      expect(response.body).to include("#{first_record.vaccine_name}を見る")
+      expect(response.body).to include(vaccine_record_path(first_record))
+      expect(response.body).to include("#{second_record.vaccine_name}を見る")
+      expect(response.body).to include(vaccine_record_path(second_record))
+    end
+  end
+
   describe "DELETE /destroy の月引き継ぎ" do
     let!(:record) { create(:daily_record, date: Date.new(2026, 6, 15)) }
 

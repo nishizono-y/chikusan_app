@@ -1,3 +1,4 @@
+<%# locals: (daily_record:, related_vaccine_records: nil) %>
 <div id="<%= dom_id daily_record %>">
   <table>
     <tbody>
@@ -7,7 +8,25 @@
       <tr><th>死亡頭数</th><td><%= daily_record.death_count %></td></tr>
       <tr><th>飼料使用量</th><td><%= daily_record.feed_usage %></td></tr>
       <tr><th>飼料残量</th><td><%= daily_record.feed_stock %></td></tr>
-      <tr><th>ワクチン接種</th><td><%= daily_record.vaccine %></td></tr>
+      <tr>
+        <th>ワクチン接種</th>
+        <td>
+          <%= daily_record.vaccine %>
+          <% if daily_record.vaccine_given? %>
+            <% if related_vaccine_records.present? %>
+              <% related_vaccine_records.each do |vaccine_record| %>
+                <%= link_to vaccine_record_path(vaccine_record), class: "btn btn-secondary btn-sm" do %>
+                  <i class="fa-solid fa-syringe"></i> <%= vaccine_record.vaccine_name %>を見る
+                <% end %>
+              <% end %>
+            <% else %>
+              <%= link_to new_vaccine_record_path(vaccinated_on: daily_record.date, vaccine_name: daily_record.vaccine), class: "btn btn-secondary btn-sm" do %>
+                <i class="fa-solid fa-syringe"></i> 接種記録を追加
+              <% end %>
+            <% end %>
+          <% end %>
+        </td>
+      </tr>
       <tr><th>メモ</th><td><%= daily_record.memo %></td></tr>
     </tbody>
   </table>

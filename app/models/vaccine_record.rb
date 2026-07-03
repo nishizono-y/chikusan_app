@@ -5,6 +5,8 @@ class VaccineRecord < ApplicationRecord
   validates :vaccinated_on, presence: true
   validates :head_count, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
 
+  after_save :sync_daily_record_vaccine, if: -> { saved_change_to_vaccinated_on? || saved_change_to_vaccine_name? }
+
   scope :overdue,   -> { where("next_due_on <= ?", Date.current) }
   scope :due_soon,  -> { where(next_due_on: (Date.current + 1)..(Date.current + DUE_SOON_DAYS)) }
 
@@ -14,5 +16,39 @@ class VaccineRecord < ApplicationRecord
 
   def due_soon?
     next_due_on.present? && next_due_on.between?(Date.current + 1, Date.current + DUE_SOON_DAYS)
+  end
+
+  private
+
+  # 接種日・ワクチン名の変更を対応する日次記録に追従させる。
+  # 接種日が変わったときは、このレコードが以前反映していた分に限って旧日付の日次記録を「なし」に戻す。
+  # 日次記録側が別の値（このレコード由来ではない値）を保持している場合は上書きしない。
+  def sync_daily_record_vaccine
+    revert_previous_daily_record if saved_change_to_vaccinated_on? && vaccinated_on_before_last_save.present?
+    apply_daily_record_vaccine
+  end
+
+  def revert_previous_daily_record
+    daily_record = DailyRecord.find_by(date: vaccinated_on_before_last_save)
+    return if daily_record.nil?
+
+    previous_option = matched_vaccine_option(vaccine_name_before_last_save || vaccine_name)
+    daily_record.update(vaccine: "なし") if daily_record.vaccine == previous_option
+  end
+
+  def apply_daily_record_vaccine
+    daily_record = DailyRecord.find_by(date: vaccinated_on)
+    return if daily_record.nil?
+
+    if daily_record.vaccine_given?
+      previous_option = vaccine_name_before_last_save && matched_vaccine_option(vaccine_name_before_last_save)
+      return if daily_record.vaccine != previous_option
+    end
+
+    daily_record.update(vaccine: matched_vaccine_option(vaccine_name))
+  end
+
+  def matched_vaccine_option(name)
+    (DailyRecord::VACCINE_OPTIONS - %w[なし]).find { |o| o == name } || "その他"
   end
 end
