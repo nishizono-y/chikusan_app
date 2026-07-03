@@ -457,4 +457,5 @@ details[open] > summary.card-title .accordion-icon { transform: rotate(180deg); 
   main { padding: 0; max-width: 100%; }
   .card { box-shadow: none; border: 1px solid #ccc; margin-bottom: 12px; page-break-inside: avoid; }
   .report-header { border: 1px solid #ccc; }
+  table { box-shadow: none; }
 }
