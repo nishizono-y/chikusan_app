@@ -7,15 +7,33 @@ class VaccineRecord < ApplicationRecord
 
   after_save :sync_daily_record_vaccine, if: -> { saved_change_to_vaccinated_on? || saved_change_to_vaccine_name? }
 
-  scope :overdue,   -> { where("next_due_on <= ?", Date.current) }
-  scope :due_soon,  -> { where(next_due_on: (Date.current + 1)..(Date.current + DUE_SOON_DAYS)) }
+  LATEST_PER_VACCINE_NAME_SQL = <<~SQL.squish
+    vaccine_records.id = (
+      SELECT vr2.id FROM vaccine_records vr2
+      WHERE vr2.vaccine_name = vaccine_records.vaccine_name
+      ORDER BY vr2.vaccinated_on DESC, vr2.id DESC
+      LIMIT 1
+    )
+  SQL
+
+  # 同じ vaccine_name の中で最新の接種記録のみを対象にする
+  scope :latest_per_vaccine_name, -> { where(LATEST_PER_VACCINE_NAME_SQL) }
+
+  scope :overdue,   -> { latest_per_vaccine_name.where("next_due_on <= ?", Date.current) }
+  scope :due_soon,  -> { latest_per_vaccine_name.where(next_due_on: (Date.current + 1)..(Date.current + DUE_SOON_DAYS)) }
 
   def overdue?
-    next_due_on.present? && next_due_on <= Date.current
+    next_due_on.present? && next_due_on <= Date.current && latest_for_vaccine_name?
   end
 
   def due_soon?
-    next_due_on.present? && next_due_on.between?(Date.current + 1, Date.current + DUE_SOON_DAYS)
+    next_due_on.present? && next_due_on.between?(Date.current + 1, Date.current + DUE_SOON_DAYS) && latest_for_vaccine_name?
+  end
+
+  # 同じ vaccine_name の中でこのレコードが最新（最新の接種日、同日なら最新の id）かどうか
+  def latest_for_vaccine_name?
+    latest = self.class.where(vaccine_name: vaccine_name).order(vaccinated_on: :desc, id: :desc).first
+    latest.nil? || latest.id == id
   end
 
   private

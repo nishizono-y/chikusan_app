@@ -154,4 +154,44 @@ RSpec.describe VaccineRecord, type: :model do
       expect(record.due_soon?).to be false
     end
   end
+
+  describe "再接種時の期限判定" do
+    it "同じワクチンを再接種すると、古い記録は overdue? が false になる" do
+      old_record = create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: Date.current - 90, next_due_on: Date.yesterday)
+      create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: Date.current, next_due_on: Date.current + 60)
+
+      expect(old_record.reload.overdue?).to be false
+    end
+
+    it "同じワクチンを再接種すると、古い記録は due_soon? が false になる" do
+      old_record = create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: Date.current - 90, next_due_on: Date.current + 3)
+      create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: Date.current, next_due_on: Date.current + 60)
+
+      expect(old_record.reload.due_soon?).to be false
+    end
+
+    it "最新の接種記録は次回接種予定日に応じて overdue?/due_soon? が有効なままである" do
+      create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: Date.current - 90, next_due_on: Date.yesterday)
+      latest_record = create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: Date.current, next_due_on: Date.yesterday)
+
+      expect(latest_record.overdue?).to be true
+    end
+
+    it "異なるワクチン名の記録には影響しない" do
+      other_vaccine_latest = create(:vaccine_record, vaccine_name: "ブルセラ", vaccinated_on: Date.current - 90, next_due_on: Date.yesterday)
+      create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: Date.current, next_due_on: Date.current + 60)
+
+      expect(other_vaccine_latest.overdue?).to be true
+    end
+  end
+
+  describe ".overdue / .due_soon スコープ" do
+    it "同じワクチン名の最新記録のみを対象にする" do
+      old_overdue = create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: Date.current - 90, next_due_on: Date.yesterday)
+      latest = create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: Date.current, next_due_on: Date.current + 3)
+
+      expect(VaccineRecord.overdue).not_to include(old_overdue)
+      expect(VaccineRecord.due_soon).to include(latest)
+    end
+  end
 end
