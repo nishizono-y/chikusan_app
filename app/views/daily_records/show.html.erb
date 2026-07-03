@@ -5,5 +5,5 @@
 <%= render "shared/detail_actions", back_path: daily_records_path(month: daily_record_month), edit_path: edit_daily_record_path(@daily_record), record: @daily_record %>
 
 <div class="card">
-  <%= render @daily_record %>
+  <%= render "daily_record", daily_record: @daily_record, related_vaccine_record: @related_vaccine_record %>
 </div>

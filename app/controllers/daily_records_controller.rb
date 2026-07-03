@@ -19,6 +19,7 @@ class DailyRecordsController < ApplicationController
 
   # GET /daily_records/1 or /daily_records/1.json
   def show
+    @related_vaccine_record = VaccineRecord.find_by(vaccinated_on: @daily_record.date) if @daily_record.vaccine_given?
   end
 
   # GET /daily_records/new

@@ -42,6 +42,32 @@ RSpec.describe VaccineRecord, type: :model do
     end
   end
 
+  describe "日次記録との連携" do
+    it "同じ日付の日次記録がワクチン「なし」のとき、一致するワクチン名で自動更新する" do
+      daily_record = create(:daily_record, date: Date.new(2026, 6, 18), vaccine: "なし")
+      create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: daily_record.date)
+      expect(daily_record.reload.vaccine).to eq("口蹄疫")
+    end
+
+    it "一致する選択肢がないワクチン名の場合は「その他」にする" do
+      daily_record = create(:daily_record, date: Date.new(2026, 6, 18), vaccine: "なし")
+      create(:vaccine_record, vaccine_name: "FMD vaccine", vaccinated_on: daily_record.date)
+      expect(daily_record.reload.vaccine).to eq("その他")
+    end
+
+    it "同じ日付の日次記録が既にワクチン記録済みのときは上書きしない" do
+      daily_record = create(:daily_record, date: Date.new(2026, 6, 18), vaccine: "ブルセラ")
+      create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: daily_record.date)
+      expect(daily_record.reload.vaccine).to eq("ブルセラ")
+    end
+
+    it "同じ日付の日次記録が存在しないときは何もしない" do
+      expect {
+        create(:vaccine_record, vaccinated_on: Date.new(2026, 6, 30))
+      }.not_to raise_error
+    end
+  end
+
   describe "#overdue?" do
     it "next_due_on が過去の場合は true" do
       record = build(:vaccine_record, next_due_on: Date.yesterday)

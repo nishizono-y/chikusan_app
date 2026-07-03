@@ -30,6 +30,12 @@ RSpec.describe "/vaccine_records", type: :request do
       get new_vaccine_record_path
       expect(response).to have_http_status(:ok)
     end
+
+    it "日次記録から接種日とワクチン名を引き継いで初期値に反映する" do
+      get new_vaccine_record_path(vaccinated_on: "2026-06-18", vaccine_name: "口蹄疫")
+      expect(response.body).to include(%(value="2026-06-18"))
+      expect(response.body).to include(%(value="口蹄疫"))
+    end
   end
 
   describe "GET /edit" do
