@@ -14,6 +14,12 @@ RSpec.describe VaccineRecord, type: :model do
         expect(subject).not_to be_valid
         expect(subject.errors[:vaccine_name]).to be_present
       end
+
+      it "前後の空白は保存時に取り除かれる" do
+        subject.vaccine_name = "  口蹄疫  "
+        subject.save!
+        expect(subject.vaccine_name).to eq("口蹄疫")
+      end
     end
 
     describe "vaccinated_on" do
@@ -182,6 +188,22 @@ RSpec.describe VaccineRecord, type: :model do
       create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: Date.current, next_due_on: Date.current + 60)
 
       expect(other_vaccine_latest.overdue?).to be true
+    end
+
+    it "ワクチン名の前後に空白が入って再入力されても同じグループとして扱われる" do
+      old_record = create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: Date.current - 90, next_due_on: Date.yesterday)
+      create(:vaccine_record, vaccine_name: "  口蹄疫  ", vaccinated_on: Date.current, next_due_on: Date.current + 60)
+
+      expect(old_record.reload.overdue?).to be false
+    end
+
+    it "latest_vaccine_ids を渡すとその集合を使って判定する（一覧表示のクエリ削減用）" do
+      old_record = create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: Date.current - 90, next_due_on: Date.yesterday)
+      latest_record = create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: Date.current, next_due_on: Date.yesterday)
+
+      latest_ids = Set[latest_record.id]
+      expect(old_record.overdue?(latest_ids)).to be false
+      expect(latest_record.overdue?(latest_ids)).to be true
     end
   end
 

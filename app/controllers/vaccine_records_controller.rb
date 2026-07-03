@@ -3,6 +3,7 @@ class VaccineRecordsController < ApplicationController
 
   def index
     @vaccine_records = VaccineRecord.order(vaccinated_on: :desc)
+    @latest_vaccine_ids = VaccineRecord.latest_per_vaccine_name.pluck(:id).to_set
   end
 
   def show
