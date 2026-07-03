@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  # ワクチン接種記録の CRUD ルート
-  resources :vaccine_records, except: :show
+  # ワクチン接種記録の CRUD ルート（一覧・新規・登録・詳細・編集・更新・削除）
+  resources :vaccine_records
 
   # 出荷記録の CRUD ルート（一覧・新規・登録・詳細・編集・更新・削除）
   resources :shipments

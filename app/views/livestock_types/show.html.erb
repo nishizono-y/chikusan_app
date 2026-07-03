@@ -2,12 +2,20 @@
 
 <h2 class="page-title">畜種 詳細</h2>
 
-<div class="card">
-  <%= render @livestock_type %>
+<div class="list-actions">
+  <%= link_to livestock_types_path, class: "btn btn-secondary btn-sm" do %>
+    <i class="fa-solid fa-arrow-left"></i> 一覧に戻る
+  <% end %>
+  <div class="page-title-actions">
+    <%= link_to edit_livestock_type_path(@livestock_type), class: "btn btn-secondary btn-sm" do %>
+      <i class="fa-solid fa-pen"></i> 編集
+    <% end %>
+    <%= button_to @livestock_type, method: :delete, class: "btn btn-danger btn-sm", data: { turbo_confirm: "本当に削除しますか？" } do %>
+      <i class="fa-solid fa-trash"></i> 削除
+    <% end %>
+  </div>
 </div>
 
-<div class="actions">
-  <%= link_to "編集", edit_livestock_type_path(@livestock_type), class: "btn btn-secondary" %>
-  <%= button_to "削除", @livestock_type, method: :delete, class: "btn btn-danger", data: { turbo_confirm: "本当に削除しますか？" } %>
-  <%= link_to "一覧に戻る", livestock_types_path, class: "btn btn-secondary" %>
+<div class="card">
+  <%= render @livestock_type %>
 </div>
