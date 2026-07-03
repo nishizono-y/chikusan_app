@@ -28,6 +28,12 @@ RSpec.describe "/feed_orders", type: :request do
       get feed_order_path(feed_order)
       expect(response).to have_http_status(:ok)
     end
+
+    it "印刷するボタンを表示する" do
+      feed_order = create(:feed_order)
+      get feed_order_path(feed_order)
+      expect(response.body).to include("印刷する")
+    end
   end
 
   describe "GET /new" do

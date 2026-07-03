@@ -1,8 +1,10 @@
-<% content_for :title, "発注記録 詳細" %>
+<% content_for :title, "発注書（#{@feed_order.supplier}）" %>
 
-<h2 class="page-title">発注記録 詳細</h2>
+<h2 class="page-title">発注書</h2>
 
-<%= render "shared/detail_actions", back_path: feed_orders_path, edit_path: edit_feed_order_path(@feed_order), record: @feed_order %>
+<div class="no-print">
+  <%= render "shared/detail_actions", back_path: feed_orders_path, edit_path: edit_feed_order_path(@feed_order), record: @feed_order, print: true %>
+</div>
 
 <div class="card">
   <%= render @feed_order %>
