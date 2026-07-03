@@ -7,26 +7,36 @@
   </div>
 </div>
 
-<div class="table-scroll">
-  <table>
-    <thead>
-      <tr>
-        <th>接種日</th>
-        <th>ワクチン名</th>
-        <th>対象頭数</th>
-        <th>次回接種予定日</th>
-        <th>状態</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody id="vaccine_records">
-      <% @vaccine_records.each do |vaccine_record| %>
-        <%= render vaccine_record, latest_vaccine_ids: @latest_vaccine_ids %>
-      <% end %>
-    </tbody>
-  </table>
-</div>
+<% @grouped_vaccine_records.each do |vaccine_name, vaccine_records| %>
+  <% latest_record = vaccine_records.first %>
+  <details class="card" open>
+    <summary class="card-title">
+      <%= vaccine_name %>
+      <%= render "vaccine_records/status_badge", vaccine_record: latest_record, latest_vaccine_ids: @latest_vaccine_ids %>
+      <i class="fa-solid fa-chevron-down accordion-icon"></i>
+    </summary>
 
-<% if @vaccine_records.empty? %>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>接種日</th>
+            <th>対象頭数</th>
+            <th>次回接種予定日</th>
+            <th>状態</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="<%= dom_id(latest_record, :vaccine_group) %>">
+          <% vaccine_records.each do |vaccine_record| %>
+            <%= render vaccine_record, latest_vaccine_ids: @latest_vaccine_ids %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </details>
+<% end %>
+
+<% if @grouped_vaccine_records.empty? %>
   <p class="empty-message">接種記録がまだありません</p>
 <% end %>

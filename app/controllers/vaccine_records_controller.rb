@@ -2,7 +2,10 @@ class VaccineRecordsController < ApplicationController
   before_action :set_vaccine_record, only: %i[show edit update destroy]
 
   def index
-    @vaccine_records = VaccineRecord.order(vaccinated_on: :desc)
+    # order(vaccinated_on: :desc, id: :desc) は LATEST_PER_VACCINE_NAME_SQL のタイブレークと同じ並び順。
+    # group_by は各グループ内の出現順を保持するため、この並び順のまま group_by すると
+    # 各グループの先頭が「そのワクチン名の最新記録」になり、グループ自体も最新記録の日付が新しい順に並ぶ。
+    @grouped_vaccine_records = VaccineRecord.order(vaccinated_on: :desc, id: :desc).group_by(&:vaccine_name)
     @latest_vaccine_ids = VaccineRecord.latest_per_vaccine_name.pluck(:id).to_set
   end
 
