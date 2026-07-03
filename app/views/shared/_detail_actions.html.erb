@@ -1,4 +1,4 @@
-<%# locals: (back_path:, edit_path:, record:, confirm_text: "本当に削除しますか？") %>
+<%# locals: (back_path:, edit_path:, record:, confirm_text: "本当に削除しますか？", print: false) %>
 <div class="list-actions">
   <%= link_to back_path, class: "btn btn-secondary btn-sm" do %>
     <i class="fa-solid fa-arrow-left"></i> 一覧に戻る
@@ -9,6 +9,11 @@
     <% end %>
     <%= button_to record, method: :delete, class: "btn btn-danger btn-sm", data: { turbo_confirm: confirm_text } do %>
       <i class="fa-solid fa-trash"></i> 削除
+    <% end %>
+    <% if print %>
+      <button type="button" class="btn btn-pdf btn-sm" onclick="window.print()">
+        <i class="fa-solid fa-print"></i> 印刷する
+      </button>
     <% end %>
   </div>
 </div>
