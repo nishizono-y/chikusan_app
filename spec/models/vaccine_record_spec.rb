@@ -66,6 +66,54 @@ RSpec.describe VaccineRecord, type: :model do
         create(:vaccine_record, vaccinated_on: Date.new(2026, 6, 30))
       }.not_to raise_error
     end
+
+    it "このレコードが自動反映した値であれば、ワクチン名を訂正すると日次記録も追従する" do
+      daily_record = create(:daily_record, date: Date.new(2026, 6, 18), vaccine: "なし")
+      vaccine_record = create(:vaccine_record, vaccine_name: "ブルセラ", vaccinated_on: daily_record.date)
+      expect(daily_record.reload.vaccine).to eq("ブルセラ")
+
+      vaccine_record.update!(vaccine_name: "口蹄疫")
+      expect(daily_record.reload.vaccine).to eq("口蹄疫")
+    end
+
+    it "日次記録が手動で別の値に変更されていれば、ワクチン名を訂正しても上書きしない" do
+      daily_record = create(:daily_record, date: Date.new(2026, 6, 18), vaccine: "なし")
+      vaccine_record = create(:vaccine_record, vaccine_name: "ブルセラ", vaccinated_on: daily_record.date)
+      daily_record.update!(vaccine: "その他")
+
+      vaccine_record.update!(vaccine_name: "口蹄疫")
+      expect(daily_record.reload.vaccine).to eq("その他")
+    end
+
+    it "接種日を変更すると、このレコードが反映していた旧日付の日次記録は「なし」に戻る" do
+      old_daily_record = create(:daily_record, date: Date.new(2026, 6, 18), vaccine: "なし")
+      new_daily_record = create(:daily_record, date: Date.new(2026, 6, 19), vaccine: "なし")
+      vaccine_record = create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: old_daily_record.date)
+      expect(old_daily_record.reload.vaccine).to eq("口蹄疫")
+
+      vaccine_record.update!(vaccinated_on: new_daily_record.date)
+      expect(old_daily_record.reload.vaccine).to eq("なし")
+      expect(new_daily_record.reload.vaccine).to eq("口蹄疫")
+    end
+
+    it "接種日を変更しても、旧日付の日次記録が手動で別の値に変更されていればリセットしない" do
+      old_daily_record = create(:daily_record, date: Date.new(2026, 6, 18), vaccine: "なし")
+      new_daily_record = create(:daily_record, date: Date.new(2026, 6, 19), vaccine: "なし")
+      vaccine_record = create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: old_daily_record.date)
+      old_daily_record.update!(vaccine: "ブルセラ")
+
+      vaccine_record.update!(vaccinated_on: new_daily_record.date)
+      expect(old_daily_record.reload.vaccine).to eq("ブルセラ")
+    end
+
+    it "vaccinated_onもvaccine_nameも変更しない保存では日次記録を再検索しない" do
+      daily_record = create(:daily_record, date: Date.new(2026, 6, 18), vaccine: "なし")
+      vaccine_record = create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: daily_record.date)
+      daily_record.update!(vaccine: "その他")
+
+      vaccine_record.update!(notes: "頭数を再確認")
+      expect(daily_record.reload.vaccine).to eq("その他")
+    end
   end
 
   describe "#overdue?" do
