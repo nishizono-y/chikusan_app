@@ -72,14 +72,6 @@ header {
   letter-spacing: 0.04em;
 }
 .header-right strong { display: block; font-size: 19px; line-height: 1.1; }
-.header-setting {
-  color: rgba(250,250,245,0.85);
-  font-size: 20px;
-  padding: 4px 6px;
-  border-radius: 6px;
-  transition: opacity 0.15s;
-}
-.header-setting:hover, .header-setting.active { opacity: 1; color: #fff; }
 .bottom-nav {
   position: fixed;
   bottom: 0; left: 0; right: 0;
@@ -112,6 +104,7 @@ main { padding: 16px; max-width: 800px; margin: 0 auto; }
 .page-title-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
 .page-title-row .page-title { margin-bottom: 0; }
 .page-title-actions { display: flex; gap: 8px; }
+.list-actions { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
 .page-title {
   font-size: 16px;
   font-weight: 700;
@@ -185,6 +178,8 @@ main { padding: 16px; max-width: 800px; margin: 0 auto; }
 .btn-sm { padding: 4px 10px; font-size: 12px; }
 .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
 .actions.back-nav { margin-top: 0; margin-bottom: 16px; }
+.actions--end { justify-content: flex-end; }
+.actions--center { justify-content: center; }
 
 /* テーブル */
 .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -321,6 +316,11 @@ td a:hover { text-decoration: underline; }
   gap: 7px;
 }
 .card-title i { font-size: 14px; }
+summary.card-title { cursor: pointer; }
+summary.card-title::-webkit-details-marker { display: none; }
+summary.card-title::marker { content: ""; }
+summary.card-title .accordion-icon { margin-left: auto; transition: transform 0.2s; }
+details[open] > summary.card-title .accordion-icon { transform: rotate(180deg); }
 
 /* サマリーグリッド（ホーム画面） */
 .summary-grid {
@@ -366,7 +366,7 @@ td a:hover { text-decoration: underline; }
 .badge-ok { background: var(--matcha-lt); color: var(--matcha); }
 .badge-ng { background: var(--alert-bg); color: var(--accent); }
 .badge-warn { background: #fff8e1; color: #b45309; }
-.alert-bar--vaccine { background: #e8f5e9; border-left-color: #388e3c; color: #1b5e20; }
+.alert-bar--vaccine, .alert-bar--success { background: #e8f5e9; border-left-color: #388e3c; color: #1b5e20; }
 .alert-bar--heat { background: #fff3e0; border-left-color: #e65100; color: #bf360c; }
 .alert-link { margin-left: auto; color: inherit; font-weight: bold; text-decoration: underline; }
 .btn-link-danger { background: none; border: none; color: var(--danger, #c0392b); cursor: pointer; font-size: inherit; padding: 0; text-decoration: underline; }

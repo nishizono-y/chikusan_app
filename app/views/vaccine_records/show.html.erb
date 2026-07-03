@@ -1,0 +1,20 @@
+<% content_for :title, "接種記録 詳細" %>
+
+<h2 class="page-title">接種記録 詳細</h2>
+
+<%= render "shared/detail_actions", back_path: vaccine_records_path, edit_path: edit_vaccine_record_path(@vaccine_record), record: @vaccine_record, confirm_text: "削除しますか？" %>
+
+<div class="card">
+  <table>
+    <tbody>
+      <tr><th>ワクチン名</th><td><%= @vaccine_record.vaccine_name %></td></tr>
+      <tr><th>接種日</th><td><%= ja_date_full(@vaccine_record.vaccinated_on) %></td></tr>
+      <tr><th>対象頭数</th><td><%= @vaccine_record.head_count ? "#{@vaccine_record.head_count}頭" : "—" %></td></tr>
+      <tr>
+        <th>次回接種予定日</th>
+        <td><%= @vaccine_record.next_due_on.present? ? ja_date_full(@vaccine_record.next_due_on) : "—" %></td>
+      </tr>
+      <tr><th>備考</th><td><%= @vaccine_record.notes %></td></tr>
+    </tbody>
+  </table>
+</div>

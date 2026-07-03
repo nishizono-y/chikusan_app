@@ -61,20 +61,4 @@ test.describe('月次報告書', () => {
       await expect(page.locator('.card').first()).toBeVisible();
     });
   });
-
-  test('設定リンクがヘッダーに表示される', async ({ page }) => {
-    await test.step('月次報告書ページにアクセスする', async () => {
-      await page.goto('/report');
-    });
-
-    await test.step('ヘッダーに設定リンクがあることを確認する', async () => {
-      const settingLink = page.locator('header .header-setting');
-      await expect(settingLink).toBeVisible();
-    });
-
-    await test.step('設定リンクをクリックすると設定ページへ遷移する', async () => {
-      await page.locator('header .header-setting').click();
-      await expect(page).toHaveURL(/\/setting/);
-    });
-  });
 });

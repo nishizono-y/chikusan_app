@@ -2,12 +2,8 @@
 
 <h2 class="page-title">出荷記録 詳細</h2>
 
+<%= render "shared/detail_actions", back_path: shipments_path, edit_path: edit_shipment_path(@shipment), record: @shipment %>
+
 <div class="card">
   <%= render @shipment %>
-</div>
-
-<div class="actions">
-  <%= link_to "編集", edit_shipment_path(@shipment), class: "btn btn-secondary" %>
-  <%= button_to "削除", @shipment, method: :delete, class: "btn btn-danger", data: { turbo_confirm: "本当に削除しますか？" } %>
-  <%= link_to "一覧に戻る", shipments_path, class: "btn btn-secondary" %>
 </div>

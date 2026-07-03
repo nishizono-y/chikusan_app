@@ -20,10 +20,5 @@
       <span>—</span>
     <% end %>
   </td>
-  <td>
-    <%= link_to "編集", edit_vaccine_record_path(vaccine_record) %>
-    <%= button_to "削除", vaccine_record_path(vaccine_record), method: :delete,
-          data: { turbo_confirm: "削除しますか？" },
-          class: "btn-link-danger" %>
-  </td>
+  <td><%= link_to "詳細", vaccine_record %></td>
 </tr>

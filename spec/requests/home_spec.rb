@@ -121,6 +121,34 @@ RSpec.describe "/", type: :request do
 
         expect(response.body).not_to include("alert-bar")
       end
+
+      it "アラートに発注記録ページへのリンクを表示する" do
+        create_daily_record(feed_stock: Setting.feed_stock_threshold, feed_usage: 100)
+
+        get root_path
+
+        expect(response.body).to include("発注する")
+      end
+
+      it "直近記録の日付以降に発注記録があるとき「発注済み」を表示しアラートを消す" do
+        create_daily_record(feed_stock: Setting.feed_stock_threshold, feed_usage: 100)
+        FeedOrder.create!(ordered_on: Date.current, quantity: 300, supplier: "JA薩摩川内")
+
+        get root_path
+
+        expect(response.body).to include("飼料は発注済みです")
+        expect(response.body).not_to include("飼料残量が少なくなっています")
+      end
+
+      it "直近記録の日付より前の発注記録では「発注済み」にならない" do
+        create_daily_record(feed_stock: Setting.feed_stock_threshold, feed_usage: 100)
+        FeedOrder.create!(ordered_on: Date.current - 10, quantity: 300, supplier: "JA薩摩川内")
+
+        get root_path
+
+        expect(response.body).to include("飼料残量が少なくなっています")
+        expect(response.body).not_to include("飼料は発注済みです")
+      end
     end
   end
 

@@ -1,8 +1,11 @@
 class VaccineRecordsController < ApplicationController
-  before_action :set_vaccine_record, only: %i[edit update destroy]
+  before_action :set_vaccine_record, only: %i[show edit update destroy]
 
   def index
     @vaccine_records = VaccineRecord.order(vaccinated_on: :desc)
+  end
+
+  def show
   end
 
   def new
@@ -16,7 +19,7 @@ class VaccineRecordsController < ApplicationController
     @vaccine_record = VaccineRecord.new(vaccine_record_params)
     respond_to do |format|
       if @vaccine_record.save
-        format.html { redirect_to vaccine_records_path, notice: "接種記録を登録しました。" }
+        format.html { redirect_to @vaccine_record, notice: "接種記録を登録しました。" }
       else
         format.html { render :new, status: :unprocessable_content }
       end
@@ -26,7 +29,7 @@ class VaccineRecordsController < ApplicationController
   def update
     respond_to do |format|
       if @vaccine_record.update(vaccine_record_params)
-        format.html { redirect_to vaccine_records_path, notice: "接種記録を更新しました。" }
+        format.html { redirect_to @vaccine_record, notice: "接種記録を更新しました。" }
       else
         format.html { render :edit, status: :unprocessable_content }
       end

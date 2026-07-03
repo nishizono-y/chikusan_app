@@ -1,0 +1,10 @@
+<div id="<%= dom_id feed_order %>">
+  <table>
+    <tbody>
+      <tr><th>発注日</th><td><%= ja_date_full(feed_order.ordered_on) %></td></tr>
+      <tr><th>数量（kg）</th><td><%= feed_order.quantity %></td></tr>
+      <tr><th>発注先</th><td><%= feed_order.supplier %></td></tr>
+      <tr><th>メモ</th><td><%= feed_order.memo %></td></tr>
+    </tbody>
+  </table>
+</div>

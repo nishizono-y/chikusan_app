@@ -25,7 +25,14 @@
 <% if @feed_stock_alert %>
   <div class="alert-bar">
     <i class="fa-solid fa-triangle-exclamation"></i>
-    飼料残量が少なくなっています<% if @feed_remaining_days %>（残り<%= @feed_remaining_days %>日分程度）<% end %>
+    <span>飼料残量が少なくなっています<% if @feed_remaining_days %>（残り<%= @feed_remaining_days %>日分程度）<% end %></span>
+    <%= link_to "発注する", new_feed_order_path, class: "alert-link" %>
+  </div>
+<% elsif @feed_ordered %>
+  <div class="alert-bar alert-bar--success">
+    <i class="fa-solid fa-circle-check"></i>
+    <span>飼料は発注済みです</span>
+    <%= link_to "発注履歴", feed_orders_path, class: "alert-link" %>
   </div>
 <% end %>
 

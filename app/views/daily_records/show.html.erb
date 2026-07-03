@@ -2,12 +2,8 @@
 
 <h2 class="page-title">日次記録 詳細</h2>
 
+<%= render "shared/detail_actions", back_path: daily_records_path(month: daily_record_month), edit_path: edit_daily_record_path(@daily_record), record: @daily_record %>
+
 <div class="card">
   <%= render @daily_record %>
-</div>
-
-<div class="actions">
-  <%= link_to "編集", edit_daily_record_path(@daily_record), class: "btn btn-secondary" %>
-  <%= button_to "削除", @daily_record, method: :delete, class: "btn btn-danger", data: { turbo_confirm: "本当に削除しますか？" } %>
-  <%= link_to "一覧に戻る", daily_records_path(month: daily_record_month), class: "btn btn-secondary" %>
 </div>

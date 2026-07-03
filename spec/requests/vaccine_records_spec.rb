@@ -17,6 +17,14 @@ RSpec.describe "/vaccine_records", type: :request do
     end
   end
 
+  describe "GET /show" do
+    it "200を返す" do
+      record = create(:vaccine_record)
+      get vaccine_record_path(record)
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
   describe "GET /new" do
     it "200を返す" do
       get new_vaccine_record_path
@@ -40,9 +48,9 @@ RSpec.describe "/vaccine_records", type: :request do
         }.to change(VaccineRecord, :count).by(1)
       end
 
-      it "一覧ページにリダイレクトする" do
+      it "詳細ページにリダイレクトする" do
         post vaccine_records_path, params: { vaccine_record: valid_attributes }
-        expect(response).to redirect_to(vaccine_records_path)
+        expect(response).to redirect_to(vaccine_record_path(VaccineRecord.last))
       end
     end
 
@@ -62,10 +70,10 @@ RSpec.describe "/vaccine_records", type: :request do
 
   describe "PATCH /update" do
     context "有効なパラメータのとき" do
-      it "接種記録を更新して一覧にリダイレクトする" do
+      it "接種記録を更新して詳細ページにリダイレクトする" do
         record = create(:vaccine_record)
         patch vaccine_record_path(record), params: { vaccine_record: { vaccine_name: "Updated vaccine" } }
-        expect(response).to redirect_to(vaccine_records_path)
+        expect(response).to redirect_to(vaccine_record_path(record))
         expect(record.reload.vaccine_name).to eq("Updated vaccine")
       end
     end

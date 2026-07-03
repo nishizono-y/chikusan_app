@@ -2,12 +2,8 @@
 
 <h2 class="page-title">畜種 詳細</h2>
 
+<%= render "shared/detail_actions", back_path: livestock_types_path, edit_path: edit_livestock_type_path(@livestock_type), record: @livestock_type %>
+
 <div class="card">
   <%= render @livestock_type %>
-</div>
-
-<div class="actions">
-  <%= link_to "編集", edit_livestock_type_path(@livestock_type), class: "btn btn-secondary" %>
-  <%= button_to "削除", @livestock_type, method: :delete, class: "btn btn-danger", data: { turbo_confirm: "本当に削除しますか？" } %>
-  <%= link_to "一覧に戻る", livestock_types_path, class: "btn btn-secondary" %>
 </div>

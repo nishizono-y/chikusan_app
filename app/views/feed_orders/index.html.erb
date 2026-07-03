@@ -1,0 +1,55 @@
+<% content_for :title, "発注履歴一覧" %>
+
+<h2 class="page-title">発注履歴一覧</h2>
+
+<div class="list-actions">
+  <%= link_to daily_records_path, class: "btn btn-secondary btn-sm" do %>
+    <i class="fa-solid fa-arrow-left"></i> 日次記録一覧に戻る
+  <% end %>
+  <%= link_to "新規作成", new_feed_order_path, class: "btn btn-primary btn-sm" %>
+</div>
+
+<details class="card"<%= " open" if @setting.errors.any? %>>
+  <summary class="card-title">
+    飼料残量アラート
+    <i class="fa-solid fa-chevron-down accordion-icon"></i>
+  </summary>
+
+  <%= form_with model: @setting, url: threshold_feed_orders_path, method: :patch, html: { novalidate: true } do |form| %>
+    <div class="form-group">
+      <%= form.label :value, "アラートしきい値（kg）" %>
+      <%= form.number_field :value, min: 1, class: "form-control" %>
+      <p class="field-hint">残量がこの値以下になるとホームにアラートを表示します（デフォルト: <%= Setting::DEFAULTS[Setting::FEED_STOCK_KEY] %>kg）</p>
+      <% @setting.errors.where(:value).each do |error| %>
+        <span class="field-error"><%= error.full_message %></span>
+      <% end %>
+    </div>
+
+    <div class="actions actions--end">
+      <%= form.submit "保存する", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</details>
+
+<div class="table-scroll">
+<table>
+  <thead>
+    <tr>
+      <th>発注日</th>
+      <th>数量（kg）</th>
+      <th>発注先</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="feed_orders">
+    <% @feed_orders.each do |feed_order| %>
+      <tr id="<%= dom_id(feed_order) %>">
+        <td><%= ja_date_full(feed_order.ordered_on) %></td>
+        <td><%= feed_order.quantity %></td>
+        <td><%= feed_order.supplier %></td>
+        <td><%= link_to "詳細", feed_order %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
