@@ -1,6 +1,5 @@
 <tr id="<%= dom_id(vaccine_record) %>">
   <td><%= ja_date_full(vaccine_record.vaccinated_on) %></td>
-  <td><%= vaccine_record.vaccine_name %></td>
   <td><%= vaccine_record.head_count ? "#{vaccine_record.head_count}頭" : "—" %></td>
   <td>
     <% if vaccine_record.next_due_on.present? %>

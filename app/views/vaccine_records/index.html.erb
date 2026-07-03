@@ -7,26 +7,42 @@
   </div>
 </div>
 
-<div class="table-scroll">
-  <table>
-    <thead>
-      <tr>
-        <th>接種日</th>
-        <th>ワクチン名</th>
-        <th>対象頭数</th>
-        <th>次回接種予定日</th>
-        <th>状態</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody id="vaccine_records">
-      <% @vaccine_records.each do |vaccine_record| %>
-        <%= render vaccine_record, latest_vaccine_ids: @latest_vaccine_ids %>
+<% @grouped_vaccine_records.each do |vaccine_name, vaccine_records| %>
+  <% latest_record = vaccine_records.first %>
+  <details class="card" open>
+    <summary class="card-title">
+      <%= vaccine_name %>
+      <% if latest_record.overdue?(@latest_vaccine_ids) %>
+        <span class="badge-ng"><i class="fa-solid fa-circle-exclamation"></i> 期限切れ</span>
+      <% elsif latest_record.due_soon?(@latest_vaccine_ids) %>
+        <span class="badge-warn"><i class="fa-solid fa-triangle-exclamation"></i> まもなく期限</span>
+      <% elsif latest_record.next_due_on.present? %>
+        <span class="badge-ok"><i class="fa-solid fa-circle-check"></i> 予定あり</span>
       <% end %>
-    </tbody>
-  </table>
-</div>
+      <i class="fa-solid fa-chevron-down accordion-icon"></i>
+    </summary>
 
-<% if @vaccine_records.empty? %>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>接種日</th>
+            <th>対象頭数</th>
+            <th>次回接種予定日</th>
+            <th>状態</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="vaccine_records_<%= latest_record.id %>">
+          <% vaccine_records.each do |vaccine_record| %>
+            <%= render vaccine_record, latest_vaccine_ids: @latest_vaccine_ids %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </details>
+<% end %>
+
+<% if @grouped_vaccine_records.empty? %>
   <p class="empty-message">接種記録がまだありません</p>
 <% end %>

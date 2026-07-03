@@ -15,6 +15,22 @@ RSpec.describe "/vaccine_records", type: :request do
       get vaccine_records_path
       expect(response).to have_http_status(:ok)
     end
+
+    it "ワクチン名ごとにグループ化し、各グループ内は接種日の降順で表示する" do
+      create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: Date.current - 400)
+      create(:vaccine_record, vaccine_name: "口蹄疫", vaccinated_on: Date.current - 30)
+      create(:vaccine_record, vaccine_name: "牛白血病", vaccinated_on: Date.current - 10)
+
+      get vaccine_records_path
+
+      # グループは最新の接種日が新しい順（牛白血病: -10日 → 口蹄疫: -30日）に並ぶ
+      vaccine_name_positions = %w[牛白血病 口蹄疫].map { |name| response.body.index(name) }
+      # 口蹄疫グループ内は接種日の降順（-30日 → -400日）に並ぶ
+      vaccinated_on_positions = [ Date.current - 30, Date.current - 400 ].map { |date| response.body.index(date.strftime("%Y年%-m月%-d日")) }
+
+      expect(vaccine_name_positions).to eq(vaccine_name_positions.sort)
+      expect(vaccinated_on_positions).to eq(vaccinated_on_positions.sort)
+    end
   end
 
   describe "GET /show" do
