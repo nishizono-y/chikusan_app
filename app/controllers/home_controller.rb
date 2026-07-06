@@ -4,7 +4,9 @@ class HomeController < ApplicationController
   FARM_LON = 130.3006
 
   def index
-    @weather = WeatherService.fetch(lat: FARM_LAT, lon: FARM_LON)
+    @weather = Rails.cache.fetch("weather:#{FARM_LAT}:#{FARM_LON}", expires_in: 15.minutes) do
+      WeatherService.fetch(lat: FARM_LAT, lon: FARM_LON)
+    end
 
     month_range = @today.beginning_of_month..@today.end_of_month
 
@@ -34,6 +36,7 @@ class HomeController < ApplicationController
     end
 
     @vaccine_alerts = VaccineRecord.overdue.or(VaccineRecord.due_soon).order(:next_due_on).load
+    @latest_vaccine_ids = @vaccine_alerts.map(&:id).to_set
 
     chart_start = 5.months.ago.beginning_of_month
     chart_records = DailyRecord

@@ -69,10 +69,6 @@ class FeedOrdersController < ApplicationController
       @feed_orders = FeedOrder.order(ordered_on: :desc)
       render :index, status: :unprocessable_content
     end
-  rescue ActiveRecord::RecordNotUnique
-    raise if (@threshold_retry_count = (@threshold_retry_count || 0) + 1) > 1
-    @setting = Setting.fetch(Setting::FEED_STOCK_KEY)
-    retry
   end
 
   private

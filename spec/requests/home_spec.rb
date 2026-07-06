@@ -156,7 +156,7 @@ RSpec.describe "/", type: :request do
 
   def create_daily_record(attrs = {})
     DailyRecord.create!(
-      { date: Date.current, death_count: 0, feed_usage: 100, feed_stock: 500, vaccine: "なし" }.merge(attrs)
+      { date: Date.current, head_count: 20, death_count: 0, feed_usage: 100, feed_stock: 500, vaccine: "なし" }.merge(attrs)
     )
   end
 

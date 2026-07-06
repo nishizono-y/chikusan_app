@@ -14,7 +14,7 @@ require 'rails_helper'
 
 RSpec.describe "/daily_records", type: :request do
   let(:valid_attributes) do
-    attributes_for(:daily_record).merge(head_count: 20)
+    attributes_for(:daily_record)
   end
 
   let(:invalid_attributes) do

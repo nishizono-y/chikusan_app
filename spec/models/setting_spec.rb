@@ -52,9 +52,9 @@ RSpec.describe Setting, type: :model do
   end
 
   describe ".fetch" do
-    it "レコードが存在しない場合は未保存レコードをデフォルト値付きで返す" do
+    it "レコードが存在しない場合はデフォルト値で作成して返す" do
       s = Setting.fetch(Setting::FEED_STOCK_KEY)
-      expect(s).not_to be_persisted
+      expect(s).to be_persisted
       expect(s.value).to eq(Setting::DEFAULTS[Setting::FEED_STOCK_KEY])
     end
 
@@ -63,6 +63,12 @@ RSpec.describe Setting, type: :model do
       s = Setting.fetch(Setting::FEED_STOCK_KEY)
       expect(s).to be_persisted
       expect(s.value).to eq(500)
+    end
+
+    it "同時に呼ばれても一意制約違反にならず既存レコードを返す（レース対策）" do
+      Setting.create!(name: Setting::FEED_STOCK_KEY, value: 500)
+      expect { Setting.fetch(Setting::FEED_STOCK_KEY) }.not_to raise_error
+      expect(Setting.where(name: Setting::FEED_STOCK_KEY).count).to eq(1)
     end
   end
 end

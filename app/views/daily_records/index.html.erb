@@ -3,7 +3,7 @@
 <div class="page-title-row">
   <h2 class="page-title">日次記録一覧</h2>
   <div class="page-title-actions">
-    <%= link_to "新規作成", new_daily_record_path, class: "btn btn-primary btn-sm" %>
+    <%= link_to "新規作成", new_daily_record_path(month: @target.strftime("%Y-%m")), class: "btn btn-primary btn-sm" %>
     <%= link_to report_path(month: @target.strftime("%Y-%m")), class: "btn btn-secondary btn-sm" do %>
       <i class="fa-solid fa-file-lines"></i> 月次報告
     <% end %>

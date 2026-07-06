@@ -35,6 +35,23 @@ RSpec.describe DailyRecord, type: :model do
       end
     end
 
+    describe 'head_count' do
+      it '必須である' do
+        subject.head_count = nil
+        expect(subject).not_to be_valid
+      end
+
+      it '0以上の整数であること' do
+        subject.head_count = -1
+        expect(subject).not_to be_valid
+      end
+
+      it '0は有効' do
+        subject.head_count = 0
+        expect(subject).to be_valid
+      end
+    end
+
     describe 'death_count' do
       it '必須である' do
         subject.death_count = nil

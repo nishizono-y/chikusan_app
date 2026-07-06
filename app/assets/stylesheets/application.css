@@ -65,13 +65,6 @@ header {
   margin-top: 3px;
   padding-left: 26px;
 }
-.header-right {
-  font-size: 12px;
-  opacity: 0.85;
-  text-align: right;
-  letter-spacing: 0.04em;
-}
-.header-right strong { display: block; font-size: 19px; line-height: 1.1; }
 .bottom-nav {
   position: fixed;
   bottom: 0; left: 0; right: 0;
@@ -176,7 +169,6 @@ main { padding: 16px; max-width: 800px; margin: 0 auto; }
 .btn-danger { background: white; color: #c0392b; border: 1.5px solid #c0392b; }
 .btn + .btn { margin-left: 8px; }
 .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
-.actions.back-nav { margin-top: 0; margin-bottom: 16px; }
 .actions--end { justify-content: flex-end; }
 .actions--center { justify-content: center; }
 
@@ -368,8 +360,6 @@ details[open] > summary.card-title .accordion-icon { transform: rotate(180deg); 
 .alert-bar--vaccine, .alert-bar--success { background: #e8f5e9; border-left-color: #388e3c; color: #1b5e20; }
 .alert-bar--heat { background: #fff3e0; border-left-color: #e65100; color: #bf360c; }
 .alert-link { margin-left: auto; color: inherit; font-weight: bold; text-decoration: underline; }
-.btn-link-danger { background: none; border: none; color: var(--danger, #c0392b); cursor: pointer; font-size: inherit; padding: 0; text-decoration: underline; }
-
 /* レポートへのボタン */
 .btn-report { background: var(--kinari); color: var(--accent); border: 1.5px solid var(--alert-bdr); width: 100%; }
 

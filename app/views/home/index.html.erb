@@ -12,9 +12,9 @@
     <div class="alert-bar alert-bar--vaccine">
       <i class="fa-solid fa-syringe"></i>
       <%= vr.vaccine_name %>の次回接種予定：<%= ja_date_full(vr.next_due_on) %>
-      <% if vr.overdue? %>
+      <% if vr.overdue?(@latest_vaccine_ids) %>
         <strong>（期限切れ）</strong>
-      <% elsif vr.due_soon? %>
+      <% elsif vr.due_soon?(@latest_vaccine_ids) %>
         <strong>（まもなく期限）</strong>
       <% end %>
       <%= link_to "詳細", vaccine_records_path, class: "alert-link" %>

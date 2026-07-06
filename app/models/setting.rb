@@ -14,8 +14,8 @@ class Setting < ApplicationRecord
   end
 
   def self.fetch(name)
-    find_or_initialize_by(name: name.to_s).tap do |s|
-      s.value = DEFAULTS[name.to_s] unless s.persisted?
-    end
+    find_by(name: name.to_s) || create!(name: name.to_s, value: DEFAULTS[name.to_s])
+  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique
+    find_by!(name: name.to_s)
   end
 end
