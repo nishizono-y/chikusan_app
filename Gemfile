@@ -41,6 +41,9 @@ group :development, :test do
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
 
+  # Scan Gemfile.lock for gems with known vulnerabilities [https://github.com/rubysec/bundler-audit]
+  gem "bundler-audit", require: false
+
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
 
@@ -49,6 +52,11 @@ group :development, :test do
   gem "factory_bot_rails"
   gem "faker"
   gem "webmock"
+end
+
+group :test do
+  # Code coverage visualization [https://github.com/simplecov-ruby/simplecov]
+  gem "simplecov", require: false
 end
 
 group :development do
