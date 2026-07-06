@@ -77,6 +77,11 @@ RSpec.describe "/daily_records", type: :request do
       get new_daily_record_url
       expect(response.body).to include(%(href="#{daily_records_path}"))
     end
+
+    it "GET /new はmonthパラメータ付きのとき、キャンセルでその月の一覧に戻るリンクを表示する" do
+      get new_daily_record_url(month: "2026-05")
+      expect(response.body).to include(%(href="#{daily_records_path(month: "2026-05")}"))
+    end
   end
 
   describe "GET /show のワクチン接種記録への導線" do
@@ -179,6 +184,15 @@ RSpec.describe "/daily_records", type: :request do
 
       it "422を返す" do
         post daily_records_url, params: { daily_record: invalid_attributes }
+        expect(response).to have_http_status(:unprocessable_content)
+      end
+    end
+
+    context "head_countが欠落しているとき" do
+      it "422を返し、日次記録を作成しない" do
+        expect {
+          post daily_records_url, params: { daily_record: valid_attributes.except(:head_count) }
+        }.not_to change(DailyRecord, :count)
         expect(response).to have_http_status(:unprocessable_content)
       end
     end

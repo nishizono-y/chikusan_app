@@ -90,6 +90,20 @@ RSpec.describe "/vaccine_records", type: :request do
         }.not_to change(VaccineRecord, :count)
       end
     end
+
+    context "JSON形式のとき" do
+      it "有効なパラメータなら201とレコードのJSONを返す" do
+        post vaccine_records_path, params: { vaccine_record: valid_attributes }, as: :json
+        expect(response).to have_http_status(:created)
+        expect(JSON.parse(response.body)["vaccine_name"]).to eq("FMD vaccine")
+      end
+
+      it "無効なパラメータなら422とエラーのJSONを返す" do
+        post vaccine_records_path, params: { vaccine_record: invalid_attributes }, as: :json
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(JSON.parse(response.body)).to have_key("vaccine_name")
+      end
+    end
   end
 
   describe "PATCH /update" do
@@ -107,6 +121,22 @@ RSpec.describe "/vaccine_records", type: :request do
         record = create(:vaccine_record)
         patch vaccine_record_path(record), params: { vaccine_record: { vaccine_name: "" } }
         expect(response).to have_http_status(:unprocessable_content)
+      end
+    end
+
+    context "JSON形式のとき" do
+      it "有効なパラメータなら200とレコードのJSONを返す" do
+        record = create(:vaccine_record)
+        patch vaccine_record_path(record), params: { vaccine_record: { vaccine_name: "Updated" } }, as: :json
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body)["vaccine_name"]).to eq("Updated")
+      end
+
+      it "無効なパラメータなら422とエラーのJSONを返す" do
+        record = create(:vaccine_record)
+        patch vaccine_record_path(record), params: { vaccine_record: { vaccine_name: "" } }, as: :json
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(JSON.parse(response.body)).to have_key("vaccine_name")
       end
     end
   end
@@ -130,6 +160,12 @@ RSpec.describe "/vaccine_records", type: :request do
       record = create(:vaccine_record)
       delete vaccine_record_path(record), headers: { "Accept" => "text/vnd.turbo-stream.html" }
       expect(response).to have_http_status(:ok)
+    end
+
+    it "JSON フォーマットで 204 を返す" do
+      record = create(:vaccine_record)
+      delete vaccine_record_path(record), as: :json
+      expect(response).to have_http_status(:no_content)
     end
   end
 end

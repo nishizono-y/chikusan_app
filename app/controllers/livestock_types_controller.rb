@@ -56,6 +56,11 @@ class LivestockTypesController < ApplicationController
       format.html { redirect_to livestock_types_path, notice: "畜種を削除しました。", status: :see_other }
       format.json { head :no_content }
     end
+  # LivestockType には has_many :daily_records, dependent: :restrict_with_error があり、
+  # 紐づく日次記録が存在すると destroy! が RecordNotDestroyed を投げるため rescue が必要。
+  # 他のモデル（Shipment/DailyRecord/VaccineRecord）には restrict_with_error な関連が無いため、
+  # 同様の rescue は不要（過去に到達不能なデッドコードとして削除済み）。
+  # 新しく restrict_with_error を追加するモデルがあれば、対応する rescue もここに倣って追加すること。
   rescue ActiveRecord::RecordNotDestroyed
     respond_to do |format|
       format.turbo_stream { render turbo_stream: turbo_stream.update("flash", partial: "shared/flash_alert", locals: { message: "この畜種は日次記録で使用されているため削除できません。" }) }

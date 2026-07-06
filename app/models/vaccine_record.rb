@@ -3,6 +3,8 @@ class VaccineRecord < ApplicationRecord
 
   validates :vaccine_name, presence: true
   validates :vaccinated_on, presence: true
+  # head_count は「今回接種した頭数」であり、DailyRecord#head_count（飼養頭数の総数）とは別概念。
+  # 頭数を記録しない接種もあり得るため任意項目とし、DailyRecordのように presence: true にはしない。
   validates :head_count, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
 
   before_validation :normalize_vaccine_name

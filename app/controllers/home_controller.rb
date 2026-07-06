@@ -4,9 +4,7 @@ class HomeController < ApplicationController
   FARM_LON = 130.3006
 
   def index
-    @weather = Rails.cache.fetch("weather:#{FARM_LAT}:#{FARM_LON}", expires_in: 15.minutes) do
-      WeatherService.fetch(lat: FARM_LAT, lon: FARM_LON)
-    end
+    @weather = fetch_weather
 
     month_range = @today.beginning_of_month..@today.end_of_month
 
@@ -50,4 +48,17 @@ class HomeController < ApplicationController
     @chart_head_count  = monthly.transform_values { |rs| rs.max_by(&:date)&.head_count }
     @chart_death_count = monthly.transform_values { |rs| rs.sum { |r| r.death_count.to_i } }
   end
+
+  private
+
+    # 取得成功時は15分、失敗時（API障害など）は1分だけキャッシュする。
+    # 失敗結果を長くキャッシュすると、API復旧後も天気が表示されない状態が長引くため。
+    def fetch_weather
+      cache_key = "weather:#{FARM_LAT}:#{FARM_LON}"
+      return Rails.cache.read(cache_key) if Rails.cache.exist?(cache_key)
+
+      weather = WeatherService.fetch(lat: FARM_LAT, lon: FARM_LON)
+      Rails.cache.write(cache_key, weather, expires_in: weather ? 15.minutes : 1.minute)
+      weather
+    end
 end

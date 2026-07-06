@@ -93,7 +93,7 @@ class DailyRecordsController < ApplicationController
     end
 
     def daily_record_month
-      @daily_record.date&.strftime("%Y-%m") || params[:month]
+      @daily_record.date&.strftime("%Y-%m")
     end
 
     def daily_record_params

@@ -150,6 +150,51 @@ RSpec.describe "/", type: :request do
         expect(response.body).not_to include("飼料は発注済みです")
       end
     end
+
+    context "天気情報のキャッシュ" do
+      around do |example|
+        original_cache = Rails.cache
+        Rails.cache = ActiveSupport::Cache::MemoryStore.new
+        example.run
+        Rails.cache = original_cache
+      end
+
+      before do
+        allow(Rails.application.credentials).to receive(:dig).with(:openweathermap, :api_key).and_return("test_key")
+      end
+
+      it "取得に成功した場合、2回目以降のリクエストでは外部APIを呼び直さない" do
+        stub_request(:get, /api.openweathermap.org/).to_return(
+          status: 200,
+          body: { main: { temp: 28.0, humidity: 60 }, weather: [ { description: "晴れ", icon: "01d" } ] }.to_json,
+          headers: { "Content-Type" => "application/json" }
+        )
+
+        get root_path
+        get root_path
+
+        expect(a_request(:get, /api.openweathermap.org/)).to have_been_made.once
+      end
+
+      it "取得に失敗した場合も直後の再リクエストでは外部APIを呼び直さない（短時間のnilキャッシュ）" do
+        stub_request(:get, /api.openweathermap.org/).to_return(status: 500)
+
+        get root_path
+        get root_path
+
+        expect(a_request(:get, /api.openweathermap.org/)).to have_been_made.once
+      end
+
+      it "失敗結果のキャッシュ有効期限は成功結果より短い" do
+        stub_request(:get, /api.openweathermap.org/).to_return(status: 500)
+
+        get root_path
+
+        cache_key = "weather:#{HomeController::FARM_LAT}:#{HomeController::FARM_LON}"
+        entry = Rails.cache.send(:read_entry, Rails.cache.send(:normalize_key, cache_key, nil))
+        expect(entry.expires_at).to be_within(5).of(1.minute.from_now.to_f)
+      end
+    end
   end
 
   private
