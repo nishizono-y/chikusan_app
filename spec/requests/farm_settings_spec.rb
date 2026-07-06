@@ -47,6 +47,11 @@ RSpec.describe "/farm_settings", type: :request do
         expect(Setting.farm_lat.to_f).to eq(Setting::DEFAULTS[Setting::FARM_LAT_KEY])
         expect(Setting.farm_lon.to_f).to eq(Setting::DEFAULTS[Setting::FARM_LON_KEY])
       end
+
+      it "緯度・経度の両方が無効な場合、両方のエラーメッセージを表示する" do
+        patch farm_settings_path, params: { farm_settings: { lat: "999", lon: "-200" } }
+        expect(response.body.scan("<span class=\"field-error\">").length).to eq(2)
+      end
     end
   end
 end

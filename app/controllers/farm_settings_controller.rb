@@ -13,8 +13,12 @@ class FarmSettingsController < ApplicationController
     @lon_setting.value = farm_settings_params[:lon]
 
     # 緯度・経度のどちらかが不正な場合に片方だけ保存されないよう、まとめてロールバックする。
+    # `&&` で短絡させると経度が不正な場合に #save が呼ばれず、エラーが表示されなくなるため
+    # 両方の #save を必ず実行してから結果をまとめて判定する。
     saved = Setting.transaction do
-      raise ActiveRecord::Rollback unless @lat_setting.save && @lon_setting.save
+      lat_saved = @lat_setting.save
+      lon_saved = @lon_setting.save
+      raise ActiveRecord::Rollback unless lat_saved && lon_saved
       true
     end
 
