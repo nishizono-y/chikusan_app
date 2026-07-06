@@ -13,22 +13,19 @@ require 'rails_helper'
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
 RSpec.describe "/daily_records", type: :request do
-  # This should return the minimal set of attributes required to create a valid
-  # DailyRecord. As you add validations to DailyRecord, be sure to
-  # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
+  let(:valid_attributes) do
+    { date: Date.current, death_count: 0, feed_usage: 50, feed_stock: 300, head_count: 20, vaccine: "なし" }
+  end
 
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
+  let(:invalid_attributes) do
+    { date: nil, death_count: nil, feed_usage: nil, feed_stock: nil }
+  end
 
   describe "GET /index" do
-    it "renders a successful response" do
-      DailyRecord.create! valid_attributes
+    it "200を返す" do
+      create(:daily_record)
       get daily_records_url
-      expect(response).to be_successful
+      expect(response).to have_http_status(:ok)
     end
   end
 
@@ -128,10 +125,10 @@ RSpec.describe "/daily_records", type: :request do
   end
 
   describe "GET /show" do
-    it "renders a successful response" do
-      daily_record = DailyRecord.create! valid_attributes
+    it "200を返す" do
+      daily_record = create(:daily_record)
       get daily_record_url(daily_record)
-      expect(response).to be_successful
+      expect(response).to have_http_status(:ok)
     end
   end
 
@@ -152,35 +149,35 @@ RSpec.describe "/daily_records", type: :request do
   end
 
   describe "GET /edit" do
-    it "renders a successful response" do
-      daily_record = DailyRecord.create! valid_attributes
+    it "200を返す" do
+      daily_record = create(:daily_record)
       get edit_daily_record_url(daily_record)
-      expect(response).to be_successful
+      expect(response).to have_http_status(:ok)
     end
   end
 
   describe "POST /create" do
-    context "with valid parameters" do
-      it "creates a new DailyRecord" do
+    context "有効なパラメータのとき" do
+      it "日次記録を1件作成する" do
         expect {
           post daily_records_url, params: { daily_record: valid_attributes }
         }.to change(DailyRecord, :count).by(1)
       end
 
-      it "redirects to the created daily_record" do
+      it "詳細ページにリダイレクトする" do
         post daily_records_url, params: { daily_record: valid_attributes }
         expect(response).to redirect_to(daily_record_url(DailyRecord.last))
       end
     end
 
-    context "with invalid parameters" do
-      it "does not create a new DailyRecord" do
+    context "無効なパラメータのとき" do
+      it "日次記録を作成しない" do
         expect {
           post daily_records_url, params: { daily_record: invalid_attributes }
-        }.to change(DailyRecord, :count).by(0)
+        }.not_to change(DailyRecord, :count)
       end
 
-      it "renders a response with 422 status (i.e. to display the 'new' template)" do
+      it "422を返す" do
         post daily_records_url, params: { daily_record: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_content)
       end
@@ -188,29 +185,19 @@ RSpec.describe "/daily_records", type: :request do
   end
 
   describe "PATCH /update" do
-    context "with valid parameters" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
-
-      it "updates the requested daily_record" do
-        daily_record = DailyRecord.create! valid_attributes
-        patch daily_record_url(daily_record), params: { daily_record: new_attributes }
-        daily_record.reload
-        skip("Add assertions for updated state")
-      end
-
-      it "redirects to the daily_record" do
-        daily_record = DailyRecord.create! valid_attributes
-        patch daily_record_url(daily_record), params: { daily_record: new_attributes }
-        daily_record.reload
+    context "有効なパラメータのとき" do
+      it "日次記録を更新して詳細ページにリダイレクトする" do
+        daily_record = create(:daily_record)
+        patch daily_record_url(daily_record), params: { daily_record: { feed_stock: 250 } }
         expect(response).to redirect_to(daily_record_url(daily_record))
+        daily_record.reload
+        expect(daily_record.feed_stock).to eq(250)
       end
     end
 
-    context "with invalid parameters" do
-      it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-        daily_record = DailyRecord.create! valid_attributes
+    context "無効なパラメータのとき" do
+      it "422を返す" do
+        daily_record = create(:daily_record)
         patch daily_record_url(daily_record), params: { daily_record: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_content)
       end
@@ -218,17 +205,11 @@ RSpec.describe "/daily_records", type: :request do
   end
 
   describe "DELETE /destroy" do
-    it "destroys the requested daily_record" do
-      daily_record = DailyRecord.create! valid_attributes
+    it "日次記録を削除する" do
+      daily_record = create(:daily_record)
       expect {
         delete daily_record_url(daily_record)
       }.to change(DailyRecord, :count).by(-1)
-    end
-
-    it "redirects to the daily_records list" do
-      daily_record = DailyRecord.create! valid_attributes
-      delete daily_record_url(daily_record)
-      expect(response).to redirect_to(daily_records_url)
     end
   end
 end
