@@ -36,6 +36,10 @@ test.describe('日次記録', () => {
       await page.fill('input[name="daily_record[date]"]', '2026-06-18');
     });
 
+    await test.step('飼養頭数を入力する', async () => {
+      await page.fill('input[name="daily_record[head_count]"]', '50');
+    });
+
     await test.step('死亡頭数を入力する', async () => {
       await page.fill('input[name="daily_record[death_count]"]', '0');
     });
