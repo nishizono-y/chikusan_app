@@ -40,6 +40,9 @@
 <div class="card">
   <div class="card-title">
     <i class="fa-solid fa-cloud-sun"></i> 農場周辺の気象
+    <%= link_to edit_farm_settings_path, class: "card-title-action", title: "農場設定（気象情報の取得地点）" do %>
+      <i class="fa-solid fa-location-crosshairs"></i>
+    <% end %>
   </div>
   <div class="summary-grid">
     <div class="<%= class_names('summary-item', warn: @weather&.heat_stress?) %>">

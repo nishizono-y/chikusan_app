@@ -28,5 +28,8 @@ Rails.application.routes.draw do
   # 畜種マスタの CRUD ルート
   resources :livestock_types
 
+  # 農場設定（気象情報の取得地点となる緯度経度）の編集ルート
+  resource :farm_settings, only: %i[ edit update ]
+
   root "home#index"
 end

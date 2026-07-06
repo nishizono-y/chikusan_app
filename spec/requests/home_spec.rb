@@ -190,7 +190,7 @@ RSpec.describe "/", type: :request do
 
         get root_path
 
-        cache_key = "weather:#{HomeController::FARM_LAT}:#{HomeController::FARM_LON}"
+        cache_key = "weather:#{Setting.farm_lat}:#{Setting.farm_lon}"
         entry = Rails.cache.send(:read_entry, Rails.cache.send(:normalize_key, cache_key, nil))
         expect(entry.expires_at).to be_within(5).of(1.minute.from_now.to_f)
       end
