@@ -14,7 +14,7 @@ require 'rails_helper'
 
 RSpec.describe "/daily_records", type: :request do
   let(:valid_attributes) do
-    { date: Date.current, death_count: 0, feed_usage: 50, feed_stock: 300, head_count: 20, vaccine: "なし" }
+    attributes_for(:daily_record).merge(head_count: 20)
   end
 
   let(:invalid_attributes) do
@@ -205,11 +205,12 @@ RSpec.describe "/daily_records", type: :request do
   end
 
   describe "DELETE /destroy" do
-    it "日次記録を削除する" do
+    it "日次記録を削除して303を返す" do
       daily_record = create(:daily_record)
       expect {
         delete daily_record_url(daily_record)
       }.to change(DailyRecord, :count).by(-1)
+      expect(response).to have_http_status(:see_other)
     end
   end
 end

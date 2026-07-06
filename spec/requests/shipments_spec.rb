@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "/shipments", type: :request do
   let(:valid_attributes) do
-    { shipped_at: Date.current, count: 5, avg_weight: "450.5", destination: "鹿児島食肉センター" }
+    attributes_for(:shipment)
   end
 
   let(:invalid_attributes) do
@@ -89,16 +89,11 @@ RSpec.describe "/shipments", type: :request do
   end
 
   describe "DELETE /destroy" do
-    it "出荷記録を削除する" do
+    it "出荷記録を削除して303で一覧にリダイレクトする" do
       shipment = create(:shipment)
       expect {
         delete shipment_path(shipment)
       }.to change(Shipment, :count).by(-1)
-    end
-
-    it "一覧ページに303リダイレクトする" do
-      shipment = create(:shipment)
-      delete shipment_path(shipment)
       expect(response).to have_http_status(:see_other)
       expect(response).to redirect_to(shipments_path)
     end

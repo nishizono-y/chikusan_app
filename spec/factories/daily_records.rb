@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :daily_record do
-    date { Date.current }
+    sequence(:date) { |n| Date.current + n.days }
     death_count { 0 }
     feed_usage { 50 }
     feed_stock { 300 }
