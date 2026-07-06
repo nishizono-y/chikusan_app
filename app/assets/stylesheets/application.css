@@ -307,6 +307,12 @@ td a:hover { text-decoration: underline; }
   gap: 7px;
 }
 .card-title i { font-size: 14px; }
+.card-title-action {
+  margin-left: auto;
+  color: var(--matcha);
+  padding: 4px;
+  line-height: 1;
+}
 summary.card-title { cursor: pointer; }
 summary.card-title::-webkit-details-marker { display: none; }
 summary.card-title::marker { content: ""; }

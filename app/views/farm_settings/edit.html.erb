@@ -1,0 +1,40 @@
+<% content_for :title, "農場設定" %>
+
+<h2 class="page-title">農場設定</h2>
+
+<div class="list-actions">
+  <%= link_to root_path, class: "btn btn-secondary btn-sm" do %>
+    <i class="fa-solid fa-arrow-left"></i> ホームに戻る
+  <% end %>
+</div>
+
+<div class="card" data-controller="geolocation">
+  <p class="field-hint">気象情報の取得地点となる緯度・経度を設定します。</p>
+
+  <button type="button" class="btn btn-secondary btn-sm" data-action="geolocation#fetch" data-geolocation-target="button">
+    <i class="fa-solid fa-location-crosshairs"></i> 現在地を取得
+  </button>
+  <p class="field-error" data-geolocation-target="error" hidden></p>
+
+  <%= form_with url: farm_settings_path, method: :patch, scope: :farm_settings, html: { novalidate: true } do |form| %>
+    <div class="form-group">
+      <%= form.label :lat, "緯度" %>
+      <%= form.text_field :lat, value: @lat_setting.value, inputmode: "decimal", class: "form-control", data: { geolocation_target: "lat" } %>
+      <% @lat_setting.errors.where(:value).each do |error| %>
+        <span class="field-error"><%= error.full_message %></span>
+      <% end %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :lon, "経度" %>
+      <%= form.text_field :lon, value: @lon_setting.value, inputmode: "decimal", class: "form-control", data: { geolocation_target: "lon" } %>
+      <% @lon_setting.errors.where(:value).each do |error| %>
+        <span class="field-error"><%= error.full_message %></span>
+      <% end %>
+    </div>
+
+    <div class="actions actions--end">
+      <%= form.submit "保存する", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>

@@ -21,6 +21,24 @@ RSpec.describe Setting, type: :model do
         Setting.create!(name: Setting::FEED_STOCK_KEY, value: 500)
       }.to raise_error(ActiveRecord::RecordNotUnique)
     end
+
+    it "farm_latは小数の緯度で保存できる" do
+      expect(Setting.new(name: Setting::FARM_LAT_KEY, value: 31.8159)).to be_valid
+    end
+
+    it "farm_latが範囲外（-90〜90）は無効" do
+      expect(Setting.new(name: Setting::FARM_LAT_KEY, value: 91)).not_to be_valid
+      expect(Setting.new(name: Setting::FARM_LAT_KEY, value: -91)).not_to be_valid
+    end
+
+    it "farm_lonは小数の経度で保存できる" do
+      expect(Setting.new(name: Setting::FARM_LON_KEY, value: 130.3006)).to be_valid
+    end
+
+    it "farm_lonが範囲外（-180〜180）は無効" do
+      expect(Setting.new(name: Setting::FARM_LON_KEY, value: 181)).not_to be_valid
+      expect(Setting.new(name: Setting::FARM_LON_KEY, value: -181)).not_to be_valid
+    end
   end
 
   describe ".[]" do
@@ -49,6 +67,24 @@ RSpec.describe Setting, type: :model do
       it "保存されたしきい値を返す" do
         Setting.create!(name: Setting::FEED_STOCK_KEY, value: 500)
         expect(Setting.feed_stock_threshold).to eq(500)
+      end
+    end
+  end
+
+  describe ".farm_lat / .farm_lon" do
+    context "レコードが存在しない場合" do
+      it "デフォルトの緯度経度を返す" do
+        expect(Setting.farm_lat).to eq(Setting::DEFAULTS[Setting::FARM_LAT_KEY])
+        expect(Setting.farm_lon).to eq(Setting::DEFAULTS[Setting::FARM_LON_KEY])
+      end
+    end
+
+    context "レコードが存在する場合" do
+      it "保存された緯度経度を返す" do
+        Setting.create!(name: Setting::FARM_LAT_KEY, value: 35.6812)
+        Setting.create!(name: Setting::FARM_LON_KEY, value: 139.7671)
+        expect(Setting.farm_lat.to_f).to eq(35.6812)
+        expect(Setting.farm_lon.to_f).to eq(139.7671)
       end
     end
   end

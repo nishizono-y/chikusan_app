@@ -1,8 +1,4 @@
 class HomeController < ApplicationController
-  # 薩摩川内市（鹿児島）
-  FARM_LAT = 31.8159
-  FARM_LON = 130.3006
-
   def index
     @weather = fetch_weather
 
@@ -54,10 +50,12 @@ class HomeController < ApplicationController
     # 取得成功時は15分、失敗時（API障害など）は1分だけキャッシュする。
     # 失敗結果を長くキャッシュすると、API復旧後も天気が表示されない状態が長引くため。
     def fetch_weather
-      cache_key = "weather:#{FARM_LAT}:#{FARM_LON}"
+      lat = Setting.farm_lat
+      lon = Setting.farm_lon
+      cache_key = "weather:#{lat}:#{lon}"
       return Rails.cache.read(cache_key) if Rails.cache.exist?(cache_key)
 
-      weather = WeatherService.fetch(lat: FARM_LAT, lon: FARM_LON)
+      weather = WeatherService.fetch(lat:, lon:)
       Rails.cache.write(cache_key, weather, expires_in: weather ? 15.minutes : 1.minute)
       weather
     end
